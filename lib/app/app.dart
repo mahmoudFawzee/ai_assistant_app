@@ -1,5 +1,5 @@
-import 'package:ai_assistant_app/logic/name_cubit/name_cubit.dart';
-import 'package:ai_assistant_app/logic/them_cubit/theme_cubit.dart';
+import 'package:ai_assistant_app/logic/local/name_cubit/name_cubit.dart';
+import 'package:ai_assistant_app/logic/local/them_cubit/theme_cubit.dart';
 import 'package:ai_assistant_app/view/routes/router.dart';
 import 'package:ai_assistant_app/view/theme/app_theme.dart';
 import 'package:flutter/material.dart';

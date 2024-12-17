@@ -1,6 +1,6 @@
 
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
-import 'package:ai_assistant_app/logic/name_cubit/name_cubit.dart';
+import 'package:ai_assistant_app/logic/local/name_cubit/name_cubit.dart';
 import 'package:ai_assistant_app/view/widgets/chat_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
