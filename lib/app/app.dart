@@ -1,4 +1,5 @@
 import 'package:ai_assistant_app/logic/local/name_cubit/name_cubit.dart';
+import 'package:ai_assistant_app/logic/local/navigation_cubit/navigation_cubit.dart';
 import 'package:ai_assistant_app/logic/local/them_cubit/theme_cubit.dart';
 import 'package:ai_assistant_app/view/routes/router.dart';
 import 'package:ai_assistant_app/view/theme/app_theme.dart';
@@ -16,6 +17,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => NameCubit()..getName(),
+        ),
+        BlocProvider(
+          create: (context) => NavigationCubit(),
         ),
       ],
       child: BlocBuilder<ThemeCubit, bool?>(
