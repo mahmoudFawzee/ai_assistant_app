@@ -1,3 +1,4 @@
 {
-  "cSpell.words": ["prefs"]
+  "cSpell.words": ["prefs"],
+  "java.compile.nullAnalysis.mode": "automatic"
 }

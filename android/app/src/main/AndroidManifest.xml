@@ -41,12 +41,8 @@
             <action android:name="android.intent.action.PROCESS_TEXT"/>
             <data android:mimeType="text/plain"/>
         </intent>
-<<<<<<< HEAD
-    </queries>
-=======
         <intent>  
             <action android:name="android.intent.action.TTS_SERVICE" />  
         </intent>  
     </queries> 
->>>>>>> b54be31 (work on ui)
 </manifest>
