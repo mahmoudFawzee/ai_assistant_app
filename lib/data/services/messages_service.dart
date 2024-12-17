@@ -1,4 +1,4 @@
-import 'package:ai_assistant_app/data/interface/history_messages_interface.dart';
+import 'package:ai_assistant_app/data/interface/messages_interface.dart';
 import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
 import 'package:ai_assistant_app/data/models/message.dart';
 import 'package:ai_assistant_app/data/services/database_helper.dart';
@@ -18,18 +18,18 @@ final class MessagesService implements MessagesInterface {
   }
 
   @override
-  Future<bool> storeMessageLocally(Message message) async =>
+  Future<int> storeMessageLocally(Message message) async =>
       await _databaseHelper.insertRow(
         _tableName,
         message.toJson(),
       );
 
   @override
-  Future<bool> deleteMessage(int id) async =>
-      await _databaseHelper.deleteRow(_tableName, id);
+  Future<int> deleteMessage(int id) async => await _databaseHelper
+      .deleteRow(_tableName, where: 'id  = ?', whereArgs: [id]);
 
   @override
-  Future<bool> createMessagesTable() async =>
+  Future<int> createMessagesTable() async =>
       await _databaseHelper.createTable('''
 CREATE TABLE messages(
 ${SqfliteKeys.id}:INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -40,4 +40,10 @@ ${SqfliteKeys.date}:TEXT,
 ${SqfliteKeys.time}:TEXT
 )
 ''');
+
+  @override
+  Future<int> deleteConversationMessages(int conversationId) async =>
+      await _databaseHelper.deleteRow(_tableName,
+          where: '${SqfliteKeys.conversationId}  = ?',
+          whereArgs: [conversationId]);
 }

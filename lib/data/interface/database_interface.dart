@@ -9,6 +9,15 @@ abstract class DatabaseInterface {
     required String where,
     required List<Object?> whereArgs,
   });
-  Future deleteRow(String tableName, int id);
+  Future deleteRow(
+    String tableName, {
+    required String where,
+    required List<Object?> whereArgs,
+  });
+  // Future deleteRows(
+  //   String tableName, {
+  //   required String where,
+  //   required List<Object?> argsWhere,
+  // });
   Future isTableExists(String tableName);
 }

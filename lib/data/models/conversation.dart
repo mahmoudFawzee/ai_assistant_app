@@ -8,7 +8,7 @@ final class Conversation {
     required this.title,
   });
   Map<String, dynamic> toJson() => {
-        SqfliteKeys.id: id,
+//        SqfliteKeys.id: id,
         SqfliteKeys.title: title,
       };
 

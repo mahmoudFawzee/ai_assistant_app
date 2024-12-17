@@ -1,8 +1,10 @@
 import 'package:ai_assistant_app/data/models/conversation.dart';
 
 abstract class ConversationInterface {
-  Future<bool> startNewConversation(Conversation conversation);
-  Future<bool> updateConversation(Conversation conversation);
-  Future<bool> deleteConversation(int id);
+  Future<int> startNewConversation(Conversation conversation);
+  Future<int> updateConversation(
+      {required int oldId, required Conversation conversation});
+  Future<int> deleteConversation(int id);
+  Future<bool> deleteConversationMessages(int conversationId);
   Future<List<Conversation>> getConversation();
 }

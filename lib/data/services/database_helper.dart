@@ -23,7 +23,6 @@ final class DatabaseHelper implements DatabaseInterface {
 
 //?here when we start the chat we will create the history data base.
   Future _onCreate(Database db, int version) async {
-
     await createTable('''
 CREATE TABLE conversations(
 ${SqfliteKeys.id}:INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -70,22 +69,37 @@ ${SqfliteKeys.time}:TEXT
   }
 
   @override
-  Future<bool> deleteRow(String tableName, int id) async {
+  Future<int> deleteRow(
+    String tableName, {
+    required String where,
+    required List<Object?> whereArgs,
+  }) async {
     final db = await database;
     final result =
-        await db.delete(tableName, where: 'id  = ?', whereArgs: [id]);
-    return result == 1;
+        await db.delete(tableName, where: where, whereArgs: whereArgs);
+    return result;
   }
 
+  // @override
+  // Future<List<Map<String, dynamic>>> deleteRows(
+  //   String tableName, {
+  //   required String where,
+  //   required List<Object?> argsWhere,
+  // }) async {
+  //   final db = await database;
+  //   final result = await db.query(tableName);
+  //   return result;
+  // }
+
   @override
-  Future<bool> insertRow(String tableName, Map<String, dynamic> row) async {
+  Future<int> insertRow(String tableName, Map<String, dynamic> row) async {
     final db = await database;
     final result = await db.insert(tableName, row);
-    return result == 1;
+    return result;
   }
 
   @override
-  Future updateRow(String tableName, Map<String, dynamic> row) async {
+  Future<int> updateRow(String tableName, Map<String, dynamic> row) async {
     final db = await database;
     final id = row[SqfliteKeys.id];
     final result = await db.update(
@@ -94,7 +108,7 @@ ${SqfliteKeys.time}:TEXT
       where: 'id=?',
       whereArgs: [id],
     );
-    return result == 1;
+    return result;
   }
 
   @override
