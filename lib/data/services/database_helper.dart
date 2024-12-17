@@ -1,6 +1,6 @@
 import 'package:ai_assistant_app/data/interface/database_interface.dart';
-import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
 import 'package:sqflite/sqflite.dart';
+import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
 import 'package:path/path.dart';
 
 final class DatabaseHelper implements DatabaseInterface {
@@ -23,18 +23,13 @@ final class DatabaseHelper implements DatabaseInterface {
 
 //?here when we start the chat we will create the history data base.
   Future _onCreate(Database db, int version) async {
-<<<<<<< HEAD
-    await db.execute('''
-=======
+
     await createTable('''
->>>>>>> b54be31 (work on ui)
 CREATE TABLE conversations(
 ${SqfliteKeys.id}:INTEGER PRIMARY KEY AUTOINCREMENT,
 ${SqfliteKeys.title}:TEXT
 )
 ''');
-<<<<<<< HEAD
-=======
     await createTable('''
 CREATE TABLE messages(
 ${SqfliteKeys.id}:INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -45,7 +40,6 @@ ${SqfliteKeys.date}:TEXT,
 ${SqfliteKeys.time}:TEXT
 )
 ''');
->>>>>>> b54be31 (work on ui)
   }
 
   Future<Database> get database async {

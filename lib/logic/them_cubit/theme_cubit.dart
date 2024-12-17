@@ -21,8 +21,6 @@ class ThemeCubit extends Cubit<bool?> {
     return;
   }
 
-<<<<<<< HEAD
-=======
   void getTheme() async {
     //?in this line if no stored theme we will set it here and also store it.
     final isDark = await _isDark();
@@ -30,7 +28,7 @@ class ThemeCubit extends Cubit<bool?> {
     return;
   }
 
->>>>>>> b54be31 (work on ui)
+
   Future<bool?> _isDark() async {
     final preferences = await SharedPreferences.getInstance();
     final currentTheme = preferences.getBool(PreferencesKeys.isDark);

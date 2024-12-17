@@ -1,8 +1,6 @@
-import 'package:ai_assistant_app/logic/name_cubit/name_cubit.dart';
-<<<<<<< HEAD
-=======
+
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
->>>>>>> b54be31 (work on ui)
+import 'package:ai_assistant_app/logic/name_cubit/name_cubit.dart';
 import 'package:ai_assistant_app/view/widgets/chat_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -17,10 +15,7 @@ class ChatScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-<<<<<<< HEAD
-=======
         centerTitle: true,
->>>>>>> b54be31 (work on ui)
         title: BlocBuilder<NameCubit, String>(
           builder: (context, state) {
             return Text(state);
@@ -30,14 +25,6 @@ class ChatScreen extends StatelessWidget {
       body: Column(
         children: [
           Expanded(
-<<<<<<< HEAD
-              child: ListView.builder(
-            itemBuilder: (context, index) {
-              return const ChatBubble(message: 'message',);
-            },
-            itemCount: 15,
-          )),
-=======
               flex: 6,
               child: ListView.builder(
                 reverse: true,
@@ -56,7 +43,7 @@ class ChatScreen extends StatelessWidget {
             color: ColorsManger.black,
             height: 0,
           ),
->>>>>>> b54be31 (work on ui)
+
           TextField(
             controller: _controller,
             onSubmitted: (text) => _handleUserInput(text),

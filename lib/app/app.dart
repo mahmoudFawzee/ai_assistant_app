@@ -12,11 +12,7 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-<<<<<<< HEAD
-          create: (context) => ThemeCubit()..changeTheme(),
-=======
           create: (context) => ThemeCubit()..getTheme(),
->>>>>>> b54be31 (work on ui)
         ),
         BlocProvider(
           create: (context) => NameCubit()..getName(),

@@ -8,17 +8,14 @@ ThemeData getTheme(bool? isDark) {
 
 final _lightTheme = ThemeData(
   scaffoldBackgroundColor: ColorsManger.white,
-<<<<<<< HEAD
-);
-final _darkTheme = ThemeData(
-  scaffoldBackgroundColor: ColorsManger.black,
-=======
   textTheme: const TextTheme(
     bodyMedium: TextStyle(
       color: ColorsManger.black,
     ),
   ),
+
 );
+
 final _darkTheme = ThemeData(
   scaffoldBackgroundColor: ColorsManger.black,
   textTheme: const TextTheme(
@@ -26,5 +23,5 @@ final _darkTheme = ThemeData(
       color: ColorsManger.white,
     ),
   ),
->>>>>>> b54be31 (work on ui)
+
 );
