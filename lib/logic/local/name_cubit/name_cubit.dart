@@ -2,8 +2,8 @@ import 'package:ai_assistant_app/data/key/preferences_keys.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class NameCubit extends Cubit<String> {
-  NameCubit() : super('AI Assistant');
+class NameCubit extends Cubit<String?> {
+  NameCubit() : super(null);
   void getName() async {
     final prefs = await SharedPreferences.getInstance();
     final name = prefs.getString(PreferencesKeys.assistantName);

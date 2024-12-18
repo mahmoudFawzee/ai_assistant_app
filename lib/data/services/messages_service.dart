@@ -17,12 +17,22 @@ final class MessagesService implements MessagesInterface {
     return Message.fromJson(messages: messagesList);
   }
 
+//*we need here to return the message to emit it in the state.
   @override
-  Future<int> storeMessageLocally(Message message) async =>
-      await _databaseHelper.insertRow(
-        _tableName,
-        message.toJson(),
-      );
+  Future<Message> storeMessageLocally(Message message) async {
+    final messageId = await _databaseHelper.insertRow(
+      _tableName,
+      message.toJson(),
+    );
+    //todo: get message stored.
+    final storedMessage = await _databaseHelper.getSpecificRows(
+      SqfliteKeys.messagesTable,
+      where: 'id = ?',
+      whereArgs: [messageId],
+    );
+    //?it will return just one row and we just need this row.
+    return Message.fromJson(messages: storedMessage).first;
+  }
 
   @override
   Future<int> deleteMessage(int id) async => await _databaseHelper

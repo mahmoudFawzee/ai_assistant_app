@@ -5,7 +5,7 @@ import 'package:ai_assistant_app/data/interface/open_ai_interface.dart';
 import 'package:ai_assistant_app/data/key/api_keys.dart';
 import 'package:http/http.dart' as http;
 
-final class OpenAiService implements OpenAiInterface {
+final class AiAssistantService implements AiAssistantInterface {
   @override
   Future<String> getAIResponse(String query) async {
     final response = await http.post(

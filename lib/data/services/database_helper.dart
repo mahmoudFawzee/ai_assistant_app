@@ -1,5 +1,4 @@
 import 'dart:developer';
-import 'dart:ffi';
 
 import 'package:ai_assistant_app/data/interface/database_interface.dart';
 import 'package:sqflite/sqflite.dart';

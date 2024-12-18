@@ -1,8 +1,5 @@
-import 'dart:developer';
-
 import 'package:ai_assistant_app/logic/chat/conversation_cubit/conversation_cubit.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
-import 'package:ai_assistant_app/logic/local/name_cubit/name_cubit.dart';
 import 'package:ai_assistant_app/view/widgets/chat_bubble.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -21,14 +18,7 @@ class ChatScreen extends StatelessWidget {
         context.read<ConversationCubit>().getConversations();
       },
       child: Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: BlocBuilder<NameCubit, String>(
-            builder: (context, state) {
-              return Text(state);
-            },
-          ),
-        ),
+        
         body: Column(
           children: [
             Expanded(
