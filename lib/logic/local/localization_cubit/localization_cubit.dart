@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ai_assistant_app/data/key/preferences_keys.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -18,6 +20,7 @@ class LocalizationCubit extends Cubit<LocalizationState> {
   void getLang() async {
     final preferences = await SharedPreferences.getInstance();
     final lang = preferences.getString(PreferencesKeys.lang);
+    log('lang is : $lang');
     if (lang != null) {
       emit(GotLangState(lang));
       return;

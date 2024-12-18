@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+// ignore: depend_on_referenced_packages
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 import 'package:ai_assistant_app/data/services/conversation_service.dart';
@@ -8,9 +9,10 @@ part 'conversation_state.dart';
 class ConversationCubit extends Cubit<ConversationState> {
   ConversationCubit() : super(const ConversationInitial());
   final _conversationService = ConversationService();
-  Future getConversation() async {
+  void getConversations() async {
     try {
-      final result = await _conversationService.getConversation();
+      emit(const ConversationLoadingState());
+      final result = await _conversationService.getConversations();
       if (result.isEmpty) {
         emit(const NoConversationState());
         return;
@@ -31,16 +33,19 @@ class ConversationCubit extends Cubit<ConversationState> {
             'conversation creation error'));
         return;
       }
-      emit(ConversationCreationState(id));
+      emit(ConversationCreatedState(id));
       return;
     } catch (e) {
       emit(ConversationErrorState(e.toString()));
     }
   }
 
-  Future updateConversation(
-      {required int oldId, required Conversation conversation}) async {
+  Future updateConversation({
+    required int oldId,
+    required Conversation conversation,
+  }) async {
     try {
+      emit(const ConversationLoadingState());
       final id = await _conversationService.updateConversation(
         oldId: oldId,
         conversation: conversation,
@@ -58,6 +63,7 @@ class ConversationCubit extends Cubit<ConversationState> {
 
   Future deleteConversation(int id) async {
     try {
+      emit(const ConversationLoadingState());
       final result = await _conversationService.deleteConversation(id);
       if (result == id) {
         emit(const ConversationDeletedState());

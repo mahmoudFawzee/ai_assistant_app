@@ -1,4 +1,9 @@
 {
     "helloWorld": "اهلا بالجميع",
-    "conversations": "conversations"
+    "conversations": "المحادثات",
+    "cancel": "الغاء",
+    "create": "انشاء",
+    "start_new_conversation": "بدأ محادثة جديدة",
+    "noConversation": "لا محادثات الي الان",
+    "assistant": "المساعد"
 }

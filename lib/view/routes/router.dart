@@ -20,8 +20,11 @@ final router = GoRouter(
       builder: (context, state) => const OnBoardingScreen(),
     ),
     GoRoute(
-      path: ChatScreen.pageRoute,
-      builder: (context, state) => const ChatScreen(),
+      path: '${ChatScreen.pageRoute}/:conversationId',
+      builder: (context, state) {
+        final conversationId = state.pathParameters['conversationId'];
+        return ChatScreen(conversationId: int.parse(conversationId!));
+      },
     ),
     ShellRoute(
       navigatorKey: GlobalKey<NavigatorState>(),

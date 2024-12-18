@@ -28,22 +28,28 @@ final class MessagesService implements MessagesInterface {
   Future<int> deleteMessage(int id) async => await _databaseHelper
       .deleteRow(_tableName, where: 'id  = ?', whereArgs: [id]);
 
-  @override
-  Future<int> createMessagesTable() async =>
-      await _databaseHelper.createTable('''
-CREATE TABLE messages(
-${SqfliteKeys.id}:INTEGER PRIMARY KEY AUTOINCREMENT,
-${SqfliteKeys.conversationId}:INTEGER,
-${SqfliteKeys.title}:TEXT,
-${SqfliteKeys.isMe}:INTEGER,
-${SqfliteKeys.date}:TEXT,
-${SqfliteKeys.time}:TEXT
-)
-''');
+//   @override
+//   Future<int> createMessagesTable() async =>
+//       await _databaseHelper.createTable('''
+// CREATE TABLE messages(
+// ${SqfliteKeys.id}:INTEGER PRIMARY KEY AUTOINCREMENT,
+// ${SqfliteKeys.conversationId}:INTEGER,
+// ${SqfliteKeys.title}:TEXT,
+// ${SqfliteKeys.isMe}:INTEGER,
+// ${SqfliteKeys.date}:TEXT,
+// ${SqfliteKeys.time}:TEXT
+// )
+// ''');
 
   @override
   Future<int> deleteConversationMessages(int conversationId) async =>
       await _databaseHelper.deleteRow(_tableName,
           where: '${SqfliteKeys.conversationId}  = ?',
           whereArgs: [conversationId]);
+
+  @override
+  Future<int> createMessagesTable() {
+    // TODO: implement createMessagesTable
+    throw UnimplementedError();
+  }
 }

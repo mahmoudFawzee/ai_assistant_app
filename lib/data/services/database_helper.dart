@@ -1,3 +1,6 @@
+import 'dart:developer';
+import 'dart:ffi';
+
 import 'package:ai_assistant_app/data/interface/database_interface.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
@@ -18,31 +21,34 @@ final class DatabaseHelper implements DatabaseInterface {
   Future<Database> _initDb() async {
     String dbPath = await getDatabasesPath();
     String path = join(dbPath, 'ai_assistant.db');
+    
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
 //?here when we start the chat we will create the history data base.
   Future _onCreate(Database db, int version) async {
-    await createTable('''
+    await createTable(db, '''
 CREATE TABLE conversations(
-${SqfliteKeys.id}:INTEGER PRIMARY KEY AUTOINCREMENT,
-${SqfliteKeys.title}:TEXT
+${SqfliteKeys.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+${SqfliteKeys.title} TEXT
 )
 ''');
-    await createTable('''
+    await createTable(db, '''
 CREATE TABLE messages(
-${SqfliteKeys.id}:INTEGER PRIMARY KEY AUTOINCREMENT,
-${SqfliteKeys.conversationId}:INTEGER,
-${SqfliteKeys.title}:TEXT,
-${SqfliteKeys.isMe}:INTEGER,
-${SqfliteKeys.date}:TEXT,
-${SqfliteKeys.time}:TEXT
+${SqfliteKeys.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+${SqfliteKeys.conversationId} INTEGER,
+${SqfliteKeys.title} TEXT,
+${SqfliteKeys.isMe} INTEGER,
+${SqfliteKeys.date} TEXT,
+${SqfliteKeys.time} TEXT
 )
 ''');
   }
 
   Future<Database> get database async {
+    log('get db');
     if (_database != null) return _database!;
+    log('db =null db');
     _database = await _initDb();
     return _database!;
   }
@@ -63,8 +69,7 @@ ${SqfliteKeys.time}:TEXT
 
   //?query is the sql command to create the new table.
   @override
-  Future createTable(String query) async {
-    final db = await database;
+  Future createTable(Database db, String query) async {
     await db.execute(query);
   }
 
@@ -79,17 +84,6 @@ ${SqfliteKeys.time}:TEXT
         await db.delete(tableName, where: where, whereArgs: whereArgs);
     return result;
   }
-
-  // @override
-  // Future<List<Map<String, dynamic>>> deleteRows(
-  //   String tableName, {
-  //   required String where,
-  //   required List<Object?> argsWhere,
-  // }) async {
-  //   final db = await database;
-  //   final result = await db.query(tableName);
-  //   return result;
-  // }
 
   @override
   Future<int> insertRow(String tableName, Map<String, dynamic> row) async {
@@ -113,7 +107,9 @@ ${SqfliteKeys.time}:TEXT
 
   @override
   Future<List<Map<String, dynamic>>> getRows(String tableName) async {
+    log('get data base');
     final db = await database;
+    log('database got $tableName');
     final result = await db.query(tableName);
     return result;
   }

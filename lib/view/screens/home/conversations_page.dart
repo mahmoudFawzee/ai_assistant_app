@@ -1,7 +1,14 @@
+import 'dart:developer';
+
+import 'package:ai_assistant_app/logic/chat/conversation_cubit/conversation_cubit.dart';
+import 'package:ai_assistant_app/logic/chat/messages_bloc/messages_bloc.dart';
 import 'package:ai_assistant_app/view/screens/home/chat_page.dart';
+import 'package:ai_assistant_app/view/theme/color_manger.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:intl/intl.dart' as bidi;
 
 class ConversationsScreen extends StatelessWidget {
   const ConversationsScreen({super.key});
@@ -12,23 +19,141 @@ class ConversationsScreen extends StatelessWidget {
     final appLocalizations = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
-        title:  Text(appLocalizations.conversations),
+        title: Text(appLocalizations.assistant),
       ),
-      body: Center(
-        child: TextButton(
-          onPressed: () {
-            //context.go(ChatScreen.pageRoute);
-            context.push(ChatScreen.pageRoute);
-          },
-          child: const Text(
-            'go to chat',
-          ),
-        ),
+      body: BlocConsumer<ConversationCubit, ConversationState>(
+        listener: (context, state) {
+          if (state is ConversationCreatedState) {
+            context.push('${ChatScreen.pageRoute}/${state.id}');
+          }
+        },
+        builder: (context, state) {
+          return BlocBuilder<ConversationCubit, ConversationState>(
+            builder: (context, state) {
+              log('conversation state is : $state');
+              if (state is ConversationLoadingState) {
+                return const Center(
+                  child: CircularProgressIndicator.adaptive(
+                    backgroundColor: ColorsManger.myMessageColor,
+                  ),
+                );
+              }
+              if (state is GotConversationsState) {
+                final conversations = state.conversations;
+                return ListView.builder(
+                  padding: const EdgeInsets.only(top: 5),
+                  itemCount: state.conversations.length,
+                  itemBuilder: (context, index) {
+                    final conversation = conversations[index];
+                    TextDirection textDirection =
+                        bidi.Bidi.startsWithRtl(conversation.title)
+                            ? TextDirection.rtl
+                            : TextDirection.ltr;
+                    return Directionality(
+                      textDirection: textDirection,
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(
+                          horizontal: 8.0,
+                          vertical: 2,
+                        ),
+                        child: Container(
+                          decoration: const BoxDecoration(
+                            color: ColorsManger.white,
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(3),
+                            ),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Color.fromARGB(88, 0, 0, 0),
+                                offset: Offset(3, 3),
+                                blurRadius: 3,
+                              )
+                            ],
+                          ),
+                          child: ListTile(
+                            title: Text(conversations[index].title),
+                            onTap: () {
+                              //?todo : we will create get conversation messages.
+                              context
+                                  .read<MessagesBloc>()
+                                  .add(const GetMessagesEvent());
+                              //todo: we will need it later when we need to clear the conversation
+                              context.push(
+                                  '${ChatScreen.pageRoute}/${conversation.id}');
+                            },
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                );
+              }
+              if (state is NoConversationState) {
+                return Center(
+                  child: Text(appLocalizations.noConversation),
+                );
+              }
+              return Container();
+            },
+          );
+        },
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          newConversationDialog(context, isNew: true);
+        },
         child: const Icon(Icons.add),
       ),
+    );
+  }
+
+  newConversationDialog(
+    BuildContext context, {
+    required bool isNew,
+  }) {
+    final appLocalization = AppLocalizations.of(context)!;
+    showDialog(
+      context: context,
+      builder: (context) {
+        final controller = TextEditingController();
+
+        return AlertDialog(
+          title: Text(
+            appLocalization.start_new_conversation,
+            style: Theme.of(context).textTheme.bodyLarge,
+          ),
+          scrollable: true,
+          insetPadding: const EdgeInsets.symmetric(
+            horizontal: 40.0,
+            vertical: 100,
+          ),
+          content: Column(
+            children: [
+              TextField(
+                controller: controller,
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text(appLocalization.cancel),
+            ),
+            TextButton(
+              onPressed: () {
+                final title = controller.value.text;
+                context.read<ConversationCubit>().startNewConversation(title);
+                Navigator.of(context).pop();
+              },
+              child: Text(
+                appLocalization.create,
+              ),
+            ),
+          ],
+        );
+      },
     );
   }
 }

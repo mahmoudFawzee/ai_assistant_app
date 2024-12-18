@@ -6,5 +6,25 @@
   "conversations": "conversations",
   "@conversations": {
     "description": "The conventional newborn programmer greeting"
+  },
+  "assistant": "assistant",
+  "@assistant": {
+    "description": "this will be the default name of the assistant until user set one"
+  },
+  "cancel": "cancel",
+  "@cancel": {
+    "description": "cancel word"
+  },
+  "create": "create",
+  "@create": {
+    "description": "create word"
+  },
+  "start_new_conversation": "start new conversation",
+  "@start_new_conversation": {
+    "description": "when we need to start a new conversation we will display this to user"
+  },
+  "noConversation": "No Conversation For Now",
+  "@noConversation": {
+    "description": "when No Conversation"
   }
 }

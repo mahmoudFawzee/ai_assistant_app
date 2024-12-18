@@ -8,5 +8,5 @@ abstract class ConversationInterface {
   });
   Future<int> deleteConversation(int id);
   Future<bool> deleteConversationMessages(int conversationId);
-  Future<List<Conversation>> getConversation();
+  Future<List<Conversation>> getConversations();
 }

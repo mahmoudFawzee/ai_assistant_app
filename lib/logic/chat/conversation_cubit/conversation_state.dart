@@ -11,13 +11,17 @@ final class ConversationInitial extends ConversationState {
   const ConversationInitial();
 }
 
+final class ConversationLoadingState extends ConversationState {
+  const ConversationLoadingState();
+}
+
 final class NoConversationState extends ConversationState {
   const NoConversationState();
 }
 
-final class ConversationCreationState extends ConversationState {
+final class ConversationCreatedState extends ConversationState {
   final int id;
-  const ConversationCreationState(this.id);
+  const ConversationCreatedState(this.id);
   @override
   List<Object?> get props => [id];
 }
@@ -49,6 +53,7 @@ final class ConversationUpdatingErrorState extends ConversationState {
   @override
   List<Object?> get props => [error];
 }
+
 final class ConversationDeletingErrorState extends ConversationState {
   final String error;
   const ConversationDeletingErrorState(this.error);
@@ -62,8 +67,7 @@ final class GotConversationsState extends ConversationState {
   @override
   List<Object?> get props => [conversations];
 }
+
 final class ConversationDeletedState extends ConversationState {
-  
   const ConversationDeletedState();
-  
 }

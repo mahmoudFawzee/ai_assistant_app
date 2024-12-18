@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ai_assistant_app/data/interface/conversation_interface.dart';
 import 'package:ai_assistant_app/data/services/messages_service.dart';
 import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
@@ -28,7 +30,8 @@ final class ConversationService implements ConversationInterface {
   }
 
   @override
-  Future<List<Conversation>> getConversation() async {
+  Future<List<Conversation>> getConversations() async {
+    log('get conv : $_tableName');
     final conversations = await _databaseHelper.getRows(_tableName);
     return Conversation.fromJson(conversations);
   }

@@ -1,3 +1,5 @@
+import 'package:ai_assistant_app/logic/chat/conversation_cubit/conversation_cubit.dart';
+import 'package:ai_assistant_app/logic/chat/messages_bloc/messages_bloc.dart';
 import 'package:ai_assistant_app/logic/local/localization_cubit/localization_cubit.dart';
 import 'package:ai_assistant_app/logic/local/name_cubit/name_cubit.dart';
 import 'package:ai_assistant_app/logic/local/navigation_cubit/navigation_cubit.dart';
@@ -7,6 +9,7 @@ import 'package:ai_assistant_app/view/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -26,6 +29,12 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => LocalizationCubit()..getLang(),
         ),
+        BlocProvider(
+          create: (context) => ConversationCubit()..getConversations(),
+        ),
+        BlocProvider(
+          create: (context) => MessagesBloc(),
+        ),
       ],
       child: BlocBuilder<LocalizationCubit, LocalizationState>(
         builder: (context, langState) {
@@ -42,6 +51,7 @@ class MyApp extends StatelessWidget {
                   GlobalMaterialLocalizations.delegate,
                   GlobalWidgetsLocalizations.delegate,
                   GlobalCupertinoLocalizations.delegate,
+                  AppLocalizations.delegate,
                 ],
                 supportedLocales: const [
                   Locale('en'), // English
