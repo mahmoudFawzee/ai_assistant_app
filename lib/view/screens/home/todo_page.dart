@@ -15,6 +15,10 @@ class ToDoScreen extends StatelessWidget {
           'todo',
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {},
+        child: const Icon(Icons.add),
+      ),
     );
   }
 }
