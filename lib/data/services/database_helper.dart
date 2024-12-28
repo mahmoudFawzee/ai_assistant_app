@@ -20,26 +20,16 @@ final class DatabaseHelper implements DatabaseInterface {
   Future<Database> _initDb() async {
     String dbPath = await getDatabasesPath();
     String path = join(dbPath, 'ai_assistant.db');
-    
+
     return await openDatabase(path, version: 1, onCreate: _onCreate);
   }
 
 //?here when we start the chat we will create the history data base.
   Future _onCreate(Database db, int version) async {
-    await createTable(db, '''
+    await _createTable(db, '''
 CREATE TABLE conversations(
 ${SqfliteKeys.id} INTEGER PRIMARY KEY AUTOINCREMENT,
 ${SqfliteKeys.title} TEXT
-)
-''');
-    await createTable(db, '''
-CREATE TABLE messages(
-${SqfliteKeys.id} INTEGER PRIMARY KEY AUTOINCREMENT,
-${SqfliteKeys.conversationId} INTEGER,
-${SqfliteKeys.title} TEXT,
-${SqfliteKeys.isMe} INTEGER,
-${SqfliteKeys.date} TEXT,
-${SqfliteKeys.time} TEXT
 )
 ''');
   }
@@ -67,8 +57,15 @@ ${SqfliteKeys.time} TEXT
   }
 
   //?query is the sql command to create the new table.
+
+  Future _createTable(Database db, String query) async {
+    await db.execute(query);
+  }
+
+//?query is the sql command to create the new table.
   @override
-  Future createTable(Database db, String query) async {
+  Future createTable(String query) async {
+    final db = await database;
     await db.execute(query);
   }
 
@@ -126,5 +123,48 @@ ${SqfliteKeys.time} TEXT
       whereArgs: whereArgs,
     );
     return result;
+  }
+
+  @override
+  Future<int?> getTableLastItemId(String tableName) async {
+    final db = await database;
+    final result = await db.query(
+      tableName,
+      columns: ['id'],
+      orderBy: 'id DESC',
+      limit: 1,
+    );
+    if (result.isNotEmpty) return result.first['id'] as int?;
+    return null;
+  }
+
+  @override
+  Future<List<Map<String, Object?>>> getTableLimitedRows({
+    required String tableName,
+    required String where,
+    required List<Object?> whereArgs,
+  }) async {
+    final db = await database;
+    return await db.query(
+      tableName,
+      //?say we will get 20 row by 20 row
+      //?so when we need last 20 row
+      //?limit will be 20 and page will be 1
+      //?if last 40 limit = 20 and page = 2
+      where: where,
+      whereArgs: whereArgs,
+    );
+  }
+
+  //!this will be used when we delete the
+  //!whole conversation NOT when we want to clear
+  //!conversation.
+  //!note that when we clear the conversation
+  //!we keep the table of conversation messages
+  //!but delete all rows exist.
+  @override
+  Future dropTable(String tableName) async {
+    final db = await database;
+    await db.execute('''DROP TABLE IF EXISTS $tableName''');
   }
 }

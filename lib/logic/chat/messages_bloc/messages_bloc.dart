@@ -12,15 +12,42 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
   MessagesBloc() : super(const MessagesInitialState()) {
     final messageService = MessagesService();
     final aiAssistantService = AiAssistantService();
+    //?those tow vars will be used with the load more messages event.
+    int? lastLoadedId;
+
+    on<LoadMoreMessagesEvent>((event, emit) async {
+      //emit(const MessagesLoadingState());
+
+      try {
+        final loadedMessages = await messageService.getRangeMessages(
+          event.conversationId,
+          start: lastLoadedId! - 20,
+          end: lastLoadedId!,
+        );
+        lastLoadedId = lastLoadedId! - 20;
+        emit(GotConversationMessagesState(loadedMessages));
+      } catch (e) {
+        emit(MessagesErrorState(e.toString()));
+      }
+    });
+
     on<GetConversationMessagesEvent>((event, emit) async {
       emit(const MessagesLoadingState());
       try {
-        final result =
-            await messageService.getConversationMessages(event.conversationId);
-        if (result.isEmpty) {
+        final lastMessageId = await messageService.getLastMessageId(
+          event.conversationId,
+        );
+        if (lastMessageId == null) {
           emit(const NoMessagesState());
           return;
         }
+        final result = await messageService.getRangeMessages(
+          event.conversationId,
+          start: lastMessageId - 20,
+          end: lastMessageId,
+        );
+        lastLoadedId = lastMessageId;
+
         emit(GotConversationMessagesState(result));
         return;
       } catch (e) {
@@ -39,9 +66,22 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
     on<SendUserMessageEvent>((event, emit) async {
       emit(const MessagesLoadingState());
       try {
-        final message = await messageService.storeMessageLocally(event.message);
-        emit(UserMessageStoredLocallyState(message));
-        final aiRes = await aiAssistantService.getAIResponse(message.title);
+        final userMessageId =
+            await messageService.storeMessageLocally(event.message);
+        //?if the message didn't store, stop whole process.
+        if (userMessageId == 0) return;
+        //todo: here we need to get the last 10 messages
+        //todo: which includes the last message which is
+        //todo: user message.
+        final messages = await messageService.getRangeMessages(
+          event.message.conversationId,
+          start: userMessageId - 20,
+          end: userMessageId,
+        );
+        lastLoadedId = userMessageId - 20;
+        emit(GotConversationMessagesState(messages));
+        final aiRes =
+            await aiAssistantService.getAIResponse(event.message.title);
         final aiMessage = Message(
           isMe: false,
           title: aiRes,
@@ -50,9 +90,14 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
           time: '${TimeOfDay.now()}',
           conversationId: event.message.conversationId,
         );
-        final aiStoredMessage =
-            await messageService.storeMessageLocally(aiMessage);
-        emit(GotAiAssistantResponseState(aiStoredMessage));
+        final aiMessageId = await messageService.storeMessageLocally(aiMessage);
+        final messages2 = await messageService.getRangeMessages(
+          event.message.conversationId,
+          start: aiMessageId - 20,
+          end: aiMessageId,
+        );
+        lastLoadedId = aiMessageId - 20;
+        emit(GotConversationMessagesState(messages2));
       } catch (e) {
         emit(MessagesErrorState(e.toString()));
       }

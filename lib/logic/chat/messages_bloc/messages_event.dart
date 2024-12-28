@@ -27,6 +27,24 @@ final class SendUserMessageEvent extends MessagesEvent {
   List<Object> get props => [message];
 }
 
+final class LoadMoreMessagesEvent extends MessagesEvent {
+  final int conversationId;
+  const LoadMoreMessagesEvent(this.conversationId);
+  @override
+  List<Object> get props => [conversationId];
+}
+
+final class OpenMessagesScreenEvent extends MessagesEvent {
+  final MessagesEvent messageEvent;
+  const OpenMessagesScreenEvent(this.messageEvent);
+  @override
+  List<Object> get props => [messageEvent];
+}
+
+final class CloseMessagesScreenEvent extends MessagesEvent {
+  const CloseMessagesScreenEvent();
+}
+
 final class DeleteMessageEvent extends MessagesEvent {
   final int id;
   const DeleteMessageEvent(this.id);

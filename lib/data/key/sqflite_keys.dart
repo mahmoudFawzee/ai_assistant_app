@@ -6,6 +6,6 @@ final class SqfliteKeys {
   static const date = 'date';
   static const time = 'time';
   static const messages = 'messages';
-  static const messagesTable = 'messages';
-  static const conversationTable = 'conversations';
+  static const messagesTable = 'messages_table';
+  static const conversationTable = 'conversations_table';
 }

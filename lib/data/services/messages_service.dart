@@ -5,12 +5,13 @@ import 'package:ai_assistant_app/data/services/database_helper.dart';
 
 final class MessagesService implements MessagesInterface {
   final _databaseHelper = DatabaseHelper();
-  static const _tableName = SqfliteKeys.messagesTable;
+  String _tableName(int conversationId) =>
+      '${SqfliteKeys.messagesTable}$conversationId';
   //!here we will load specific conversation messages.
   @override
   Future<List<Message>> getConversationMessages(int conversationId) async {
     final messagesList = await _databaseHelper.getSpecificRows(
-      _tableName,
+      _tableName(conversationId),
       where: '${SqfliteKeys.conversationId}=?',
       whereArgs: [conversationId],
     );
@@ -19,47 +20,66 @@ final class MessagesService implements MessagesInterface {
 
 //*we need here to return the message to emit it in the state.
   @override
-  Future<Message> storeMessageLocally(Message message) async {
+  Future<int> storeMessageLocally(Message message) async {
     final messageId = await _databaseHelper.insertRow(
-      _tableName,
+      _tableName(message.conversationId),
       message.toJson(),
     );
     //todo: get message stored.
-    final storedMessage = await _databaseHelper.getSpecificRows(
-      SqfliteKeys.messagesTable,
-      where: 'id = ?',
-      whereArgs: [messageId],
-    );
-    //?it will return just one row and we just need this row.
-    return Message.fromJson(messages: storedMessage).first;
+    return messageId;
   }
 
   @override
-  Future<int> deleteMessage(int id) async => await _databaseHelper
-      .deleteRow(_tableName, where: 'id  = ?', whereArgs: [id]);
-
-//   @override
-//   Future<int> createMessagesTable() async =>
-//       await _databaseHelper.createTable('''
-// CREATE TABLE messages(
-// ${SqfliteKeys.id}:INTEGER PRIMARY KEY AUTOINCREMENT,
-// ${SqfliteKeys.conversationId}:INTEGER,
-// ${SqfliteKeys.title}:TEXT,
-// ${SqfliteKeys.isMe}:INTEGER,
-// ${SqfliteKeys.date}:TEXT,
-// ${SqfliteKeys.time}:TEXT
-// )
-// ''');
+  Future<int> deleteMessage({
+    required int conversationId,
+    required int id,
+  }) async =>
+      await _databaseHelper.deleteRow(_tableName(conversationId),
+          where: 'id  = ?', whereArgs: [id]);
 
   @override
   Future<int> deleteConversationMessages(int conversationId) async =>
-      await _databaseHelper.deleteRow(_tableName,
+      await _databaseHelper.deleteRow(_tableName(conversationId),
           where: '${SqfliteKeys.conversationId}  = ?',
           whereArgs: [conversationId]);
 
   @override
-  Future<int> createMessagesTable() {
-    // TODO: implement createMessagesTable
-    throw UnimplementedError();
+  Future<List<Message>> getRangeMessages(
+    int conversationId, {
+    required int start,
+    required int end,
+  }) async {
+    //?result => get messages from limit : limit*pageNumber.
+    final result = await _databaseHelper.getTableLimitedRows(
+      tableName: _tableName(conversationId),
+      where: 'id > ? AND id < ?',
+      whereArgs: [start, end],
+    );
+    if (result.isEmpty) return [];
+    return Message.fromJson(messages: result);
+  }
+
+  @override
+  Future createMessageTable(int conversationId) async {
+    final tableName = '${SqfliteKeys.messagesTable}$conversationId';
+    await _databaseHelper.createTable(
+      '''
+CREATE TABLE $tableName(
+${SqfliteKeys.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+${SqfliteKeys.conversationId} INTEGER,
+${SqfliteKeys.title} TEXT,
+${SqfliteKeys.isMe} INTEGER,
+${SqfliteKeys.date} TEXT,
+${SqfliteKeys.time} TEXT
+)
+''',
+    );
+  }
+
+  @override
+  Future<int?> getLastMessageId(int conversationId) async {
+    return await _databaseHelper.getTableLastItemId(_tableName(
+      conversationId,
+    ));
   }
 }

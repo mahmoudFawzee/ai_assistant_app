@@ -26,10 +26,10 @@ final class GotConversationMessagesState extends MessagesState {
   List<Object> get props => [messages];
 }
 final class UserMessageStoredLocallyState extends MessagesState {
-  final Message message;
-  const UserMessageStoredLocallyState(this.message);
+  final List<Message> messages;
+  const UserMessageStoredLocallyState(this.messages);
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [messages];
 }
 
 final class GotAiAssistantResponseState extends MessagesState {
