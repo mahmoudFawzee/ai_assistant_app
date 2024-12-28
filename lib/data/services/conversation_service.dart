@@ -21,12 +21,10 @@ final class ConversationService implements ConversationInterface {
   }
 
   @override
-  Future<bool> deleteConversationMessages(int conversationId) async {
-    final result = await _messagesService.deleteConversationMessages(
+  Future deleteConversationMessages(int conversationId) async {
+    await _messagesService.dropTable(
       conversationId,
     );
-    //?this means that there is some thing deleted.
-    return result > 0;
   }
 
   @override
@@ -42,6 +40,9 @@ final class ConversationService implements ConversationInterface {
         _tableName,
         conversation.toJson(),
       );
+
+  Future createConversationMessagesTable(int conversationId) async =>
+      await _messagesService.createMessageTable(conversationId);
 
   @override
   Future<int> updateConversation({

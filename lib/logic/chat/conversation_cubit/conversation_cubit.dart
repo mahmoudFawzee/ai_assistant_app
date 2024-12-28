@@ -33,6 +33,7 @@ class ConversationCubit extends Cubit<ConversationState> {
             'conversation creation error'));
         return;
       }
+      await _conversationService.createConversationMessagesTable(id);
       emit(ConversationCreatedState(id));
       return;
     } catch (e) {

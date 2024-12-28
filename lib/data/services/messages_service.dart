@@ -82,4 +82,9 @@ ${SqfliteKeys.time} TEXT
       conversationId,
     ));
   }
+
+  @override
+  Future dropTable(int conversationId) async {
+    await _databaseHelper.dropTable(_tableName(conversationId));
+  }
 }

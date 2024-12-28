@@ -7,6 +7,6 @@ abstract class ConversationInterface {
     required Conversation conversation,
   });
   Future<int> deleteConversation(int id);
-  Future<bool> deleteConversationMessages(int conversationId);
+  Future deleteConversationMessages(int conversationId);
   Future<List<Conversation>> getConversations();
 }

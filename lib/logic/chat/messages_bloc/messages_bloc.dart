@@ -41,12 +41,12 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
           emit(const NoMessagesState());
           return;
         }
+        lastLoadedId = lastMessageId;
         final result = await messageService.getRangeMessages(
           event.conversationId,
-          start: lastMessageId - 20,
-          end: lastMessageId,
+          start: lastLoadedId! - 20,
+          end: lastLoadedId!,
         );
-        lastLoadedId = lastMessageId;
 
         emit(GotConversationMessagesState(result));
         return;
