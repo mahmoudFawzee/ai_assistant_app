@@ -27,7 +27,7 @@ final class DatabaseHelper implements DatabaseInterface {
 //?here when we start the chat we will create the history data base.
   Future _onCreate(Database db, int version) async {
     await _createTable(db, '''
-CREATE TABLE conversations(
+CREATE TABLE ${SqfliteKeys.conversationTable}(
 ${SqfliteKeys.id} INTEGER PRIMARY KEY AUTOINCREMENT,
 ${SqfliteKeys.title} TEXT
 )
@@ -141,12 +141,15 @@ ${SqfliteKeys.title} TEXT
   @override
   Future<List<Map<String, Object?>>> getTableLimitedRows({
     required String tableName,
+    required String orderedBy,
     required String where,
+
     required List<Object?> whereArgs,
   }) async {
     final db = await database;
     return await db.query(
       tableName,
+      orderBy: orderedBy,
       //?say we will get 20 row by 20 row
       //?so when we need last 20 row
       //?limit will be 20 and page will be 1

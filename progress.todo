@@ -1,0 +1,8 @@
+29/12/2024 => work on pagination in the chat page
+              make the chat page load more messages 
+              when you get the top edge and show older
+              messages and work on smaller message id
+              make its smallest value = 0 and load just one time 
+              in the one group of messages not for each loading process
+              its value changes.
+              

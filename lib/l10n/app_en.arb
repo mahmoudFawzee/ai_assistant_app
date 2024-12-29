@@ -26,5 +26,13 @@
   "noConversation": "No Conversation For Now",
   "@noConversation": {
     "description": "when No Conversation"
+  },
+  "noMessages": "No Messages For Now",
+  "@noMessages": {
+    "description": "when No Conversation"
+  },
+  "aiGetRes": "I am Getting The Response Now...",
+  "@aiGetRes": {
+    "description": "when No Conversation"
   }
 }

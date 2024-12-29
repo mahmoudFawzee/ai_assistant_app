@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:ai_assistant_app/data/constants/end_points.dart';
 import 'package:ai_assistant_app/data/interface/open_ai_interface.dart';
@@ -8,6 +9,7 @@ import 'package:http/http.dart' as http;
 final class AiAssistantService implements AiAssistantInterface {
   @override
   Future<String> getAIResponse(String query) async {
+    
     final response = await http.post(
       Uri.parse(ai_model_endpoint),
       headers: {
@@ -19,9 +21,9 @@ final class AiAssistantService implements AiAssistantInterface {
         'inputs': query,
       }),
     );
-
+    
     if (response.statusCode == 200) {
-      return jsonDecode(response.body)['generated_text'];
+      return json.decode(response.body)[0]['generated_text'];
     } else {
       throw Exception('Failed to fetch AI response');
     }

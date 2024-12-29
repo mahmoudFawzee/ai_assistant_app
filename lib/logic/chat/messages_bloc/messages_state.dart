@@ -11,12 +11,19 @@ final class MessagesInitialState extends MessagesState {
   const MessagesInitialState();
 }
 
+final class AiGettingResponseState extends MessagesState {
+  const AiGettingResponseState();
+}
+
 final class MessagesLoadingState extends MessagesState {
   const MessagesLoadingState();
 }
 
 final class MessagesStoredState extends MessagesState {
   const MessagesStoredState();
+}
+final class NewMessagesLoadingState extends MessagesState {
+  const NewMessagesLoadingState();
 }
 
 final class GotConversationMessagesState extends MessagesState {
@@ -25,6 +32,13 @@ final class GotConversationMessagesState extends MessagesState {
   @override
   List<Object> get props => [messages];
 }
+final class LoadedMoreMessagesState extends MessagesState {
+  final List<Message> messages;
+  const LoadedMoreMessagesState(this.messages);
+  @override
+  List<Object> get props => [messages];
+}
+
 final class UserMessageStoredLocallyState extends MessagesState {
   final List<Message> messages;
   const UserMessageStoredLocallyState(this.messages);

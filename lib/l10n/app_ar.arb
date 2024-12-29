@@ -5,5 +5,7 @@
     "create": "انشاء",
     "start_new_conversation": "بدأ محادثة جديدة",
     "noConversation": "لا محادثات الي الان",
-    "assistant": "المساعد"
+    "assistant": "المساعد",
+    "noMessages": "لا يوجد رسائل الي الآن",
+    "aiGetRes": "الاجابة في طريقها الان ..."
 }

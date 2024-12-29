@@ -1,7 +1,8 @@
+import 'dart:developer';
+
 import 'package:ai_assistant_app/data/models/message.dart';
 import 'package:ai_assistant_app/data/services/messages_service.dart';
 import 'package:ai_assistant_app/data/services/ai_assistant_service.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 
@@ -13,19 +14,29 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
     final messageService = MessagesService();
     final aiAssistantService = AiAssistantService();
     //?those tow vars will be used with the load more messages event.
-    int? lastLoadedId;
+    int smallerLoadedId = 0;
+    void decreaseSmallerLoadedId() {
+      if (smallerLoadedId < 0) {
+        smallerLoadedId = 0;
+        return;
+      }
+      smallerLoadedId = smallerLoadedId - 20;
+    }
+
+    final List<Message> allLoadedMessages = [];
 
     on<LoadMoreMessagesEvent>((event, emit) async {
-      //emit(const MessagesLoadingState());
-
+      log('start load more messages');
+      emit(const NewMessagesLoadingState());
       try {
         final loadedMessages = await messageService.getRangeMessages(
           event.conversationId,
-          start: lastLoadedId! - 20,
-          end: lastLoadedId!,
+          start: 0,
+          end: 3,
         );
-        lastLoadedId = lastLoadedId! - 20;
-        emit(GotConversationMessagesState(loadedMessages));
+        decreaseSmallerLoadedId();
+        allLoadedMessages.addAll(loadedMessages);
+        emit(LoadedMoreMessagesState([...allLoadedMessages]));
       } catch (e) {
         emit(MessagesErrorState(e.toString()));
       }
@@ -41,14 +52,16 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
           emit(const NoMessagesState());
           return;
         }
-        lastLoadedId = lastMessageId;
+        decreaseSmallerLoadedId();
+
         final result = await messageService.getRangeMessages(
           event.conversationId,
-          start: lastLoadedId! - 20,
-          end: lastLoadedId!,
+          start: lastMessageId - 20,
+          end: lastMessageId,
         );
 
-        emit(GotConversationMessagesState(result));
+        allLoadedMessages.addAll(result);
+        emit(GotConversationMessagesState(allLoadedMessages));
         return;
       } catch (e) {
         emit(MessagesErrorState(e.toString()));
@@ -78,16 +91,18 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
           start: userMessageId - 20,
           end: userMessageId,
         );
-        lastLoadedId = userMessageId - 20;
+        decreaseSmallerLoadedId();
         emit(GotConversationMessagesState(messages));
+        emit(const AiGettingResponseState());
+
         final aiRes =
             await aiAssistantService.getAIResponse(event.message.title);
+
         final aiMessage = Message(
           isMe: false,
           title: aiRes,
           id: 0,
           date: '${DateTime.now()}',
-          time: '${TimeOfDay.now()}',
           conversationId: event.message.conversationId,
         );
         final aiMessageId = await messageService.storeMessageLocally(aiMessage);
@@ -96,7 +111,7 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
           start: aiMessageId - 20,
           end: aiMessageId,
         );
-        lastLoadedId = aiMessageId - 20;
+        smallerLoadedId = aiMessageId - 20;
         emit(GotConversationMessagesState(messages2));
       } catch (e) {
         emit(MessagesErrorState(e.toString()));
@@ -117,6 +132,11 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
       } catch (e) {
         emit(MessagesErrorState(e.toString()));
       }
+    });
+
+    on<CloseMessagesScreenEvent>((event, emit) async {
+      allLoadedMessages.clear();
+      smallerLoadedId = 0;
     });
   }
 }

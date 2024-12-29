@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ai_assistant_app/data/interface/messages_interface.dart';
 import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
 import 'package:ai_assistant_app/data/models/message.dart';
@@ -50,11 +52,14 @@ final class MessagesService implements MessagesInterface {
     required int end,
   }) async {
     //?result => get messages from limit : limit*pageNumber.
+    print('messages state : start : $start end : $end');
     final result = await _databaseHelper.getTableLimitedRows(
       tableName: _tableName(conversationId),
-      where: 'id > ? AND id < ?',
+      orderedBy: 'id DESC',
+      where: 'id >= ? AND id <= ?',
       whereArgs: [start, end],
     );
+    log('n of rows :${result.length}');
     if (result.isEmpty) return [];
     return Message.fromJson(messages: result);
   }

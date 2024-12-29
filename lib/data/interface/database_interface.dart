@@ -19,6 +19,7 @@ abstract class DatabaseInterface {
   Future isTableExists(String tableName);
   Future getTableLimitedRows({
     required String tableName,
+    required String orderedBy,
     required String where,
     required List<Object?> whereArgs,
   });

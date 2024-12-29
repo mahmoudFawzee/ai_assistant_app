@@ -6,31 +6,26 @@ final class Message {
   final String title;
   final bool isMe;
   final String date;
-  final String time;
   const Message({
     required this.isMe,
     required this.title,
     required this.id,
-    required this.time,
-    required this.date,
     required this.conversationId,
+    required this.date,
   });
   Map<String, dynamic> toJson() => {
         SqfliteKeys.title: title,
         SqfliteKeys.isMe: isMe ? 1 : 0,
-        SqfliteKeys.date: date,
-        SqfliteKeys.time: time,
-        SqfliteKeys.conversationId:conversationId,
+        SqfliteKeys.date: DateTime.now().toString(),
+        SqfliteKeys.conversationId: conversationId,
       };
 
   factory Message._fromJson({required Map<String, dynamic> json}) => Message(
-        isMe: json[SqfliteKeys.isMe] == 0 ? false : true,
-        title: json[SqfliteKeys.title],
-        id: json[SqfliteKeys.id],
-        date: json[SqfliteKeys.date],
-        time: json[SqfliteKeys.time],
-        conversationId:json[SqfliteKeys.conversationId]
-      );
+      isMe: json[SqfliteKeys.isMe] == 0 ? false : true,
+      title: json[SqfliteKeys.title],
+      id: json[SqfliteKeys.id],
+      date: json[SqfliteKeys.date],
+      conversationId: json[SqfliteKeys.conversationId]);
   static List<Message> fromJson({
     required List<Map<String, dynamic>> messages,
   }) {

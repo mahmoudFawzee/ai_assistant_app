@@ -28,13 +28,12 @@ class ThemeCubit extends Cubit<bool?> {
     return;
   }
 
-
   Future<bool?> _isDark() async {
     final preferences = await SharedPreferences.getInstance();
     final currentTheme = preferences.getBool(PreferencesKeys.isDark);
     if (currentTheme == null) {
-      await preferences.setBool(PreferencesKeys.isDark, true);
-      return true;
+      await _setDark(dark: false);
+      return false;
     }
     return currentTheme;
   }
