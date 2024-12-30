@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:ai_assistant_app/data/models/message.dart';
 import 'package:ai_assistant_app/logic/chat/conversation_cubit/conversation_cubit.dart';
 import 'package:ai_assistant_app/logic/chat/messages_bloc/messages_bloc.dart';
+import 'package:ai_assistant_app/logic/chat/mic_cubit/mic_cubit.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:ai_assistant_app/view/widgets/chat_bubble.dart';
 import 'package:flutter/material.dart';
@@ -55,7 +56,13 @@ class _ChatScreenState extends State<ChatScreen> {
     _controller.clear();
   }
 
-  void _handleUserInput(String text) {}
+  void _handleUserVoice() {
+    log('handle voice');
+  }
+
+  void _startListen() {
+    log('user start talking');
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -98,6 +105,14 @@ class _ChatScreenState extends State<ChatScreen> {
                     if (current is AiGettingResponseState) return false;
                     if (current is NewMessagesLoadingState &&
                         previous is GotConversationMessagesState) {
+                      return false;
+                    }
+                    if (current is MessagesLoadingState &&
+                        previous is GotConversationMessagesState) {
+                      return false;
+                    }
+                    if (current is MessagesLoadingState &&
+                        previous is MessagesInitialState) {
                       return false;
                     }
                     return true;
@@ -159,25 +174,78 @@ class _ChatScreenState extends State<ChatScreen> {
                 if (state is AiGettingResponseState) {
                   return Text(appLocalization.aiGetRes);
                 }
-                return TextField(
-                  controller: _controller,
-                  onSubmitted: (text) => _handleUserInput(text),
-                  decoration: InputDecoration(
-                    hintText: 'Ask me anything...',
-                    suffixIcon: IconButton(
-                      icon: const Icon(Icons.send),
-                      onPressed: () {
-                        final Message message = Message(
-                          isMe: true,
-                          title: _controller.value.text,
-                          id: 0,
-                          date: '',
-                          conversationId: widget.conversationId,
+                return BlocProvider<MicCubit>(
+                  create: (context) => MicCubit(),
+                  child: Builder(builder: (context) {
+                    return BlocBuilder<MicCubit, TextFieldIcon>(
+                      builder: (context, textFieldState) {
+                        //?if we record now
+                        //?disable the text field
+                        //?and show tap to send.
+                        final enabled = textFieldState != TextFieldIcon.wave;
+                        return InkWell(
+                          onTap: () {
+                            if (!enabled) {
+                              //todo: handle the case of
+                              //todo: handling the voice to text.
+                              context.read<MicCubit>().showMic();
+                              _handleUserVoice();
+                              return;
+                            }
+                          },
+                          child: TextField(
+                            controller: _controller,
+                            enabled: enabled,
+                            onChanged: (value) {
+                              if (value.isNotEmpty) {
+                                context.read<MicCubit>().showSend();
+                                return;
+                              }
+                              context.read<MicCubit>().showMic();
+                              return;
+                            },
+                            decoration: InputDecoration(
+                              hintText: enabled
+                                  ? 'Ask me anything...'
+                                  : 'Tap To Send',
+                              suffixIcon: BlocBuilder<MicCubit, TextFieldIcon>(
+                                builder: (context, iconState) {
+                                  return IconButton(
+                                    icon: Icon(
+                                      iconState == TextFieldIcon.mic
+                                          ? Icons.mic
+                                          : iconState == TextFieldIcon.wave
+                                              ? Icons.waves
+                                              : Icons.send,
+                                      color: ColorsManger.blue,
+                                    ),
+                                    onPressed: () {
+                                      if (iconState == TextFieldIcon.mic) {
+                                        //todo: handle the case of
+                                        //todo: start listen to voice.
+                                        context.read<MicCubit>().showWave();
+                                        _startListen();
+                                        return;
+                                      }
+
+                                      final Message message = Message(
+                                        isMe: true,
+                                        title: _controller.value.text,
+                                        id: 0,
+                                        date: '',
+                                        conversationId: widget.conversationId,
+                                      );
+                                      _sendMessage(message);
+                                    },
+                                  );
+                                },
+                              ),
+                            ),
+                          ),
                         );
-                        _sendMessage(message);
                       },
-                    ),
-                  ),
+                    );
+                  }),
                 );
               },
             ),
