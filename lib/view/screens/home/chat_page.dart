@@ -21,6 +21,7 @@ class ChatScreen extends StatefulWidget {
 class _ChatScreenState extends State<ChatScreen> {
   static final _controller = TextEditingController();
   final _scrollController = ScrollController();
+  double _savedScrollOffset = 0.0;
   @override
   void initState() {
     super.initState();
@@ -31,6 +32,8 @@ class _ChatScreenState extends State<ChatScreen> {
     final loadMorePoint = _scrollController.position.maxScrollExtent;
 
     if (_scrollController.offset >= loadMorePoint - 1) {
+      _savedScrollOffset = _scrollController.offset;
+      log('scroll offset : $_savedScrollOffset');
       context.read<MessagesBloc>().add(
             LoadMoreMessagesEvent(
               widget.conversationId,
@@ -41,8 +44,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   @override
   void dispose() {
-    _scrollController.dispose();
     super.dispose();
+    _scrollController.dispose();
   }
 
   void _sendMessage(Message message) {
@@ -92,23 +95,30 @@ class _ChatScreenState extends State<ChatScreen> {
                 flex: 6,
                 child: BlocBuilder<MessagesBloc, MessagesState>(
                   buildWhen: (previous, current) {
-                    return current is! AiGettingResponseState ||
-                        current is! NewMessagesLoadingState;
+                    if (current is AiGettingResponseState) return false;
+                    if (current is NewMessagesLoadingState &&
+                        previous is GotConversationMessagesState) {
+                      return false;
+                    }
+                    return true;
                   },
                   builder: (context, state) {
-                    log('mes state : $state');
+                    log('build state :  state : $state');
                     if (state is GotConversationMessagesState) {
-                      final reverse = state.reverseListView;
                       final messages = state.messages;
+                      WidgetsBinding.instance.addPostFrameCallback((_) {
+                        _scrollController.jumpTo(_savedScrollOffset);
+                      });
 
                       return ListView.builder(
                         controller: _scrollController,
-                        reverse: reverse,
+                        reverse: true,
                         itemBuilder: (context, index) {
                           final Message message = messages[index];
                           log('current message : ${message.title} and index : $index');
 
                           return ChatBubble(
+                            key: ValueKey(index),
                             message: message,
                           );
                         },

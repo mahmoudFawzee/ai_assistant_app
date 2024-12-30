@@ -21,7 +21,7 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
   //?var for set the start point we will get rows from.
   int _offset = 0;
   //?var for set the maximum rows per page (request) .
-  static const int _limit = 5;
+  static const int _limit = 10;
 
 //*********************************************************************
 //methods :
@@ -76,7 +76,6 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
         //?find solution for that.
         _dbRowLength = nOfMessages;
         _numberOfPages = (_dbRowLength / _limit).ceil();
-        _currentPage = 1; //get data [0:19]
         final result = await messageService.getRangeMessages(
           event.conversationId,
           //?in the first request offset is 0
@@ -84,8 +83,8 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
           limit: _limit,
         );
         _messagesList.addAll(result);
+        log('build state : messages : ${_messagesList.length}');
         emit(GotConversationMessagesState(
-          reverseListView: true,
           messages: _messagesList,
         ));
         return;
@@ -108,8 +107,7 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
         log('load more : result ${result.length} ');
         _messagesList.addAll(result);
         emit(GotConversationMessagesState(
-          reverseListView: false,
-          messages: _messagesList.reversed.toList(),
+          messages: _messagesList,
         ));
       } catch (e) {
         emit(MessagesErrorState(e.toString()));
@@ -134,14 +132,14 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
         //todo: here we need to get the last 10 messages
         //todo: which includes the last message which is
         //todo: user message.
-        final messages = await messageService.getRangeMessages(
-          event.message.conversationId,
-          offset: userMessageId - 20,
-          limit: userMessageId,
+        final message = await messageService.getMessage(
+          conversationId: event.message.conversationId,
+          messageId: userMessageId,
         );
-
-        emit(GotConversationMessagesState(
-            reverseListView: false, messages: _messagesList));
+        //?this message will be the last one so
+        //?we want to store it in the first index.
+        _messagesList.insert(0, message);
+        emit(GotConversationMessagesState(messages: _messagesList));
         emit(const AiGettingResponseState());
 
         final aiRes =
@@ -155,14 +153,15 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
           conversationId: event.message.conversationId,
         );
         final aiMessageId = await messageService.storeMessageLocally(aiMessage);
-        final messages2 = await messageService.getRangeMessages(
-          event.message.conversationId,
-          offset: aiMessageId - 20,
-          limit: aiMessageId,
+        final message2 = await messageService.getMessage(
+          conversationId: aiMessage.conversationId,
+          messageId: aiMessageId,
         );
+        //?this message will be the last one so
+        //?we want to store it in the first index.
+        _messagesList.insert(0, message2);
 
-        emit(GotConversationMessagesState(
-            reverseListView: false, messages: _messagesList));
+        emit(GotConversationMessagesState(messages: _messagesList));
       } catch (e) {
         emit(MessagesErrorState(e.toString()));
       }

@@ -12,6 +12,10 @@ abstract class MessagesInterface {
     required int offset,
     required int limit,
   });
+  Future<Message> getMessage({
+    required int conversationId,
+    required int messageId,
+  });
 
   Future<int?> getLastMessageId(int conversationId);
   Future<int> getNumberOfMessages(int conversationId);

@@ -52,7 +52,7 @@ final class MessagesService implements MessagesInterface {
     required int limit,
   }) async {
     //?result => get messages from limit : limit*pageNumber.
-    print('messages state : offset : $offset limit : $limit');
+    log('messages state : offset : $offset limit : $limit');
     final result = await _databaseHelper.getRowsInRange(
       tableName: _tableName(conversationId),
       orderedBy: 'id DESC',
@@ -97,5 +97,17 @@ ${SqfliteKeys.time} TEXT
   Future<int> getNumberOfMessages(int conversationId) async {
     final tableName = '${SqfliteKeys.messagesTable}$conversationId';
     return await _databaseHelper.getNumberOfRows(tableName);
+  }
+
+  @override
+  Future<Message> getMessage(
+      {required int conversationId, required int messageId}) async {
+    final tableName = '${SqfliteKeys.messagesTable}$conversationId';
+    final result = await _databaseHelper.getSpecificRows(
+      tableName,
+      where: 'id = ?',
+      whereArgs: [messageId],
+    );
+    return Message.fromJson(messages: result).first;
   }
 }

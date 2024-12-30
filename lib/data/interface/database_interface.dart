@@ -5,6 +5,7 @@ abstract class DatabaseInterface {
   Future insertRow(String tableName, Map<String, dynamic> row);
   Future updateRow(String tableName, Map<String, dynamic> row);
   Future getRows(String tableName);
+  
   Future getSpecificRows(String tableName,
       {required String where, required List<Object?> whereArgs});
   Future deleteRow(String tableName,
