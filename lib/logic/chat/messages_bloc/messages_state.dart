@@ -22,16 +22,20 @@ final class MessagesLoadingState extends MessagesState {
 final class MessagesStoredState extends MessagesState {
   const MessagesStoredState();
 }
+
 final class NewMessagesLoadingState extends MessagesState {
   const NewMessagesLoadingState();
 }
 
 final class GotConversationMessagesState extends MessagesState {
   final List<Message> messages;
-  const GotConversationMessagesState(this.messages);
+  final bool reverseListView;
+  const GotConversationMessagesState(
+      {required this.messages, required this.reverseListView});
   @override
-  List<Object> get props => [messages];
+  List<Object> get props => [messages, reverseListView];
 }
+
 final class LoadedMoreMessagesState extends MessagesState {
   final List<Message> messages;
   const LoadedMoreMessagesState(this.messages);

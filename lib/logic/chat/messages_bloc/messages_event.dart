@@ -7,9 +7,9 @@ sealed class MessagesEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class GetConversationMessagesEvent extends MessagesEvent {
+final class OpenConversationMessagePageEvent extends MessagesEvent {
   final int conversationId;
-  const GetConversationMessagesEvent(this.conversationId);
+  const OpenConversationMessagePageEvent(this.conversationId);
   @override
   List<Object> get props => [conversationId];
 }

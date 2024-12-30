@@ -10,59 +10,107 @@ part 'messages_event.dart';
 part 'messages_state.dart';
 
 class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
+  //?this the list which hold all data.
+  final List<Message> _messagesList = [];
+  //?var for storing the total amount of messages in the conversation
+  int _dbRowLength = 0;
+  //?var for storing number of messages pages.
+  int _numberOfPages = 0;
+  //?var for storing the current page.
+  int _currentPage = 1;
+  //?var for set the start point we will get rows from.
+  int _offset = 0;
+  //?var for set the maximum rows per page (request) .
+  static const int _limit = 5;
+
+//*********************************************************************
+//methods :
+  bool reloadPagination() {
+    logData();
+    //?we reach end of conversation messages.
+    if (_currentPage >= _numberOfPages) return false;
+    //!we start with id 1 so we need to make it starts with 1.
+    final offset = _currentPage * _limit;
+    if (_currentPage < _numberOfPages) {
+      //todo: get data.
+      //todo: add data to the messages list.
+
+      _offset = offset;
+      _currentPage++;
+    }
+    logData();
+    return true;
+  }
+
+  void resetData() {
+    log('pagination data reset data');
+    _messagesList.clear();
+    _dbRowLength = 0;
+    _numberOfPages = 0;
+    _currentPage = 1;
+    _offset = 0;
+  }
+
+  logData() {
+    log(' pagination data :  length : $_dbRowLength  current page : $_currentPage  n of pages : $_numberOfPages');
+    log('load more : result offset : $_offset');
+  }
+
   MessagesBloc() : super(const MessagesInitialState()) {
     final messageService = MessagesService();
+
     final aiAssistantService = AiAssistantService();
-    //?those tow vars will be used with the load more messages event.
-    int smallerLoadedId = 0;
-    void decreaseSmallerLoadedId() {
-      if (smallerLoadedId < 0) {
-        smallerLoadedId = 0;
-        return;
-      }
-      smallerLoadedId = smallerLoadedId - 20;
-    }
 
-    final List<Message> allLoadedMessages = [];
-
-    on<LoadMoreMessagesEvent>((event, emit) async {
-      log('start load more messages');
-      emit(const NewMessagesLoadingState());
+    on<OpenConversationMessagePageEvent>((event, emit) async {
+      emit(const MessagesLoadingState());
       try {
-        final loadedMessages = await messageService.getRangeMessages(
+        final nOfMessages = await messageService.getNumberOfMessages(
           event.conversationId,
-          start: 0,
-          end: 3,
         );
-        decreaseSmallerLoadedId();
-        allLoadedMessages.addAll(loadedMessages);
-        emit(LoadedMoreMessagesState([...allLoadedMessages]));
+        if (nOfMessages == 0) {
+          emit(const NoMessagesState());
+          return;
+        }
+        //?the problem is here we call the constructor each time we
+        //?call the event.
+        //?find solution for that.
+        _dbRowLength = nOfMessages;
+        _numberOfPages = (_dbRowLength / _limit).ceil();
+        _currentPage = 1; //get data [0:19]
+        final result = await messageService.getRangeMessages(
+          event.conversationId,
+          //?in the first request offset is 0
+          offset: _offset,
+          limit: _limit,
+        );
+        _messagesList.addAll(result);
+        emit(GotConversationMessagesState(
+          reverseListView: true,
+          messages: _messagesList,
+        ));
+        return;
       } catch (e) {
         emit(MessagesErrorState(e.toString()));
       }
     });
 
-    on<GetConversationMessagesEvent>((event, emit) async {
-      emit(const MessagesLoadingState());
+    on<LoadMoreMessagesEvent>((event, emit) async {
+      log('start load more messages');
+      final reloaded = reloadPagination();
+      if (!reloaded) return;
+      emit(const NewMessagesLoadingState());
       try {
-        final lastMessageId = await messageService.getLastMessageId(
-          event.conversationId,
-        );
-        if (lastMessageId == null) {
-          emit(const NoMessagesState());
-          return;
-        }
-        decreaseSmallerLoadedId();
-
         final result = await messageService.getRangeMessages(
           event.conversationId,
-          start: lastMessageId - 20,
-          end: lastMessageId,
+          offset: _offset,
+          limit: _limit,
         );
-
-        allLoadedMessages.addAll(result);
-        emit(GotConversationMessagesState(allLoadedMessages));
-        return;
+        log('load more : result ${result.length} ');
+        _messagesList.addAll(result);
+        emit(GotConversationMessagesState(
+          reverseListView: false,
+          messages: _messagesList.reversed.toList(),
+        ));
       } catch (e) {
         emit(MessagesErrorState(e.toString()));
       }
@@ -88,11 +136,12 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
         //todo: user message.
         final messages = await messageService.getRangeMessages(
           event.message.conversationId,
-          start: userMessageId - 20,
-          end: userMessageId,
+          offset: userMessageId - 20,
+          limit: userMessageId,
         );
-        decreaseSmallerLoadedId();
-        emit(GotConversationMessagesState(messages));
+
+        emit(GotConversationMessagesState(
+            reverseListView: false, messages: _messagesList));
         emit(const AiGettingResponseState());
 
         final aiRes =
@@ -108,11 +157,12 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
         final aiMessageId = await messageService.storeMessageLocally(aiMessage);
         final messages2 = await messageService.getRangeMessages(
           event.message.conversationId,
-          start: aiMessageId - 20,
-          end: aiMessageId,
+          offset: aiMessageId - 20,
+          limit: aiMessageId,
         );
-        smallerLoadedId = aiMessageId - 20;
-        emit(GotConversationMessagesState(messages2));
+
+        emit(GotConversationMessagesState(
+            reverseListView: false, messages: _messagesList));
       } catch (e) {
         emit(MessagesErrorState(e.toString()));
       }
@@ -135,8 +185,7 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
     });
 
     on<CloseMessagesScreenEvent>((event, emit) async {
-      allLoadedMessages.clear();
-      smallerLoadedId = 0;
+      resetData();
     });
   }
 }

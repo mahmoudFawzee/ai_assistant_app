@@ -139,23 +139,20 @@ ${SqfliteKeys.title} TEXT
   }
 
   @override
-  Future<List<Map<String, Object?>>> getTableLimitedRows({
+  Future<List<Map<String, Object?>>> getRowsInRange({
     required String tableName,
     required String orderedBy,
-    required String where,
-
-    required List<Object?> whereArgs,
+    required int offset,
+    required int limit,
   }) async {
     final db = await database;
     return await db.query(
       tableName,
       orderBy: orderedBy,
-      //?say we will get 20 row by 20 row
-      //?so when we need last 20 row
-      //?limit will be 20 and page will be 1
-      //?if last 40 limit = 20 and page = 2
-      where: where,
-      whereArgs: whereArgs,
+      //?this is the start point
+      offset: offset,
+      //?this is number of rows we will get.
+      limit: limit,
     );
   }
 
@@ -169,5 +166,13 @@ ${SqfliteKeys.title} TEXT
   Future dropTable(String tableName) async {
     final db = await database;
     await db.execute('''DROP TABLE IF EXISTS $tableName''');
+  }
+
+  @override
+  Future<int> getNumberOfRows(String tableName) async {
+    final db = await database;
+    final result = await db.rawQuery(
+        'SELECT COUNT(*) AS count FROM $tableName'); // Replace 'messages' with your table name
+    return Sqflite.firstIntValue(result) ?? 0; // Safely extract the count value
   }
 }

@@ -29,9 +29,8 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _onScroll() {
     final loadMorePoint = _scrollController.position.maxScrollExtent;
-    log('load more : ${_scrollController.offset >= loadMorePoint - 200}');
-    if (_scrollController.offset >= loadMorePoint - 200) {
-      log('load more messages');
+
+    if (_scrollController.offset >= loadMorePoint - 1) {
       context.read<MessagesBloc>().add(
             LoadMoreMessagesEvent(
               widget.conversationId,
@@ -93,19 +92,22 @@ class _ChatScreenState extends State<ChatScreen> {
                 flex: 6,
                 child: BlocBuilder<MessagesBloc, MessagesState>(
                   buildWhen: (previous, current) {
-                    print(current);
                     return current is! AiGettingResponseState ||
                         current is! NewMessagesLoadingState;
                   },
                   builder: (context, state) {
+                    log('mes state : $state');
                     if (state is GotConversationMessagesState) {
+                      final reverse = state.reverseListView;
                       final messages = state.messages;
+
                       return ListView.builder(
                         controller: _scrollController,
-                        reverse: true,
-                        shrinkWrap: true,
+                        reverse: reverse,
                         itemBuilder: (context, index) {
                           final Message message = messages[index];
+                          log('current message : ${message.title} and index : $index');
+
                           return ChatBubble(
                             message: message,
                           );
@@ -113,7 +115,7 @@ class _ChatScreenState extends State<ChatScreen> {
                         itemCount: messages.length,
                       );
                     }
-                    
+
                     if (state is MessagesLoadingState) {
                       return const Center(
                         child: SizedBox(

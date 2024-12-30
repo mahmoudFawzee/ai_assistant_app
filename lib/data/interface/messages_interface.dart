@@ -9,9 +9,10 @@ abstract class MessagesInterface {
   Future<int> deleteConversationMessages(int conversationId);
   Future<List<Message>> getRangeMessages(
     int conversationId, {
-    required int start,
-    required int end,
+    required int offset,
+    required int limit,
   });
 
   Future<int?> getLastMessageId(int conversationId);
+  Future<int> getNumberOfMessages(int conversationId);
 }

@@ -48,16 +48,16 @@ final class MessagesService implements MessagesInterface {
   @override
   Future<List<Message>> getRangeMessages(
     int conversationId, {
-    required int start,
-    required int end,
+    required int offset,
+    required int limit,
   }) async {
     //?result => get messages from limit : limit*pageNumber.
-    print('messages state : start : $start end : $end');
-    final result = await _databaseHelper.getTableLimitedRows(
+    print('messages state : offset : $offset limit : $limit');
+    final result = await _databaseHelper.getRowsInRange(
       tableName: _tableName(conversationId),
       orderedBy: 'id DESC',
-      where: 'id >= ? AND id <= ?',
-      whereArgs: [start, end],
+      offset: offset,
+      limit: limit,
     );
     log('n of rows :${result.length}');
     if (result.isEmpty) return [];
@@ -91,5 +91,11 @@ ${SqfliteKeys.time} TEXT
   @override
   Future dropTable(int conversationId) async {
     await _databaseHelper.dropTable(_tableName(conversationId));
+  }
+
+  @override
+  Future<int> getNumberOfMessages(int conversationId) async {
+    final tableName = '${SqfliteKeys.messagesTable}$conversationId';
+    return await _databaseHelper.getNumberOfRows(tableName);
   }
 }

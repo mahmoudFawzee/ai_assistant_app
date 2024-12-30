@@ -17,10 +17,11 @@ abstract class DatabaseInterface {
 
   Future getTableLastItemId(String tableName);
   Future isTableExists(String tableName);
-  Future getTableLimitedRows({
+  Future getRowsInRange({
     required String tableName,
     required String orderedBy,
-    required String where,
-    required List<Object?> whereArgs,
+    required int limit,
+    required int offset,
   });
+  Future<int> getNumberOfRows(String tableName);
 }

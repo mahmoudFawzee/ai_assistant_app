@@ -81,7 +81,7 @@ class ConversationsScreen extends StatelessWidget {
                             onTap: () {
                               //?todo : we will create get conversation messages.
                               context.read<MessagesBloc>().add(
-                                  GetConversationMessagesEvent(
+                                  OpenConversationMessagePageEvent(
                                       conversation.id));
                               //todo: we will need it later when we need to clear the conversation
                               context.push(
