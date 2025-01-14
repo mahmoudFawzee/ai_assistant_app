@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:ai_assistant_app/data/models/message.dart';
+import 'package:ai_assistant_app/data/models/message_spec.dart';
 import 'package:ai_assistant_app/data/services/messages_service.dart';
 import 'package:ai_assistant_app/data/services/ai_assistant_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -125,15 +126,21 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
     on<SendUserMessageEvent>((event, emit) async {
       emit(const MessagesLoadingState());
       try {
+        final messageSpec = MessageSpec(
+          isMe: true,
+          title: event.title,
+          conversationId: event.conversationId,
+          date: DateTime.now().toString(),
+        );
         final userMessageId =
-            await messageService.storeMessageLocally(event.message);
+            await messageService.storeMessageLocally(messageSpec);
         //?if the message didn't store, stop whole process.
         if (userMessageId == 0) return;
         //todo: here we need to get the last 10 messages
         //todo: which includes the last message which is
         //todo: user message.
         final message = await messageService.getMessage(
-          conversationId: event.message.conversationId,
+          conversationId: messageSpec.conversationId,
           messageId: userMessageId,
         );
         //?this message will be the last one so
@@ -142,15 +149,13 @@ class MessagesBloc extends Bloc<MessagesEvent, MessagesState> {
         emit(GotConversationMessagesState(messages: _messagesList));
         emit(const AiGettingResponseState());
 
-        final aiRes =
-            await aiAssistantService.getAIResponse(event.message.title);
+        final aiRes = await aiAssistantService.getAIResponse(messageSpec.title);
 
-        final aiMessage = Message(
+        final aiMessage = MessageSpec(
           isMe: false,
           title: aiRes,
-          id: 0,
-          date: '${DateTime.now()}',
-          conversationId: event.message.conversationId,
+          date: DateTime.now().toString(),
+          conversationId: messageSpec.conversationId,
         );
         final aiMessageId = await messageService.storeMessageLocally(aiMessage);
         final message2 = await messageService.getMessage(

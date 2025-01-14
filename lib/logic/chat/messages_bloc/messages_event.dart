@@ -21,10 +21,14 @@ final class OpenConversationMessagePageEvent extends MessagesEvent {
 //?hint : we don't need to make event for the ai response
 //?we will store it directly after the api response.
 final class SendUserMessageEvent extends MessagesEvent {
-  final Message message;
-  const SendUserMessageEvent(this.message);
+  final String title;
+  final int conversationId;
+  const SendUserMessageEvent({
+    required this.title,
+    required this.conversationId,
+  });
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [title, conversationId];
 }
 
 final class LoadMoreMessagesEvent extends MessagesEvent {

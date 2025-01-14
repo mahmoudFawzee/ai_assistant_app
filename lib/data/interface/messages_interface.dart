@@ -1,10 +1,11 @@
 import 'package:ai_assistant_app/data/models/message.dart';
+import 'package:ai_assistant_app/data/models/message_spec.dart';
 
 abstract class MessagesInterface {
   Future createMessageTable(int conversationId);
   Future dropTable(int conversationId);
   Future<List<Message>> getConversationMessages(int conversationId);
-  Future<int> storeMessageLocally(Message message);
+  Future<int> storeMessageLocally(MessageSpec messageSpec);
   Future<int> deleteMessage({required int conversationId, required int id});
   Future<int> deleteConversationMessages(int conversationId);
   Future<List<Message>> getRangeMessages(

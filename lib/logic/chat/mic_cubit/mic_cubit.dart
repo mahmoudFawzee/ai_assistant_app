@@ -5,6 +5,7 @@ class MicCubit extends Cubit<TextFieldIcon> {
   void showMic() => emit(TextFieldIcon.mic);
   void showWave() => emit(TextFieldIcon.wave);
   void showSend() => emit(TextFieldIcon.send);
+  
 }
 
 enum TextFieldIcon {

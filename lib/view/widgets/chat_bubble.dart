@@ -1,43 +1,41 @@
-import 'package:ai_assistant_app/data/models/message.dart';
+import 'package:ai_assistant_app/data/models/message_spec.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:flutter/material.dart';
 
 class ChatBubble extends StatelessWidget {
   const ChatBubble({
     super.key,
-    required this.message,
+    required this.messageSpec,
   });
-  final Message message;
+  final MessageSpec messageSpec;
+
   @override
   Widget build(BuildContext context) {
     return Column(
-      crossAxisAlignment:
-          !message.isMe ? CrossAxisAlignment.start : CrossAxisAlignment.end,
+      crossAxisAlignment: getCrossAxisAlignment(messageSpec.isMe),
       children: [
         AnimatedSwitcher(
-          duration:const Duration(milliseconds: 30),
+          duration: const Duration(milliseconds: 30),
           child: Container(
             padding: const EdgeInsets.all(10),
             margin: EdgeInsets.only(
               top: 15,
               bottom: 5,
-              left: message.isMe ? 30 : 5,
-              right: !message.isMe ? 30 : 5,
+              left: getMargin(messageSpec.isMe),
+              right: getMargin(!messageSpec.isMe),
             ),
             decoration: BoxDecoration(
-              color: message.isMe
-                  ? ColorsManger.myMessageColor
-                  : ColorsManger.aiMessageColor,
+              color: getColor(messageSpec.isMe),
               borderRadius: BorderRadius.only(
                 topLeft: const Radius.circular(20),
                 topRight: const Radius.circular(20),
-                bottomLeft: message.isMe ? const Radius.circular(20) : Radius.zero,
-                bottomRight: message.isMe ? Radius.zero : const Radius.circular(20),
+                bottomLeft: getBorderRadius(messageSpec.isMe),
+                bottomRight: getBorderRadius(!messageSpec.isMe),
               ),
             ),
             child: Text(
-              message.title,
-              textAlign: message.isMe ? TextAlign.end : TextAlign.start,
+              messageSpec.title,
+              textAlign: getTextAlign(messageSpec.isMe),
               style: Theme.of(context).textTheme.bodyMedium,
               maxLines: 10,
               softWrap: true,
@@ -47,4 +45,13 @@ class ChatBubble extends StatelessWidget {
       ],
     );
   }
+
+  CrossAxisAlignment getCrossAxisAlignment(bool isMe) =>
+      !messageSpec.isMe ? CrossAxisAlignment.start : CrossAxisAlignment.end;
+  double getMargin(bool isMe) => isMe ? 30 : 5;
+  Color getColor(bool isMe) =>
+      isMe ? ColorsManger.myMessageColor : ColorsManger.aiMessageColor;
+  Radius getBorderRadius(bool isMe) =>
+      isMe ? const Radius.circular(20) : Radius.zero;
+  TextAlign getTextAlign(bool isMe) => isMe ? TextAlign.end : TextAlign.start;
 }

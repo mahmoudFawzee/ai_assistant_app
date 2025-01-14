@@ -49,10 +49,16 @@ class _ChatScreenState extends State<ChatScreen> {
     _scrollController.dispose();
   }
 
-  void _sendMessage(Message message) {
-    context.read<MessagesBloc>().add(SendUserMessageEvent(
-          message,
-        ));
+  void _sendMessage({
+    required String title,
+  }) {
+    context.read<MessagesBloc>().add(
+          SendUserMessageEvent(
+            conversationId: widget.conversationId,
+            
+            title: title,
+          ),
+        );
     _controller.clear();
   }
 
@@ -130,11 +136,9 @@ class _ChatScreenState extends State<ChatScreen> {
                         reverse: true,
                         itemBuilder: (context, index) {
                           final Message message = messages[index];
-                          log('current message : ${message.title} and index : $index');
-
                           return ChatBubble(
                             key: ValueKey(index),
-                            message: message,
+                            messageSpec: message.messageSpec,
                           );
                         },
                         itemCount: messages.length,
@@ -205,18 +209,13 @@ class _ChatScreenState extends State<ChatScreen> {
                               return;
                             },
                             decoration: InputDecoration(
-                              hintText: enabled
-                                  ? 'Ask me anything...'
-                                  : 'Tap To Send',
+                              hintText: getTextFieldHint(enabled),
                               suffixIcon: BlocBuilder<MicCubit, TextFieldIcon>(
                                 builder: (context, iconState) {
                                   return IconButton(
                                     icon: Icon(
-                                      iconState == TextFieldIcon.mic
-                                          ? Icons.mic
-                                          : iconState == TextFieldIcon.wave
-                                              ? Icons.waves
-                                              : Icons.send,
+                                      //?this method will get the suitable icon.
+                                      getTextFieldIcon(iconState),
                                       color: ColorsManger.blue,
                                     ),
                                     onPressed: () {
@@ -227,15 +226,9 @@ class _ChatScreenState extends State<ChatScreen> {
                                         _startListen();
                                         return;
                                       }
-
-                                      final Message message = Message(
-                                        isMe: true,
+                                      _sendMessage(
                                         title: _controller.value.text,
-                                        id: 0,
-                                        date: '',
-                                        conversationId: widget.conversationId,
                                       );
-                                      _sendMessage(message);
                                     },
                                   );
                                 },
@@ -254,4 +247,14 @@ class _ChatScreenState extends State<ChatScreen> {
       ),
     );
   }
+
+  IconData getTextFieldIcon(TextFieldIcon iconState) =>
+      iconState == TextFieldIcon.mic
+          ? Icons.mic
+          : iconState == TextFieldIcon.wave
+              ? Icons.waves
+              : Icons.send;
+
+  String getTextFieldHint(bool enabled) =>
+      enabled ? 'Ask me anything...' : 'Tap To Send';
 }

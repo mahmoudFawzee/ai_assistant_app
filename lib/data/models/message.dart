@@ -1,31 +1,19 @@
 import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
+import 'package:ai_assistant_app/data/models/message_spec.dart';
 
 final class Message {
   final int id;
-  final int conversationId;
-  final String title;
-  final bool isMe;
-  final String date;
+  final MessageSpec messageSpec;
   const Message({
-    required this.isMe,
-    required this.title,
+    required this.messageSpec,
     required this.id,
-    required this.conversationId,
-    required this.date,
   });
-  Map<String, dynamic> toJson() => {
-        SqfliteKeys.title: title,
-        SqfliteKeys.isMe: isMe ? 1 : 0,
-        SqfliteKeys.date: DateTime.now().toString(),
-        SqfliteKeys.conversationId: conversationId,
-      };
+ 
 
   factory Message._fromJson({required Map<String, dynamic> json}) => Message(
-      isMe: json[SqfliteKeys.isMe] == 0 ? false : true,
-      title: json[SqfliteKeys.title],
-      id: json[SqfliteKeys.id],
-      date: json[SqfliteKeys.date],
-      conversationId: json[SqfliteKeys.conversationId]);
+        messageSpec: MessageSpec.fromJson(json: json),
+        id: json[SqfliteKeys.id],        
+      );
   static List<Message> fromJson({
     required List<Map<String, dynamic>> messages,
   }) {

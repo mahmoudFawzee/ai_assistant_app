@@ -3,6 +3,7 @@ import 'dart:developer';
 import 'package:ai_assistant_app/data/interface/messages_interface.dart';
 import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
 import 'package:ai_assistant_app/data/models/message.dart';
+import 'package:ai_assistant_app/data/models/message_spec.dart';
 import 'package:ai_assistant_app/data/services/database_helper.dart';
 
 final class MessagesService implements MessagesInterface {
@@ -22,10 +23,10 @@ final class MessagesService implements MessagesInterface {
 
 //*we need here to return the message to emit it in the state.
   @override
-  Future<int> storeMessageLocally(Message message) async {
+  Future<int> storeMessageLocally(MessageSpec messageSpec) async {
     final messageId = await _databaseHelper.insertRow(
-      _tableName(message.conversationId),
-      message.toJson(),
+      _tableName(messageSpec.conversationId),
+      messageSpec.toJson(),
     );
     //todo: get message stored.
     return messageId;
