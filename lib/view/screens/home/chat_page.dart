@@ -43,19 +43,12 @@ class _ChatScreenState extends State<ChatScreen> {
     }
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    _scrollController.dispose();
-  }
-
   void _sendMessage({
     required String title,
   }) {
     context.read<MessagesBloc>().add(
           SendUserMessageEvent(
             conversationId: widget.conversationId,
-            
             title: title,
           ),
         );
@@ -68,6 +61,12 @@ class _ChatScreenState extends State<ChatScreen> {
 
   void _startListen() {
     log('user start talking');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _scrollController.dispose();
   }
 
   @override
@@ -255,6 +254,7 @@ class _ChatScreenState extends State<ChatScreen> {
               ? Icons.waves
               : Icons.send;
 
-  String getTextFieldHint(bool enabled) =>
-      enabled ? 'Ask me anything...' : 'Tap To Send';
+  String getTextFieldHint(bool enabled) => enabled
+      ? AppLocalizations.of(context)!.askAiAnyThing
+      : AppLocalizations.of(context)!.tapToSend;
 }

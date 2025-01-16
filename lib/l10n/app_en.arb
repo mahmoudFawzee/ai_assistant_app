@@ -34,5 +34,13 @@
   "aiGetRes": "I am Getting The Response Now...",
   "@aiGetRes": {
     "description": "when No Conversation"
+  },
+  "askAiAnyThing": "Ask me anything....",
+  "@askAiAnyThing": {
+    "description": "when the ai told us to ask it"
+  },
+  "tapToSend": "Tap To Send",
+  "@tapToSend": {
+    "description": "when we use record and need to send it"
   }
 }
