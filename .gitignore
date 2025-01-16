@@ -42,3 +42,4 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 /lib/data/key/api_keys.dart
+/lib/data/constants/weather_res.json
