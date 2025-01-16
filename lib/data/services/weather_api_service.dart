@@ -6,14 +6,17 @@ import 'package:ai_assistant_app/data/interface/weather_api_interface.dart';
 import 'package:ai_assistant_app/data/key/api_keys.dart';
 import 'package:ai_assistant_app/data/key/json_keys.dart';
 import 'package:ai_assistant_app/data/models/weather.dart';
+import 'package:ai_assistant_app/data/services/geolocator_service.dart';
 import 'package:http/http.dart' as http;
 
 final class WeatherService implements WeatherApiInterface {
+  final _geolocatorService = GeolocatorService();
   @override
-  Future<Map<String, Object?>> getWeather({
-    required double lat,
-    required double lng,
-  }) async {
+  Future<Map<String, Object?>> getWeather() async {
+    final currentPosition = await _geolocatorService.determinePosition();
+    
+    final lat = currentPosition.latitude;
+    final lng = currentPosition.longitude;
     final endPoint = Uri.parse(
       'https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lng&appid=$weather_api_key',
     );
@@ -36,7 +39,7 @@ final class WeatherService implements WeatherApiInterface {
     return {
       JsonKeys.message: decodedBody[JsonKeys.message],
       JsonKeys.code: resCode,
-      JsonKeys.content:null,
+      JsonKeys.content: null,
     };
   }
 }

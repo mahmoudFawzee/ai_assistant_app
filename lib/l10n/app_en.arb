@@ -42,5 +42,9 @@
   "tapToSend": "Tap To Send",
   "@tapToSend": {
     "description": "when we use record and need to send it"
+  },
+  "todayWeather": "Today Weather",
+  "@todayWeather": {
+    "description": "weather of today"
   }
 }

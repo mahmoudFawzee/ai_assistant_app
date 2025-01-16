@@ -1,5 +1,5 @@
 final class Weather {
-  final String name;
+  final String cityName;
   final int code;
   final double cloud;
   final _MainWeather main;
@@ -7,7 +7,7 @@ final class Weather {
   final _Wind wind;
   final _Sys sys;
   const Weather({
-    required this.name,
+    required this.cityName,
     required this.code,
     required this.cloud,
     required this.main,
@@ -16,11 +16,12 @@ final class Weather {
     required this.sys,
   });
   factory Weather.fromJson(Map<String, Object?> json) {
-    final cloud = json['cloud'] as Map<String, Object>;
+    final clouds = json['clouds'] as Map<String, Object?>;
+    print('converting : weather');
     return Weather(
-      name: json['name'] as String,
-      code: json['code'] as int,
-      cloud: cloud['all'] as double,
+      cityName: json['name'] as String,
+      code: json['cod'] as int,
+      cloud: _parseDouble('${clouds['all']}'),
       main: _MainWeather.fromJson(json),
       overView: _WeatherOverView.fromJson(json),
       wind: _Wind.fromJson(json),
@@ -49,18 +50,21 @@ final class _MainWeather {
     required this.seaLevel,
   });
   factory _MainWeather.fromJson(Map<String, Object?> json) {
+    print('converting : mainWeather');
     final targetJson = json['main'] as Map<String, Object?>;
     return _MainWeather(
-      temp: targetJson['temp'] as double,
-      feelsLike: targetJson['feels_like'] as double,
-      tempMin: targetJson['temp_min'] as double,
-      tempMax: targetJson['temp_max'] as double,
-      pressure: targetJson['pressure'] as double,
-      humidity: targetJson['humidity'] as double,
-      seaLevel: targetJson['1024'] as double,
-      grndLevel: targetJson['1023'] as double,
+      temp: _handleTemp(_parseDouble('${targetJson['temp']}')),
+      feelsLike: _parseDouble('${targetJson['feels_like']}'),
+      tempMin: _parseDouble('${targetJson['temp_min']}'),
+      tempMax: _parseDouble('${targetJson['temp_max']}'),
+      pressure: _parseDouble('${targetJson['pressure']}'),
+      humidity: _parseDouble('${targetJson['humidity']}'),
+      seaLevel: _parseDouble('${targetJson['sea_level']}'),
+      grndLevel: _parseDouble('${targetJson['grnd_level']}'),
     );
   }
+  //?we got temp in kelvin and we need to convert it to celsius
+  static double _handleTemp(double kTemp) => kTemp - 273.15;
 }
 
 final class _WeatherOverView {
@@ -75,13 +79,20 @@ final class _WeatherOverView {
     required this.main,
   });
   factory _WeatherOverView.fromJson(Map<String, Object?> json) {
+    print('converting : weather overview');
     final targetJson = json['weather'] as List;
     return _WeatherOverView(
       id: targetJson[0]['id'],
       main: targetJson[0]['main'],
       description: targetJson[0]['description'],
-      icon: targetJson[0]['icon'],
+      icon: _handleIconUrl(targetJson[0]['icon']),
     );
+  }
+  static String _handleIconUrl(String iconCode) =>
+      'http://openweathermap.org/img/w/$iconCode.png';
+  @override
+  String toString() {
+    return 'id : $id main : $main description : $description icon : $icon';
   }
 }
 
@@ -96,12 +107,17 @@ final class _Wind {
   });
 
   factory _Wind.fromJson(Map<String, Object?> json) {
+    print('converting : wind');
     final targetJson = json['wind'] as Map<String, Object?>;
     return _Wind(
-      speed: targetJson['speed'] as double,
-      deg: targetJson['deg'] as double,
-      gust: targetJson['gust'] as double,
+      speed: _parseDouble('${targetJson['speed']}'),
+      deg: _parseDouble('${targetJson['deg']}'),
+      gust: _parseDouble('${targetJson['gust']}'),
     );
+  }
+  @override
+  String toString() {
+    return 'speed : $speed deg : $deg gust : $gust';
   }
 }
 
@@ -115,6 +131,7 @@ final class _Sys {
     required this.sunSet,
   });
   factory _Sys.fromJson(Map<String, Object?> json) {
+    print('converting : sys');
     final targetJson = json['sys'] as Map<String, Object?>;
     return _Sys(
       countryCode: targetJson['country'] as String,
@@ -122,4 +139,10 @@ final class _Sys {
       sunSet: targetJson['sunset'].toString(),
     );
   }
+  @override
+  String toString() {
+    return 'country code : $countryCode sunrise : $sunRise sunset : $sunSet';
+  }
 }
+
+double _parseDouble(String value) => double.parse(value);

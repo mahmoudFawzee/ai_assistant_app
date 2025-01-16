@@ -1,11 +1,10 @@
+import 'dart:developer';
 import 'dart:io';
-
 import 'package:ai_assistant_app/data/key/json_keys.dart';
 import 'package:ai_assistant_app/data/models/weather.dart';
 import 'package:ai_assistant_app/data/services/weather_api_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:geolocator/geolocator.dart';
 
 part 'weather_event.dart';
 part 'weather_state.dart';
@@ -16,10 +15,8 @@ class WeatherBloc extends Bloc<WeatherEvent, WeatherState> {
     on<GetTodayWeatherEvent>((event, emit) async {
       emit(const WeatherLoadingState());
       try {
-        final res = await _weatherApiService.getWeather(
-          lat: event.position.latitude,
-          lng: event.position.longitude,
-        );
+        final res = await _weatherApiService.getWeather();
+        log('res : $res');
         final resCode = res[JsonKeys.code];
         if (resCode == HttpStatus.ok) {
           final weather = res[JsonKeys.content] as Weather;
