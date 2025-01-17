@@ -1,7 +1,9 @@
 import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
+import 'package:ai_assistant_app/data/services/date_time_formatter.dart';
+import 'package:flutter/material.dart';
 
 final class Task {
-  final String id;
+  final int id;
   final TaskSpec taskSpec;
   const Task({
     required this.id,
@@ -49,8 +51,8 @@ final class TaskSpec {
   final bool done;
   final String title;
   final TaskCategory category;
-  final String date;
-  final String time;
+  final DateTime date;
+  final TimeOfDay time;
   const TaskSpec({
     required this.date,
     required this.done,
@@ -63,8 +65,8 @@ final class TaskSpec {
       SqfliteKeys.done: done ? 1 : 0,
       SqfliteKeys.category: _categoryToJson(),
       SqfliteKeys.title: title,
-      SqfliteKeys.date: date,
-      SqfliteKeys.time: time,
+      SqfliteKeys.date: DateTimeFormatter.dateToString(date),
+      SqfliteKeys.time: DateTimeFormatter.timeToString(date),
     };
   }
 
@@ -111,9 +113,9 @@ final class TaskSpec {
 
   factory TaskSpec._fromJson(Map<String, dynamic> json) {
     return TaskSpec(
-      date: json[SqfliteKeys.date],
+      date: DateTimeFormatter.dateFromString(json[SqfliteKeys.date]),
       done: json[SqfliteKeys.done] == 1,
-      time: json[SqfliteKeys.time],
+      time: DateTimeFormatter.timeFromString(json[SqfliteKeys.time]),
       title: json[SqfliteKeys.title],
       category: _categoryFromJson(json[SqfliteKeys.category]),
     );

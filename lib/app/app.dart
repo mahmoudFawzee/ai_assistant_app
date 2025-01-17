@@ -4,6 +4,7 @@ import 'package:ai_assistant_app/logic/local/localization_cubit/localization_cub
 import 'package:ai_assistant_app/logic/local/name_cubit/name_cubit.dart';
 import 'package:ai_assistant_app/logic/local/navigation_cubit/navigation_cubit.dart';
 import 'package:ai_assistant_app/logic/local/them_cubit/theme_cubit.dart';
+import 'package:ai_assistant_app/logic/tasks/tasks_bloc/tasks_bloc.dart';
 import 'package:ai_assistant_app/logic/weather/weather_bloc/weather_bloc.dart';
 import 'package:ai_assistant_app/view/routes/router.dart';
 import 'package:ai_assistant_app/view/theme/app_theme.dart';
@@ -38,6 +39,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => WeatherBloc()..add(const GetTodayWeatherEvent()),
+        ),
+        BlocProvider(
+          create: (context) => TasksBloc()..add(const GetTodayTasksEvent()),
         ),
       ],
       child: BlocBuilder<LocalizationCubit, LocalizationState>(

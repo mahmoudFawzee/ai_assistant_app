@@ -4,6 +4,7 @@ import 'package:ai_assistant_app/data/interface/tasks_interface.dart';
 import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
 import 'package:ai_assistant_app/data/models/task.dart';
 import 'package:ai_assistant_app/data/services/database_helper.dart';
+import 'package:ai_assistant_app/data/services/date_time_formatter.dart';
 
 final class TasksService implements TasksInterface {
   final _dbHelper = DatabaseHelper();
@@ -37,7 +38,41 @@ final class TasksService implements TasksInterface {
   }
 
   @override
-  void addTask(TaskSpec taskSpec) async {
+  Future<List<Task>> getSpecificDayTasks(DateTime date) async {
+    final result = await _dbHelper.getSpecificRows(
+      SqfliteKeys.tasksTable,
+      where: 'date = ?',
+      whereArgs: [DateTimeFormatter.dateToString(date)],
+    );
+    return Task.fromJson(result);
+  }
+
+  @override
+  Future<List<Task>> getSpecificDayCompletedTasks(DateTime date) async {
+    final result = await _dbHelper.getSpecificRows(
+      SqfliteKeys.tasksTable,
+      where: 'date = ? && done = ?',
+      whereArgs: [DateTimeFormatter.dateToString(date), 1],
+    );
+    return Task.fromJson(result);
+  }
+
+  @override
+  Future<List<Task>> getSpecificDayUnCompletedTasks(DateTime date) async {
+    final result = await _dbHelper.getSpecificRows(
+      SqfliteKeys.tasksTable,
+      where: 'date = ? && done = ?',
+      whereArgs: [DateTimeFormatter.dateToString(date), 0],
+    );
+    return Task.fromJson(result);
+  }
+
+  @override
+  Future addTask(TaskSpec taskSpec) async {
+    final tableCreated = await checkTableExists();
+    if (!tableCreated) {
+      await createTable();
+    }
     final id = await _dbHelper.insertRow(
       SqfliteKeys.tasksTable,
       taskSpec.toJson(),
@@ -46,7 +81,7 @@ final class TasksService implements TasksInterface {
   }
 
   @override
-  void deleteTask(int taskId) async {
+  Future deleteTask(int taskId) async {
     final nOfRowDeleted = await _dbHelper.deleteRow(
       SqfliteKeys.tasksTable,
       where: 'id = ?',
@@ -56,8 +91,7 @@ final class TasksService implements TasksInterface {
   }
 
   @override
-  void updateTask({required Task task, required Task oldTask}) async {
-    if (!oldTask.isMatch(task)) return;
+  Future updateTask(Task task) async {
     final changes = await _dbHelper.updateRow(
       SqfliteKeys.tasksTable,
       task.toJson(),
@@ -66,7 +100,7 @@ final class TasksService implements TasksInterface {
   }
 
   @override
-  void createTable() async {
+  Future createTable() async {
     await _dbHelper.createTable(
       '''
 CREATE TABLE ${SqfliteKeys.tasksTable}(
