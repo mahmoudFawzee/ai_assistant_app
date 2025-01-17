@@ -1,3 +1,4 @@
+//?this is the weather model which we get all data about weather from it.
 final class Weather {
   final String cityName;
   final int code;
@@ -17,7 +18,6 @@ final class Weather {
   });
   factory Weather.fromJson(Map<String, Object?> json) {
     final clouds = json['clouds'] as Map<String, Object?>;
-    print('converting : weather');
     return Weather(
       cityName: json['name'] as String,
       code: json['cod'] as int,
@@ -50,7 +50,6 @@ final class _MainWeather {
     required this.seaLevel,
   });
   factory _MainWeather.fromJson(Map<String, Object?> json) {
-    print('converting : mainWeather');
     final targetJson = json['main'] as Map<String, Object?>;
     return _MainWeather(
       temp: _handleTemp(_parseDouble('${targetJson['temp']}')),
@@ -79,7 +78,6 @@ final class _WeatherOverView {
     required this.main,
   });
   factory _WeatherOverView.fromJson(Map<String, Object?> json) {
-    print('converting : weather overview');
     final targetJson = json['weather'] as List;
     return _WeatherOverView(
       id: targetJson[0]['id'],

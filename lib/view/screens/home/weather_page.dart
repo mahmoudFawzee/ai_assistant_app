@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:ai_assistant_app/logic/weather/weather_bloc/weather_bloc.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:flutter/material.dart';

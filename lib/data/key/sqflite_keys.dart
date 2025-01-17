@@ -5,7 +5,16 @@ final class SqfliteKeys {
   static const conversationId = 'conversationId';
   static const date = 'date';
   static const time = 'time';
+  static const category = 'category';
+  static const done = 'done';
+  static const education = 'education';
+  static const family = 'family';
+  static const other = 'other';
+  static const work = 'work';
+  static const entertainment = 'entertainment';
+
   static const messages = 'messages';
   static const messagesTable = 'messages_table';
+  static const tasksTable = 'tasksTable';
   static const conversationTable = 'conversations_table';
 }
