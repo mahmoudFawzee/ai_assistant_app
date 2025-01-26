@@ -45,6 +45,28 @@ final class GotSpecificDayTasksState extends TasksState {
   List<Object> get props => [completedTasks, unCompletedTasks];
 }
 
+final class GotTasksState extends TasksState {
+  final List<Task> completedTasks;
+  final List<Task> unCompletedTasks;
+  const GotTasksState({
+    required this.completedTasks,
+    required this.unCompletedTasks,
+  });
+  @override
+  List<Object> get props => [completedTasks, unCompletedTasks];
+}
+
+final class GotCategoryTasksState extends TasksState {
+  final List<Task> completedTasks;
+  final List<Task> unCompletedTasks;
+  const GotCategoryTasksState({
+    required this.completedTasks,
+    required this.unCompletedTasks,
+  });
+  @override
+  List<Object> get props => [completedTasks, unCompletedTasks];
+}
+
 final class GotCompletedTasksState extends TasksState {
   final List<Task> tasks;
   const GotCompletedTasksState(this.tasks);

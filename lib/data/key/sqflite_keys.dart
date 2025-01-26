@@ -5,6 +5,7 @@ final class SqfliteKeys {
   static const conversationId = 'conversationId';
   static const date = 'date';
   static const time = 'time';
+  static const description = 'description';
   static const category = 'category';
   static const done = 'done';
   static const education = 'education';

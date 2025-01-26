@@ -1,3 +1,5 @@
+import 'package:ai_assistant_app/logic/tasks/category_cubit/category_cubit.dart';
+import 'package:ai_assistant_app/logic/tasks/welcome_message_cubit/welcome_message_cubit.dart';
 import 'package:ai_assistant_app/view/screens/home/base.dart';
 import 'package:ai_assistant_app/view/screens/home/chat_page.dart';
 import 'package:ai_assistant_app/view/screens/home/conversations_page.dart';
@@ -6,6 +8,7 @@ import 'package:ai_assistant_app/view/screens/home/weather_page.dart';
 import 'package:ai_assistant_app/view/screens/start/on_boarding_screen.dart';
 import 'package:ai_assistant_app/view/screens/start/splash_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
 
 final router = GoRouter(
@@ -38,7 +41,18 @@ final router = GoRouter(
         GoRoute(
             path: ToDoScreen.pageRoute,
             builder: (context, state) {
-              return const ToDoScreen();
+              return MultiBlocProvider(
+                providers: [
+                  BlocProvider(
+                    create: (context) =>
+                        WelcomeMessageCubit()..getWelcomeMessage(context),
+                  ),
+                  BlocProvider(
+                    create: (context) => CategoryCubit()..getCategories(context),
+                  ),
+                ],
+                child: const ToDoScreen(),
+              );
             }),
         GoRoute(
             path: WeatherScreen.pageRoute,

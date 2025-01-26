@@ -1,5 +1,6 @@
 import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
-import 'package:ai_assistant_app/data/services/date_time_formatter.dart';
+import 'package:ai_assistant_app/data/models/tasks/category.dart';
+import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart';
 import 'package:flutter/material.dart';
 
 final class Task {
@@ -39,18 +40,11 @@ final class Task {
   }
 }
 
-enum TaskCategory {
-  education,
-  work,
-  entertainment,
-  family,
-  other,
-}
-
 final class TaskSpec {
   final bool done;
   final String title;
-  final TaskCategory category;
+  final String description;
+  final CategoryEnum category;
   final DateTime date;
   final TimeOfDay time;
   const TaskSpec({
@@ -58,13 +52,15 @@ final class TaskSpec {
     required this.done,
     required this.time,
     required this.title,
+    required this.description,
     required this.category,
   });
   Map<String, dynamic> toJson() {
     return {
       SqfliteKeys.done: done ? 1 : 0,
-      SqfliteKeys.category: _categoryToJson(),
+      SqfliteKeys.category: Category.categoryToJson(category),
       SqfliteKeys.title: title,
+      SqfliteKeys.description: description,
       SqfliteKeys.date: DateTimeFormatter.dateToString(date),
       SqfliteKeys.time: DateTimeFormatter.timeToString(date),
     };
@@ -79,45 +75,14 @@ final class TaskSpec {
     return true;
   }
 
-  String _categoryToJson() {
-    switch (category) {
-      case TaskCategory.education:
-        return SqfliteKeys.education;
-      case TaskCategory.family:
-        return SqfliteKeys.family;
-      case TaskCategory.entertainment:
-        return SqfliteKeys.entertainment;
-      case TaskCategory.work:
-        return SqfliteKeys.work;
-
-      default:
-        return SqfliteKeys.other;
-    }
-  }
-
-  static TaskCategory _categoryFromJson(String value) {
-    switch (value) {
-      case SqfliteKeys.education:
-        return TaskCategory.education;
-      case SqfliteKeys.family:
-        return TaskCategory.family;
-      case SqfliteKeys.entertainment:
-        return TaskCategory.entertainment;
-      case SqfliteKeys.work:
-        return TaskCategory.work;
-
-      default:
-        return TaskCategory.other;
-    }
-  }
-
   factory TaskSpec._fromJson(Map<String, dynamic> json) {
     return TaskSpec(
       date: DateTimeFormatter.dateFromString(json[SqfliteKeys.date]),
       done: json[SqfliteKeys.done] == 1,
       time: DateTimeFormatter.timeFromString(json[SqfliteKeys.time]),
       title: json[SqfliteKeys.title],
-      category: _categoryFromJson(json[SqfliteKeys.category]),
+      description: json[SqfliteKeys.description],
+      category: Category.categoryFromJson(json[SqfliteKeys.category]),
     );
   }
 }

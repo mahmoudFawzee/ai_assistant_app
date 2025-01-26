@@ -6,4 +6,14 @@
               in the one group of messages not for each loading process
               its value changes.
 
-next : now work on chat page specifically on tts.
+after completed weather feature we will work now on tasks 
+first we finished tha service and logic of it 
+we will work on the ui we have the ui got from google .
+we will work like that 
+    first we will make the todo page determine if we at morning or 
+    evening and say welcome message based on that.
+    note : we won't use app bar in the tasks page.
+
+    then we need to make a row for week days.
+    in this bar we will have the current month in the top and user can go throw it.
+    with day name and month day. ( sat 18 june, sun ,mon tue,wen ,thu,fri)

@@ -1,5 +1,6 @@
-import 'package:ai_assistant_app/data/models/task.dart';
-import 'package:ai_assistant_app/data/services/tasks_service.dart';
+import 'package:ai_assistant_app/data/models/tasks/category.dart';
+import 'package:ai_assistant_app/data/models/tasks/task.dart';
+import 'package:ai_assistant_app/data/services/tasks/tasks_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -9,7 +10,9 @@ part 'tasks_state.dart';
 
 class TasksBloc extends Bloc<TasksEvent, TasksState> {
   final _tasksService = TasksService();
+
   TasksBloc() : super(const TasksInitialState()) {
+
     on<AddTaskEvent>((event, emit) async {
       try {
         final TaskSpec taskSpec = TaskSpec(
@@ -17,6 +20,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           done: false,
           time: event.time,
           title: event.title,
+          description:event.description,
           category: event.category,
         );
         await _tasksService.addTask(taskSpec);
@@ -35,7 +39,8 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
             done: event.done,
             time: event.time,
             title: event.title,
-            category: event.category,
+            description: event.description,
+            category: event.category.category,
           ),
         );
         await _tasksService.updateTask(task);
@@ -55,6 +60,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     });
 
     on<GetSpecificDayTasksEvent>((event, emit) async {
+      emit(const TasksLoadingState());
       try {
         final completedTasks = await _tasksService.getSpecificDayCompletedTasks(
           event.date,
@@ -67,7 +73,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           emit(const GotNoTasksState());
           return;
         }
-        emit(GotSpecificDayTasksState(
+        emit(GotTasksState(
           completedTasks: completedTasks,
           unCompletedTasks: unCompletedTasks,
         ));
@@ -75,8 +81,9 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         emit(GotTasksErrorState(e.toString()));
       }
     });
-    
+
     on<GetTodayTasksEvent>((event, emit) async {
+      emit(const TasksLoadingState());
       try {
         final completedTasks = await _tasksService.getSpecificDayCompletedTasks(
           DateTime.now(),
@@ -89,9 +96,38 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           emit(const GotNoTasksState());
           return;
         }
-        emit(GotSpecificDayTasksState(
+        emit(GotTasksState(
           completedTasks: completedTasks,
           unCompletedTasks: unCompletedTasks,
+        ));
+      } catch (e) {
+        emit(GotTasksErrorState(e.toString()));
+      }
+    });
+
+    on<GetCategoryTasksEvent>((event, emit) async {
+    emit(const TasksLoadingState());
+      try {
+        final completedTasks = await _tasksService.getSpecificDayCompletedTasks(
+          DateTime.now(),
+        );
+        final unCompletedTasks =
+            await _tasksService.getSpecificDayUnCompletedTasks(
+          DateTime.now(),
+        );
+        if ([...completedTasks, ...unCompletedTasks].isEmpty) {
+          emit(const GotNoTasksState());
+          return;
+        }
+        emit(GotTasksState(
+          completedTasks: _tasksService.getCategoryTasks(
+            event.category,
+            allTasks: completedTasks,
+          ),
+          unCompletedTasks: _tasksService.getCategoryTasks(
+            event.category,
+            allTasks: unCompletedTasks,
+          ),
         ));
       } catch (e) {
         emit(GotTasksErrorState(e.toString()));

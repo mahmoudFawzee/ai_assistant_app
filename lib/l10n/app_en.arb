@@ -46,5 +46,40 @@
   "todayWeather": "Today Weather",
   "@todayWeather": {
     "description": "weather of today"
+  },
+  "category": "Category",
+  "@category": {
+    "description": "category of the task"
+  },
+  "morning": "Good Morning",
+  "@morning": {
+    "description": "the welcome massage in the morning"
+  },
+  "afternoon": "Good Afternoon",
+  "@afternoon": {
+    "description": "the welcome massage in the afternoon"
+  },
+  "evening": "Good Evening",
+  "@evening": {
+    "description": "the welcome massage in the evening"
+  },
+  "education": "Education",
+  "@education": {
+    "description": "the category of education"
+  },"family": "Family",
+  "@family": {
+    "description": "the category of family"
+  },
+  "work": "Work",
+  "@work": {
+    "description": "the category of work"
+  },
+  "entertainment": "Entertainment",
+  "@entertainment": {
+    "description": "the category of entertainment"
+  },
+  "other": "Other",
+  "@other": {
+    "description": "the category of other"
   }
 }

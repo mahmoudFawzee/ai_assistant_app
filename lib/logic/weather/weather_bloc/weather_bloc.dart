@@ -1,8 +1,8 @@
 import 'dart:developer';
 import 'dart:io';
 import 'package:ai_assistant_app/data/key/json_keys.dart';
-import 'package:ai_assistant_app/data/models/weather.dart';
-import 'package:ai_assistant_app/data/services/weather_api_service.dart';
+import 'package:ai_assistant_app/data/models/weather/weather.dart';
+import 'package:ai_assistant_app/data/services/weather/weather_api_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 

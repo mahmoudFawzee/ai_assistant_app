@@ -1,5 +1,5 @@
-import 'package:ai_assistant_app/data/models/message.dart';
-import 'package:ai_assistant_app/data/models/message_spec.dart';
+import 'package:ai_assistant_app/data/models/ai_assistant/message.dart';
+import 'package:ai_assistant_app/data/models/ai_assistant/message_spec.dart';
 
 abstract class MessagesInterface {
   Future createMessageTable(int conversationId);

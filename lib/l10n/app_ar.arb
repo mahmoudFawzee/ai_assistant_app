@@ -10,5 +10,14 @@
     "aiGetRes": "الاجابة في طريقها الان ...",
     "askAiAnyThing": "اسألني عن اي شئ",
     "tapToSend": "اضغط للارسال",
-    "todayWeather": "طقس اليوم"
+    "todayWeather": "طقس اليوم",
+    "category": "الاقسام",
+    "morning": "صباح الخير",
+    "afternoon": "مساء الخير",
+    "evening": "مساء الخير",
+    "education": "تعليمي",
+    "family": "العائلة",
+    "work": "العمل",
+    "entertainment": "الترفيه",
+    "other": "غير ذلك"
 }

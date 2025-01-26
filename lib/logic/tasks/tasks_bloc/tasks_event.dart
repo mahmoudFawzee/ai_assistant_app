@@ -16,9 +16,6 @@ final class GetUnCompletedTasksEvent extends TasksEvent {
 
 final class GetCompletedTasksEvent extends TasksEvent {
   const GetCompletedTasksEvent();
-
-  @override
-  List<Object> get props => [];
 }
 
 final class GetTodayTasksEvent extends TasksEvent {
@@ -40,40 +37,51 @@ final class GetSpecificDayTasksEvent extends TasksEvent {
   List<Object> get props => [date];
 }
 
+final class GetCategoryTasksEvent extends TasksEvent {
+  final CategoryEnum category;
+  const GetCategoryTasksEvent(this.category);
+
+  @override
+  List<Object> get props => [category];
+}
+
 final class AddTaskEvent extends TasksEvent {
   final String title;
+  final String description;
   final DateTime date;
   final TimeOfDay time;
-  final TaskCategory category;
+  final CategoryEnum category;
   const AddTaskEvent({
     required this.title,
+    required this.description,
     required this.time,
     required this.date,
     required this.category,
   });
   @override
-  List<Object> get props => [date, time, category, title];
+  List<Object> get props => [date, time, category, title,description];
 }
 
 final class UpdateTaskEvent extends TasksEvent {
   final int oldId;
   final String title;
+  final String description;
   final bool done;
   final DateTime date;
 
   final TimeOfDay time;
-  final TaskCategory category;
+  final Category category;
   const UpdateTaskEvent({
     required this.oldId,
     required this.title,
+    required this.description,
     required this.done,
     required this.time,
-    
     required this.date,
     required this.category,
   });
   @override
-  List<Object> get props => [oldId, done,date, time, category, title];
+  List<Object> get props => [oldId, done, date, time, category, title,description];
 }
 
 final class DeleteTaskEvent extends TasksEvent {

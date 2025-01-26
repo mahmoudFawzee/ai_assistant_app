@@ -1,9 +1,9 @@
 import 'dart:developer';
 
-import 'package:ai_assistant_app/data/models/message.dart';
-import 'package:ai_assistant_app/data/models/message_spec.dart';
-import 'package:ai_assistant_app/data/services/messages_service.dart';
-import 'package:ai_assistant_app/data/services/ai_assistant_service.dart';
+import 'package:ai_assistant_app/data/models/ai_assistant/message.dart';
+import 'package:ai_assistant_app/data/models/ai_assistant/message_spec.dart';
+import 'package:ai_assistant_app/data/services/ai_assistant/messages_service.dart';
+import 'package:ai_assistant_app/data/services/ai_assistant/ai_assistant_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
 

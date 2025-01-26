@@ -1,4 +1,5 @@
-import 'package:ai_assistant_app/data/models/task.dart';
+import 'package:ai_assistant_app/data/models/tasks/category.dart';
+import 'package:ai_assistant_app/data/models/tasks/task.dart';
 
 abstract class TasksInterface {
   void addTask(TaskSpec taskSpec);
@@ -10,6 +11,8 @@ abstract class TasksInterface {
   Future<List<Task>> getSpecificDayTasks(DateTime date);
   Future<List<Task>> getSpecificDayUnCompletedTasks(DateTime date);
   Future<List<Task>> getSpecificDayCompletedTasks(DateTime date);
+  List<Task> getCategoryTasks(CategoryEnum category,
+      {required List<Task> allTasks});
 
   void createTable();
   Future<bool> checkTableExists();

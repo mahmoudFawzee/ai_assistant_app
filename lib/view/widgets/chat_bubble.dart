@@ -1,4 +1,4 @@
-import 'package:ai_assistant_app/data/models/message_spec.dart';
+import 'package:ai_assistant_app/data/models/ai_assistant/message_spec.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:flutter/material.dart';
 

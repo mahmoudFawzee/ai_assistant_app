@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:ai_assistant_app/data/models/message.dart';
+import 'package:ai_assistant_app/data/models/ai_assistant/message.dart';
 import 'package:ai_assistant_app/logic/chat/conversation_cubit/conversation_cubit.dart';
 import 'package:ai_assistant_app/logic/chat/messages_bloc/messages_bloc.dart';
 import 'package:ai_assistant_app/logic/chat/mic_cubit/mic_cubit.dart';

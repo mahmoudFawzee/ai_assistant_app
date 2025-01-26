@@ -2,8 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 // ignore: depend_on_referenced_packages
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
-import 'package:ai_assistant_app/data/services/conversation_service.dart';
-import 'package:ai_assistant_app/data/models/conversation.dart';
+import 'package:ai_assistant_app/data/services/ai_assistant/conversation_service.dart';
+import 'package:ai_assistant_app/data/models/ai_assistant/conversation.dart';
 part 'conversation_state.dart';
 
 class ConversationCubit extends Cubit<ConversationState> {

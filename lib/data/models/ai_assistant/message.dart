@@ -1,5 +1,5 @@
 import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
-import 'package:ai_assistant_app/data/models/message_spec.dart';
+import 'package:ai_assistant_app/data/models/ai_assistant/message_spec.dart';
 
 final class Message {
   final int id;
