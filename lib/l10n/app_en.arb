@@ -74,8 +74,8 @@
   "@work": {
     "description": "the category of work"
   },
-  "entertainment": "Entertainment",
-  "@entertainment": {
+  "fun": "Fun",
+  "@fun": {
     "description": "the category of entertainment"
   },
   "other": "Other",

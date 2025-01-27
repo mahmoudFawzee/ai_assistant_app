@@ -52,7 +52,7 @@ class CustomCalender extends StatelessWidget {
                             ),
                           ),
                           Text(
-                            '${week.year}/${week.month}',
+                            '${week.year}/${(week.month).toString().padLeft(2, '0')}',
                             style: const TextStyle(
                               color: ColorsManger.white,
                               fontSize: 24,

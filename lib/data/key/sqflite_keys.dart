@@ -12,7 +12,7 @@ final class SqfliteKeys {
   static const family = 'family';
   static const other = 'other';
   static const work = 'work';
-  static const entertainment = 'entertainment';
+  static const fun = 'fun';
 
   static const messages = 'messages';
   static const messagesTable = 'messages_table';

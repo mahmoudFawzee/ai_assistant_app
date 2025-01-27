@@ -6,21 +6,20 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 final class Category {
   final String imagePath;
   final CategoryEnum category;
- final int numberOfTasks;
+  final int numberOfTasks;
   Category({
     required this.imagePath,
     required this.category,
     required this.numberOfTasks,
   });
 
- 
   String getCategoryTitle(BuildContext context) {
     final appLocalizations = AppLocalizations.of(context)!;
     switch (category) {
       case CategoryEnum.education:
         return appLocalizations.education;
-      case CategoryEnum.entertainment:
-        return appLocalizations.entertainment;
+      case CategoryEnum.fun:
+        return appLocalizations.fun;
       case CategoryEnum.family:
         return appLocalizations.family;
       case CategoryEnum.work:
@@ -30,15 +29,15 @@ final class Category {
         return appLocalizations.other;
     }
   }
-static Color getCategoryColor(CategoryEnum cat) {
-    
+
+  static Color getCategoryColor(CategoryEnum cat) {
     switch (cat) {
       case CategoryEnum.education:
         return ColorsManger.educationColor;
-      case CategoryEnum.entertainment:
-        return ColorsManger.entertainmentColor;
+      case CategoryEnum.fun:
+        return ColorsManger.funColor;
       case CategoryEnum.family:
-        return ColorsManger.familyColor;
+        return const Color.fromARGB(255, 129, 240, 199);
       case CategoryEnum.work:
         return ColorsManger.workColor;
 
@@ -47,15 +46,14 @@ static Color getCategoryColor(CategoryEnum cat) {
     }
   }
 
-  
   static String categoryToJson(CategoryEnum cat) {
     switch (cat) {
       case CategoryEnum.education:
         return SqfliteKeys.education;
       case CategoryEnum.family:
         return SqfliteKeys.family;
-      case CategoryEnum.entertainment:
-        return SqfliteKeys.entertainment;
+      case CategoryEnum.fun:
+        return SqfliteKeys.fun;
       case CategoryEnum.work:
         return SqfliteKeys.work;
 
@@ -70,8 +68,8 @@ static Color getCategoryColor(CategoryEnum cat) {
         return CategoryEnum.education;
       case SqfliteKeys.family:
         return CategoryEnum.family;
-      case SqfliteKeys.entertainment:
-        return CategoryEnum.entertainment;
+      case SqfliteKeys.fun:
+        return CategoryEnum.fun;
       case SqfliteKeys.work:
         return CategoryEnum.work;
 
@@ -84,7 +82,7 @@ static Color getCategoryColor(CategoryEnum cat) {
 enum CategoryEnum {
   education,
   work,
-  entertainment,
+  fun,
   family,
   other,
 }

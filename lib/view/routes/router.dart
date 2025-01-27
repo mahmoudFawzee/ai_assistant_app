@@ -47,12 +47,12 @@ final router = GoRouter(
               return MultiBlocProvider(
                 providers: [
                   BlocProvider(
-                    create: (context) =>
+                    create: (_) =>
                         WelcomeMessageCubit()..getWelcomeMessage(context),
                   ),
                   BlocProvider(
                     create: (context) =>
-                        CategoryCubit()..getCategories(context),
+                        CategoryCubit()..getCategories(),
                   ),
                   BlocProvider(
                     create: (context) => CalenderCubit()..initCalender(),

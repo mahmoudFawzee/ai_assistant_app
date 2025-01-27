@@ -3,13 +3,10 @@ import 'package:ai_assistant_app/data/models/tasks/category.dart';
 import 'package:ai_assistant_app/data/models/tasks/task.dart';
 import 'package:ai_assistant_app/data/services/database_helper.dart';
 import 'package:ai_assistant_app/view/resources/images_manger.dart';
-import 'package:flutter/material.dart';
 
 final class CategoryService {
   final _databaseHelper = DatabaseHelper();
-  Future<List<Category>> getCategoriesList(
-    BuildContext context,
-  ) async {
+  Future<List<Category>> getCategoriesList() async {
     return [
       await _getEducationCategory(),
       await _getFamilyCategory(),
@@ -62,9 +59,8 @@ final class CategoryService {
 
   Future<Category> _getEntertainmentCategory() async => Category(
         imagePath: ImagesManger.entertainmentCategory,
-        category: CategoryEnum.entertainment,
-        numberOfTasks:
-            await _getNumberOfTasksPerCategory(CategoryEnum.entertainment),
+        category: CategoryEnum.fun,
+        numberOfTasks: await _getNumberOfTasksPerCategory(CategoryEnum.fun),
       );
 
   Future<Category> _getOtherCategory() async => Category(
