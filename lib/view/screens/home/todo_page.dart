@@ -1,10 +1,9 @@
-import 'dart:developer';
-import 'package:ai_assistant_app/data/models/tasks/category.dart';
 import 'package:ai_assistant_app/logic/tasks/category_cubit/category_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/tasks_bloc/tasks_bloc.dart';
 import 'package:ai_assistant_app/logic/tasks/welcome_message_cubit/welcome_message_cubit.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:ai_assistant_app/view/widgets/custom_calender.dart';
+import 'package:ai_assistant_app/view/widgets/custom_category.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -109,72 +108,6 @@ class ToDoScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {},
         child: const Icon(Icons.add),
-      ),
-    );
-  }
-}
-
-class CustomCategory extends StatelessWidget {
-  const CustomCategory({
-    super.key,
-    required this.category,
-    required this.onTap,
-  });
-
-  final Category category;
-  final Function()? onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      height: 120,
-      width: 100,
-      margin: const EdgeInsets.symmetric(horizontal: 5),
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-      decoration: BoxDecoration(
-        color: Category.getCategoryColor(
-          category.category,
-        ),
-        borderRadius: const BorderRadius.all(Radius.circular(15)),
-        shape: BoxShape.rectangle,
-      ),
-      child: InkWell(
-        onTap: onTap,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Align(
-              alignment: Alignment.center,
-              child: Image.asset(
-                height: 30,
-                width: 30,
-                category.imagePath,
-                color: ColorsManger.white,
-              ),
-            ),
-            const SizedBox(height: 10),
-            RichText(
-              maxLines: 2,
-              textAlign: TextAlign.start,
-              text: TextSpan(
-                style: const TextStyle(
-                  color: ColorsManger.white,
-                  fontSize: 18,
-                ),
-                children: [
-                  TextSpan(
-                    text: '${category.getCategoryTitle(context)}\n',
-                    style: const TextStyle(
-                      fontSize: 15,
-                    ),
-                  ),
-                  const WidgetSpan(child: SizedBox(height: 20)),
-                  TextSpan(text: '${category.numberOfTasks}'),
-                ],
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }
