@@ -3,6 +3,7 @@ import 'package:ai_assistant_app/data/models/tasks/category.dart';
 import 'package:ai_assistant_app/logic/tasks/category_cubit/category_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/tasks_bloc/tasks_bloc.dart';
 import 'package:ai_assistant_app/logic/tasks/welcome_message_cubit/welcome_message_cubit.dart';
+import 'package:ai_assistant_app/view/widgets/custom_calender.dart';
 import 'package:ai_assistant_app/view/widgets/loading_indicator.dart';
 import 'package:ai_assistant_app/view/widgets/task_card.dart';
 import 'package:flutter/material.dart';
@@ -19,15 +20,24 @@ class ToDoScreen extends StatelessWidget {
     return Scaffold(
       body: Column(
         children: [
-          BlocBuilder<WelcomeMessageCubit, String>(
-            builder: (context, state) {
-              return Text(
-                '$state Ali',
-              );
-            },
+          const SizedBox(height: 50),
+          // BlocBuilder<WelcomeMessageCubit, String>(
+          //   builder: (context, state) {
+          //     return Text(
+          //       '$state Ali',
+          //     );
+          //   },
+          // ),
+
+          const CustomCalender(),
+          Text(
+            appLocalizations.category,
+            style: const TextStyle(
+              color: Colors.black,
+            ),
           ),
-          Text(appLocalizations.category),
-          //?this is for categories.
+          // //?this is for categories.
+          
           SizedBox(
             height: 75,
             child: BlocBuilder<CategoryCubit, CategoryState>(
@@ -70,30 +80,33 @@ class ToDoScreen extends StatelessWidget {
               },
             ),
           ),
-          BlocBuilder<TasksBloc, TasksState>(
-            builder: (context, state) {
-              if (state is TasksLoadingState) {
-                return const LoadingIndicator();
-              }
-              if (state is GotTasksState) {
-                final unCompletedTasks = state.unCompletedTasks;
-                final completedTasks = state.completedTasks;
-                final allTasks = [...unCompletedTasks, ...completedTasks];
-                return ListView.builder(
-                  itemBuilder: (context, index) {
-                    //?here we have uncompleted tasks.
-                    final task = allTasks[index];
-                    if (index < unCompletedTasks.length) {
-                      return TaskCard(task: task);
-                    }
-                    //?here we've completed tasks
-                    return TaskCard(task: task);
-                  },
-                );
-              }
-              return Container();
-            },
-          ),
+          
+          // BlocBuilder<TasksBloc, TasksState>(
+          //   builder: (context, state) {
+          //     if (state is TasksLoadingState) {
+          //       return const LoadingIndicator();
+          //     }
+          //     if (state is GotTasksState) {
+          //       final unCompletedTasks = state.unCompletedTasks;
+          //       final completedTasks = state.completedTasks;
+          //       final allTasks = [...unCompletedTasks, ...completedTasks];
+          //       return ListView.builder(
+          //         itemBuilder: (context, index) {
+          //           //?here we have uncompleted tasks.
+          //           final task = allTasks[index];
+          //           if (index < unCompletedTasks.length) {
+          //             return TaskCard(task: task);
+          //           }
+          //           //?here we've completed tasks
+          //           return TaskCard(task: task);
+          //         },
+          //       );
+          //     }
+          //     return Container();
+          //   },
+          // ),
+        
+        
         ],
       ),
       floatingActionButton: FloatingActionButton(

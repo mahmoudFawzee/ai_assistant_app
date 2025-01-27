@@ -22,7 +22,7 @@ final class CategoryService {
   Future<int> _getNumberOfTasksPerCategory(CategoryEnum category) async {
     final tasks = await _databaseHelper.getSpecificRows(
       SqfliteKeys.tasksTable,
-      where: SqfliteKeys.category,
+      where: '${SqfliteKeys.category}=?',
       whereArgs: [Category.categoryToJson(category)],
     );
 
@@ -56,7 +56,6 @@ final class CategoryService {
       );
   Future<Category> _getWorkCategory() async => Category(
         imagePath: ImagesManger.workCategory,
-      
         category: CategoryEnum.work,
         numberOfTasks: await _getNumberOfTasksPerCategory(CategoryEnum.work),
       );

@@ -5,8 +5,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class WelcomeMessageCubit extends Cubit<String> {
   WelcomeMessageCubit() : super('');
   void getWelcomeMessage(BuildContext context) =>
-      emit(_checkCurrentTime(context));
-  String _checkCurrentTime(BuildContext context) {
+      emit(_getMessage(context));
+  String _getMessage(BuildContext context) {
     final appLocalizations = AppLocalizations.of(context)!;
 
     final hour = DateTime.now().hour;

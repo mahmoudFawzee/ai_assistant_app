@@ -104,19 +104,19 @@ final class TasksService implements TasksInterface {
 
   @override
   Future createTable() async {
-    await _dbHelper.createTable(
-      '''
-CREATE TABLE ${SqfliteKeys.tasksTable}(
-${SqfliteKeys.id} INTEGER PRIMARY KEY AUTOINCREMENT,
-${SqfliteKeys.category} TEXT,
-${SqfliteKeys.title} TEXT,
-${SqfliteKeys.description} TEXT,
-${SqfliteKeys.done} INTEGER,
-${SqfliteKeys.date} TEXT,
-${SqfliteKeys.time} TEXT
-)
-''',
-    );
+//     await _dbHelper.createTable(
+//       '''
+// CREATE TABLE ${SqfliteKeys.tasksTable}(
+// ${SqfliteKeys.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+// ${SqfliteKeys.category} TEXT,
+// ${SqfliteKeys.title} TEXT,
+// ${SqfliteKeys.description} TEXT,
+// ${SqfliteKeys.done} INTEGER,
+// ${SqfliteKeys.date} TEXT,
+// ${SqfliteKeys.time} TEXT
+// )
+// '''
+//     );
   }
 
   @override

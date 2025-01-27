@@ -7,6 +7,10 @@ final class Week {
     required this.month,
     required this.days,
   });
+  @override
+  String toString() {
+    return ' month : $month , year : $year , days : $days , nDays : ${days.length}';
+  }
 }
 
 final class DayPerWeek {
@@ -21,25 +25,30 @@ final class DayPerWeek {
     return _handleTodayString(_dayPerWeek);
   }
 
-  String getDayPerMonth() => _dayPerMonth.toString().padLeft(2);
+  String getDayPerMonth() => _dayPerMonth.toString().padLeft(2, '0');
 
   String _handleTodayString(int weekDay) {
     switch (weekDay) {
       case 1:
-        return 'mon';
+        return 'Mon';
       case 2:
-        return 'tues';
+        return 'Tue';
       case 3:
-        return 'wen';
+        return 'Wen';
       case 4:
-        return 'thur';
+        return 'Thu';
       case 5:
-        return 'fri';
+        return 'Fri';
       case 6:
-        return 'sat';
+        return 'Sat';
 
       default:
-        return 'sun';
+        return 'Sun';
     }
+  }
+
+  @override
+  String toString() {
+    return ' month day : $_dayPerMonth , week day : $_dayPerWeek , day string : ${getStringDay()}';
   }
 }

@@ -32,6 +32,17 @@ ${SqfliteKeys.id} INTEGER PRIMARY KEY AUTOINCREMENT,
 ${SqfliteKeys.title} TEXT
 )
 ''');
+ await _createTable(db, '''
+CREATE TABLE ${SqfliteKeys.tasksTable}(
+${SqfliteKeys.id} INTEGER PRIMARY KEY AUTOINCREMENT,
+${SqfliteKeys.category} TEXT,
+${SqfliteKeys.title} TEXT,
+${SqfliteKeys.description} TEXT,
+${SqfliteKeys.done} INTEGER,
+${SqfliteKeys.date} TEXT,
+${SqfliteKeys.time} TEXT
+)
+''');
   }
 
   Future<Database> get database async {

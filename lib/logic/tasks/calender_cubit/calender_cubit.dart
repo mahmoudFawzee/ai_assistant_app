@@ -1,4 +1,6 @@
-import 'package:ai_assistant_app/data/models/tasks/day_per_week.dart';
+import 'dart:developer';
+
+import 'package:ai_assistant_app/data/models/tasks/week.dart';
 import 'package:ai_assistant_app/data/services/tasks/calender_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -8,10 +10,10 @@ part 'calender_state.dart';
 class CalenderCubit extends Cubit<CalenderState> {
   CalenderCubit() : super(const CalenderInitialState());
   final _calenderService = CalenderService();
-  DateTime? currentDate;
+  DateTime? _currentDate;
   void initCalender() {
     final todayDate = DateTime.now();
-    currentDate = todayDate;
+    _currentDate = todayDate;
     final week = _calenderService.getWeek(todayDate);
     emit(GotWeekState(week: week));
   }
@@ -27,31 +29,52 @@ class CalenderCubit extends Cubit<CalenderState> {
     //?where are we and where we are going to.
     //? we are in current year and month and week.
     //? and we move to next week (move 7 days.)
-    int movementAmount = moveForward ? 7 : -7;
-    final movementDays = currentDate!.day + movementAmount;
-    final date = currentDate!.subtract(Duration(days: movementDays));
-    final week = _calenderService.getWeek(date);
+
+    final date = getWantedDate(
+      baseDate: _currentDate!,
+      days: 7,
+      forward: moveForward,
+    );
+    log('new date : $date');
+    _currentDate = date;
+    final week = _calenderService.getWeek(_currentDate!);
     emit(GotWeekState(week: week));
   }
 
   void _moveMonth({required bool moveForward}) {
-    int movementAmount = moveForward ? 1 : -1;
     final monthDays = _calenderService.getMonthDays(
-      year: currentDate!.year,
-      month: currentDate!.month + movementAmount,
+      year: _currentDate!.year,
+      month: _currentDate!.month,
     );
-    final date = currentDate!.subtract(Duration(days: monthDays));
-    final week = _calenderService.getWeek(date);
+    final date = getWantedDate(
+      baseDate: _currentDate!,
+      days: monthDays,
+      forward: moveForward,
+    );
+    log('new date : $date and days : $monthDays');
+    _currentDate = date;
+    final week = _calenderService.getWeek(_currentDate!);
     emit(GotWeekState(week: week));
   }
 
   void _moveYear({required bool moveForward}) {
     int movementAmount = moveForward ? 1 : -1;
     final isLeapYear = _calenderService.isLeapYear(
-      currentDate!.year + movementAmount,
+      _currentDate!.year + movementAmount,
     );
-    final date = currentDate!.subtract(Duration(days: isLeapYear ? 366 : 365));
+    final date = _currentDate!.subtract(Duration(days: isLeapYear ? 366 : 365));
     final week = _calenderService.getWeek(date);
     emit(GotWeekState(week: week));
+  }
+
+  DateTime getWantedDate({
+    required DateTime baseDate,
+    required int days,
+    required bool forward,
+  }) {
+    if (forward) {
+      return baseDate.add(Duration(days: days));
+    }
+    return baseDate.subtract(Duration(days: days));
   }
 }

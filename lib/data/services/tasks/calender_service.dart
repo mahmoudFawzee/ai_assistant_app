@@ -1,10 +1,11 @@
-import 'package:ai_assistant_app/data/models/tasks/day_per_week.dart';
+import 'package:ai_assistant_app/data/models/tasks/week.dart';
 
 final class CalenderService {
   int getMonthDays({
     required int year,
     required int month,
   }) {
+    print('month is $month year : $year');
     if (month > 12) month = 1;
     if (month < 1) month = 12;
     switch (month) {

@@ -1,5 +1,3 @@
-import 'package:ai_assistant_app/logic/tasks/category_cubit/category_cubit.dart';
-import 'package:ai_assistant_app/logic/tasks/welcome_message_cubit/welcome_message_cubit.dart';
 import 'package:ai_assistant_app/view/screens/home/base.dart';
 import 'package:ai_assistant_app/view/screens/home/chat_page.dart';
 import 'package:ai_assistant_app/view/screens/home/conversations_page.dart';
@@ -10,6 +8,11 @@ import 'package:ai_assistant_app/view/screens/start/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:go_router/go_router.dart';
+
+import 'package:ai_assistant_app/logic/tasks/calender_cubit/calender_cubit.dart';
+import 'package:ai_assistant_app/logic/tasks/category_cubit/category_cubit.dart';
+import 'package:ai_assistant_app/logic/tasks/tasks_bloc/tasks_bloc.dart';
+import 'package:ai_assistant_app/logic/tasks/welcome_message_cubit/welcome_message_cubit.dart';
 
 final router = GoRouter(
   initialLocation: SplashScreen.pageRoute,
@@ -48,7 +51,15 @@ final router = GoRouter(
                         WelcomeMessageCubit()..getWelcomeMessage(context),
                   ),
                   BlocProvider(
-                    create: (context) => CategoryCubit()..getCategories(context),
+                    create: (context) =>
+                        CategoryCubit()..getCategories(context),
+                  ),
+                  BlocProvider(
+                    create: (context) => CalenderCubit()..initCalender(),
+                  ),
+                  BlocProvider(
+                    create: (context) =>
+                        TasksBloc()..add(const GetTodayTasksEvent()),
                   ),
                 ],
                 child: const ToDoScreen(),

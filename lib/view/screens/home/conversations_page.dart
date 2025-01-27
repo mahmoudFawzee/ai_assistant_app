@@ -1,5 +1,4 @@
 import 'dart:developer';
-
 import 'package:ai_assistant_app/logic/chat/conversation_cubit/conversation_cubit.dart';
 import 'package:ai_assistant_app/logic/chat/messages_bloc/messages_bloc.dart';
 import 'package:ai_assistant_app/logic/local/name_cubit/name_cubit.dart';
