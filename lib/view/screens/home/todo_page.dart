@@ -4,6 +4,8 @@ import 'package:ai_assistant_app/logic/tasks/welcome_message_cubit/welcome_messa
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:ai_assistant_app/view/widgets/custom_calender.dart';
 import 'package:ai_assistant_app/view/widgets/custom_category.dart';
+import 'package:ai_assistant_app/view/widgets/loading_indicator.dart';
+import 'package:ai_assistant_app/view/widgets/task_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -79,30 +81,31 @@ class ToDoScreen extends StatelessWidget {
             ),
           ),
 
-          // BlocBuilder<TasksBloc, TasksState>(
-          //   builder: (context, state) {
-          //     if (state is TasksLoadingState) {
-          //       return const LoadingIndicator();
-          //     }
-          //     if (state is GotTasksState) {
-          //       final unCompletedTasks = state.unCompletedTasks;
-          //       final completedTasks = state.completedTasks;
-          //       final allTasks = [...unCompletedTasks, ...completedTasks];
-          //       return ListView.builder(
-          //         itemBuilder: (context, index) {
-          //           //?here we have uncompleted tasks.
-          //           final task = allTasks[index];
-          //           if (index < unCompletedTasks.length) {
-          //             return TaskCard(task: task);
-          //           }
-          //           //?here we've completed tasks
-          //           return TaskCard(task: task);
-          //         },
-          //       );
-          //     }
-          //     return Container();
-          //   },
-          // ),
+          BlocBuilder<TasksBloc, TasksState>(
+            builder: (context, state) {
+              if (state is TasksLoadingState) {
+                return const LoadingIndicator();
+              }
+              if (state is GotTasksState) {
+                final unCompletedTasks = state.unCompletedTasks;
+                final completedTasks = state.completedTasks;
+                final allTasks = [...unCompletedTasks, ...completedTasks];
+                return ListView.builder(
+                  itemBuilder: (context, index) {
+                    //?here we have uncompleted tasks.
+                    final task = allTasks[index];
+                    if (index < unCompletedTasks.length) {
+                      return TaskCard(task: task);
+                    }
+                    //?here we've completed tasks
+                    return TaskCard(task: task);
+                  },
+                );
+              }
+              return Container();
+            },
+          ),
+        
         ],
       ),
       floatingActionButton: FloatingActionButton(

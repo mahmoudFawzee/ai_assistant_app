@@ -38,6 +38,7 @@ final class CalenderService {
       final day = DayPerWeek(
         dayPerMonth: currentDay.day,
         dayPerWeek: currentDay.weekday,
+        date: currentDay,
       );
       days.add(day);
     }

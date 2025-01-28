@@ -24,9 +24,11 @@ final class Category {
         return appLocalizations.family;
       case CategoryEnum.work:
         return appLocalizations.work;
+      case CategoryEnum.other:
+        return appLocalizations.other;
 
       default:
-        return appLocalizations.other;
+        return appLocalizations.all;
     }
   }
 
@@ -40,9 +42,11 @@ final class Category {
         return const Color.fromARGB(255, 129, 240, 199);
       case CategoryEnum.work:
         return ColorsManger.workColor;
+      case CategoryEnum.other:
+        return ColorsManger.otherColor;
 
       default:
-        return ColorsManger.otherColor;
+        return ColorsManger.allColor;
     }
   }
 
@@ -80,6 +84,7 @@ final class Category {
 }
 
 enum CategoryEnum {
+  all,
   education,
   work,
   fun,

@@ -81,5 +81,9 @@
   "other": "Other",
   "@other": {
     "description": "the category of other"
+  },
+  "all": "All",
+  "@all": {
+    "description": "all tasks in all categories"
   }
 }

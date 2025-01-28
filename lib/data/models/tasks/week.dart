@@ -16,15 +16,26 @@ final class Week {
 final class DayPerWeek {
   final int _dayPerMonth;
   final int _dayPerWeek;
+  final DateTime _date;
   const DayPerWeek({
     required int dayPerMonth,
     required int dayPerWeek,
+    required DateTime date,
   })  : _dayPerMonth = dayPerMonth,
-        _dayPerWeek = dayPerWeek;
+        _dayPerWeek = dayPerWeek,
+        _date = date;
   String getStringDay() {
     return _handleTodayString(_dayPerWeek);
   }
 
+  bool isMatched(DateTime dayDate) {
+    if (date.day != dayDate.day) return false;
+    if (date.month != dayDate.month) return false;
+    if (date.year != dayDate.year) return false;
+    return true;
+  }
+
+  DateTime get date => _date;
   String getDayPerMonth() => _dayPerMonth.toString().padLeft(2, '0');
 
   String _handleTodayString(int weekDay) {

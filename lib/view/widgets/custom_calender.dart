@@ -1,7 +1,7 @@
 import 'dart:developer';
-
 import 'package:ai_assistant_app/logic/tasks/calender_cubit/calender_cubit.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
+import 'package:ai_assistant_app/view/widgets/custom_day.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -89,34 +89,7 @@ class CustomCalender extends StatelessWidget {
                         scrollDirection: Axis.horizontal,
                         itemBuilder: (context, index) {
                           final day = week.days[index];
-                          return InkWell(
-                            onTap: () {
-                              log('tapped day : $day');
-                            },
-                            child: Container(
-                              margin: const EdgeInsets.symmetric(horizontal: 5),
-                              width: 40,
-                              decoration: const BoxDecoration(
-                                color: ColorsManger.aiMessageColor,
-                                borderRadius:
-                                    BorderRadius.all(Radius.circular(5)),
-                              ),
-                              child: RichText(
-                                maxLines: 2,
-                                textAlign: TextAlign.center,
-                                text: TextSpan(
-                                  style: const TextStyle(
-                                    color: ColorsManger.black,
-                                    fontSize: 18,
-                                  ),
-                                  children: [
-                                    TextSpan(text: '${day.getStringDay()}\n'),
-                                    TextSpan(text: day.getDayPerMonth()),
-                                  ],
-                                ),
-                              ),
-                            ),
-                          );
+                          return CustomDay(day: day);
                         },
                       ),
                     ),

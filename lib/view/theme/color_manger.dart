@@ -13,4 +13,5 @@ final class ColorsManger {
   static const workColor = Color(0xffFDD2BF);
   static const educationColor = Color(0xff02556D);
   static const otherColor = Color(0xffF73859);
+  static const allColor = myMessageColor;
 }

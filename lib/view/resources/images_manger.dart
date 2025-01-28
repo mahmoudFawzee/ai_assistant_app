@@ -9,4 +9,6 @@ final class ImagesManger {
   static const otherCategory = '$_categories/other.png';
   static const entertainmentCategory = '$_categories/entertainment.png';
   static const workCategory = '$_categories/work.png';
+static const allCategories = '$_categories/all.png';
+  
 }
