@@ -18,6 +18,17 @@ final class CategoryService {
     ];
   }
 
+  List<CategoryProps> getCategoriesSpec() {
+    return const [
+      CategoryProps(category: CategoryEnum.all),
+      CategoryProps(category: CategoryEnum.education),
+      CategoryProps(category: CategoryEnum.family),
+      CategoryProps(category: CategoryEnum.fun),
+      CategoryProps(category: CategoryEnum.work),
+      CategoryProps(category: CategoryEnum.other),
+    ];
+  }
+
   int _getNumberOfTasksPerCategory(
     CategoryEnum category, {
     required List<Task> tasks,
@@ -34,7 +45,7 @@ final class CategoryService {
   Future<List<Task>> _getSpecificDayTasks(DateTime? date) async =>
       await _tasksService.getSpecificDayTasks(date ?? DateTime.now());
 
-  static  List<Task> filterTasks(
+  static List<Task> filterTasks(
     CategoryEnum category, {
     required List<Task> allTasks,
   }) {
@@ -49,41 +60,40 @@ final class CategoryService {
 
   Category _getAllCategory(List<Task> tasks) => Category(
         imagePath: ImagesManger.allCategories,
-        category: CategoryEnum.all,
+        categoryProps: const CategoryProps(category: CategoryEnum.all),
         numberOfTasks:
             _getNumberOfTasksPerCategory(CategoryEnum.all, tasks: tasks),
       );
 
   Category _getEducationCategory(List<Task> tasks) => Category(
         imagePath: ImagesManger.educationCategory,
-        category: CategoryEnum.education,
+        categoryProps: const CategoryProps(category: CategoryEnum.education),
         numberOfTasks:
             _getNumberOfTasksPerCategory(CategoryEnum.education, tasks: tasks),
       );
-
   Category _getFamilyCategory(List<Task> tasks) => Category(
         imagePath: ImagesManger.familyCategory,
-        category: CategoryEnum.family,
+        categoryProps: const CategoryProps(category: CategoryEnum.family),
         numberOfTasks:
             _getNumberOfTasksPerCategory(CategoryEnum.family, tasks: tasks),
       );
   Category _getWorkCategory(List<Task> tasks) => Category(
         imagePath: ImagesManger.workCategory,
-        category: CategoryEnum.work,
+        categoryProps: const CategoryProps(category: CategoryEnum.work),
         numberOfTasks:
             _getNumberOfTasksPerCategory(CategoryEnum.work, tasks: tasks),
       );
 
   Category _getFunCategory(List<Task> tasks) => Category(
         imagePath: ImagesManger.funCategory,
-        category: CategoryEnum.fun,
+        categoryProps: const CategoryProps(category: CategoryEnum.fun),
         numberOfTasks:
             _getNumberOfTasksPerCategory(CategoryEnum.fun, tasks: tasks),
       );
 
   Category _getOtherCategory(List<Task> tasks) => Category(
         imagePath: ImagesManger.otherCategory,
-        category: CategoryEnum.other,
+        categoryProps: const CategoryProps(category: CategoryEnum.other),
         numberOfTasks:
             _getNumberOfTasksPerCategory(CategoryEnum.other, tasks: tasks),
       );

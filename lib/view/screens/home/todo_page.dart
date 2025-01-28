@@ -1,6 +1,8 @@
 import 'package:ai_assistant_app/logic/tasks/category_cubit/category_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/tasks_bloc/tasks_bloc.dart';
 import 'package:ai_assistant_app/logic/tasks/welcome_message_cubit/welcome_message_cubit.dart';
+import 'package:go_router/go_router.dart';
+import 'package:ai_assistant_app/view/screens/home/new_task.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:ai_assistant_app/view/widgets/custom_calender.dart';
 import 'package:ai_assistant_app/view/widgets/custom_category.dart';
@@ -69,7 +71,7 @@ class ToDoScreen extends StatelessWidget {
                           onTap: () {
                             context.read<TasksBloc>().add(
                                   GetCategoryTasksEvent(
-                                    category.category,
+                                    category.categoryProps.category,
                                   ),
                                 );
                           },
@@ -105,12 +107,12 @@ class ToDoScreen extends StatelessWidget {
               return Container();
             },
           ),
-       
-       
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {},
+        onPressed: () {
+          context.push(NewTaskScreen.pageRoute);
+        },
         child: const Icon(Icons.add),
       ),
     );

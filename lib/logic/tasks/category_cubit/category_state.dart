@@ -17,3 +17,10 @@ final class GotAllCategoriesState extends CategoryState {
   @override
   List<Object> get props => [categories];
 }
+
+final class GotCategoriesPropsState extends CategoryState {
+  final List<CategoryProps> categoriesProps;
+  const GotCategoriesPropsState(this.categoriesProps);
+  @override
+  List<Object> get props => [categoriesProps];
+}

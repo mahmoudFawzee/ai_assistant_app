@@ -5,14 +5,50 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final class Category {
   final String imagePath;
-  final CategoryEnum category;
+  final CategoryProps categoryProps;
   final int numberOfTasks;
   Category({
     required this.imagePath,
-    required this.category,
     required this.numberOfTasks,
+    required this.categoryProps,
   });
 
+  static String categoryToJson(CategoryEnum cat) {
+    switch (cat) {
+      case CategoryEnum.education:
+        return SqfliteKeys.education;
+      case CategoryEnum.family:
+        return SqfliteKeys.family;
+      case CategoryEnum.fun:
+        return SqfliteKeys.fun;
+      case CategoryEnum.work:
+        return SqfliteKeys.work;
+
+      default:
+        return SqfliteKeys.other;
+    }
+  }
+
+  static CategoryEnum categoryFromJson(String value) {
+    switch (value) {
+      case SqfliteKeys.education:
+        return CategoryEnum.education;
+      case SqfliteKeys.family:
+        return CategoryEnum.family;
+      case SqfliteKeys.fun:
+        return CategoryEnum.fun;
+      case SqfliteKeys.work:
+        return CategoryEnum.work;
+
+      default:
+        return CategoryEnum.other;
+    }
+  }
+}
+
+final class CategoryProps {
+  final CategoryEnum category;
+  const CategoryProps({required this.category});
   String getCategoryTitle(BuildContext context) {
     final appLocalizations = AppLocalizations.of(context)!;
     switch (category) {
@@ -47,38 +83,6 @@ final class Category {
 
       default:
         return ColorsManger.allColor;
-    }
-  }
-
-  static String categoryToJson(CategoryEnum cat) {
-    switch (cat) {
-      case CategoryEnum.education:
-        return SqfliteKeys.education;
-      case CategoryEnum.family:
-        return SqfliteKeys.family;
-      case CategoryEnum.fun:
-        return SqfliteKeys.fun;
-      case CategoryEnum.work:
-        return SqfliteKeys.work;
-
-      default:
-        return SqfliteKeys.other;
-    }
-  }
-
-  static CategoryEnum categoryFromJson(String value) {
-    switch (value) {
-      case SqfliteKeys.education:
-        return CategoryEnum.education;
-      case SqfliteKeys.family:
-        return CategoryEnum.family;
-      case SqfliteKeys.fun:
-        return CategoryEnum.fun;
-      case SqfliteKeys.work:
-        return CategoryEnum.work;
-
-      default:
-        return CategoryEnum.other;
     }
   }
 }

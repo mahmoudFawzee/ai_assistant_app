@@ -1,4 +1,3 @@
-
 import 'package:ai_assistant_app/data/models/tasks/category.dart';
 import 'package:ai_assistant_app/data/models/tasks/task.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +15,7 @@ class TaskCard extends StatelessWidget {
     return Container(
       //?here we need to provide the color of the category.
       decoration: BoxDecoration(
-        color: Category.getCategoryColor(
+        color: CategoryProps.getCategoryColor(
           task.taskSpec.category,
         ),
       ),

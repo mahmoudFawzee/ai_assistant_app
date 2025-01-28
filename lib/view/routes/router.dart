@@ -2,6 +2,7 @@ import 'package:ai_assistant_app/logic/tasks/day_decorator_cubit/day_decorator_c
 import 'package:ai_assistant_app/view/screens/home/base.dart';
 import 'package:ai_assistant_app/view/screens/home/chat_page.dart';
 import 'package:ai_assistant_app/view/screens/home/conversations_page.dart';
+import 'package:ai_assistant_app/view/screens/home/new_task.dart';
 import 'package:ai_assistant_app/view/screens/home/todo_page.dart';
 import 'package:ai_assistant_app/view/screens/home/weather_page.dart';
 import 'package:ai_assistant_app/view/screens/start/on_boarding_screen.dart';
@@ -33,6 +34,10 @@ final router = GoRouter(
         return ChatScreen(conversationId: int.parse(conversationId!));
       },
     ),
+    GoRoute(
+      path: NewTaskScreen.pageRoute,
+      builder: (context, state) => const NewTaskScreen(),
+    ),
     ShellRoute(
       navigatorKey: GlobalKey<NavigatorState>(),
       builder: (context, state, child) => BaseScreen(child: child),
@@ -58,8 +63,7 @@ final router = GoRouter(
                     create: (_) => CalenderCubit()..initCalender(),
                   ),
                   BlocProvider(
-                    create: (_) =>
-                        TasksBloc()..add(const GetTodayTasksEvent()),
+                    create: (_) => TasksBloc()..add(const GetTodayTasksEvent()),
                   ),
                   BlocProvider(
                     create: (_) => DayDecoratorCubit(),

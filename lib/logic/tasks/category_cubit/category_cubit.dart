@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:ai_assistant_app/data/models/tasks/category.dart';
 import 'package:ai_assistant_app/data/services/tasks/category_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,8 +9,12 @@ class CategoryCubit extends Cubit<CategoryState> {
   CategoryCubit() : super(const CategoryInitial());
   final _categoryService = CategoryService();
   void getCategories() async {
-    log('start work : ');
     final categories = await _categoryService.getCategoriesList();
     emit(GotAllCategoriesState(categories));
+  }
+
+  void getCategoriesNamesAndColors() async {
+    final categoriesProps = _categoryService.getCategoriesSpec();
+    emit(GotCategoriesPropsState(categoriesProps));
   }
 }

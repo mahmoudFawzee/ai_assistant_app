@@ -85,5 +85,13 @@
   "all": "All",
   "@all": {
     "description": "all tasks in all categories"
+  },
+  "newTask": "New Task",
+  "@newTask": {
+    "description": "new task phrase we will use in add new task page"
+  },
+  "editTask": "Edit Task",
+  "@editTask": {
+    "description": "Edit task phrase we will use in add new task page"
   }
 }

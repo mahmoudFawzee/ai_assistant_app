@@ -12,7 +12,6 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
   final _tasksService = TasksService();
 
   TasksBloc() : super(const TasksInitialState()) {
-
     on<AddTaskEvent>((event, emit) async {
       try {
         final TaskSpec taskSpec = TaskSpec(
@@ -20,7 +19,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           done: false,
           time: event.time,
           title: event.title,
-          description:event.description,
+          description: event.description,
           category: event.category,
         );
         await _tasksService.addTask(taskSpec);
@@ -40,7 +39,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
             time: event.time,
             title: event.title,
             description: event.description,
-            category: event.category.category,
+            category: event.category.categoryProps.category,
           ),
         );
         await _tasksService.updateTask(task);
@@ -106,7 +105,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     });
 
     on<GetCategoryTasksEvent>((event, emit) async {
-    emit(const TasksLoadingState());
+      emit(const TasksLoadingState());
       try {
         final completedTasks = await _tasksService.getSpecificDayCompletedTasks(
           DateTime.now(),

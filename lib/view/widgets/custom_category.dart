@@ -1,4 +1,3 @@
-
 import 'package:ai_assistant_app/data/models/tasks/category.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +20,8 @@ class CustomCategory extends StatelessWidget {
       margin: const EdgeInsets.symmetric(horizontal: 5),
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
       decoration: BoxDecoration(
-        color: Category.getCategoryColor(
-          category.category,
+        color: CategoryProps.getCategoryColor(
+          category.categoryProps.category,
         ),
         borderRadius: const BorderRadius.all(Radius.circular(15)),
         shape: BoxShape.rectangle,
@@ -52,7 +51,8 @@ class CustomCategory extends StatelessWidget {
                 ),
                 children: [
                   TextSpan(
-                    text: '${category.getCategoryTitle(context)}\n',
+                    text:
+                        '${category.categoryProps.getCategoryTitle(context)}\n',
                     style: const TextStyle(
                       fontSize: 15,
                     ),
