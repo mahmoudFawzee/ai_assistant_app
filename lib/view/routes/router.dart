@@ -1,3 +1,4 @@
+import 'package:ai_assistant_app/logic/tasks/day_decorator_cubit/day_decorator_cubit.dart';
 import 'package:ai_assistant_app/view/screens/home/base.dart';
 import 'package:ai_assistant_app/view/screens/home/chat_page.dart';
 import 'package:ai_assistant_app/view/screens/home/conversations_page.dart';
@@ -51,15 +52,17 @@ final router = GoRouter(
                         WelcomeMessageCubit()..getWelcomeMessage(context),
                   ),
                   BlocProvider(
-                    create: (context) =>
-                        CategoryCubit()..getCategories(),
+                    create: (_) => CategoryCubit()..getCategories(),
                   ),
                   BlocProvider(
-                    create: (context) => CalenderCubit()..initCalender(),
+                    create: (_) => CalenderCubit()..initCalender(),
                   ),
                   BlocProvider(
-                    create: (context) =>
+                    create: (_) =>
                         TasksBloc()..add(const GetTodayTasksEvent()),
+                  ),
+                  BlocProvider(
+                    create: (_) => DayDecoratorCubit(),
                   ),
                 ],
                 child: const ToDoScreen(),

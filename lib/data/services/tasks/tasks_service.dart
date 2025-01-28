@@ -10,7 +10,7 @@ import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart';
 
 final class TasksService implements TasksInterface {
   final _dbHelper = DatabaseHelper();
-  final _categoryService = CategoryService();
+  //final _categoryService = CategoryService();
 
   @override
   Future<List<Task>> getAllTasks() async {
@@ -129,5 +129,5 @@ final class TasksService implements TasksInterface {
     CategoryEnum category, {
     required List<Task> allTasks,
   }) =>
-      _categoryService.filterTasks(category, allTasks: allTasks);
+      CategoryService.filterTasks(category, allTasks: allTasks);
 }

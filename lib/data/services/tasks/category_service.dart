@@ -7,21 +7,22 @@ final class CategoryService {
   final _tasksService = TasksService();
 
   Future<List<Category>> getCategoriesList([DateTime? date]) async {
+    final allTasks = await _getSpecificDayTasks(date);
     return [
-      await _getAllCategory(date: date),
-      await _getEducationCategory(date: date),
-      await _getFamilyCategory(date: date),
-      await _getEntertainmentCategory(date: date),
-      await _getWorkCategory(date: date),
-      await _getOtherCategory(date: date),
+      _getAllCategory(allTasks),
+      _getEducationCategory(allTasks),
+      _getFamilyCategory(allTasks),
+      _getFunCategory(allTasks),
+      _getWorkCategory(allTasks),
+      _getOtherCategory(allTasks),
     ];
   }
 
-  Future<int> _getNumberOfTasksPerCategory(
+  int _getNumberOfTasksPerCategory(
     CategoryEnum category, {
-    required DateTime? date,
-  }) async {
-    final tasks = await _getSpecificDayTasks(date);
+    required List<Task> tasks,
+  }) {
+    if (category == CategoryEnum.all) return tasks.length;
     return tasks
         .map((element) {
           return element.taskSpec.category == category;
@@ -32,13 +33,8 @@ final class CategoryService {
 
   Future<List<Task>> _getSpecificDayTasks(DateTime? date) async =>
       await _tasksService.getSpecificDayTasks(date ?? DateTime.now());
-  Future<int> _getSpecificDayNTasks(DateTime? date) async {
-    final tasks =
-        await _tasksService.getSpecificDayTasks(date ?? DateTime.now());
-    return tasks.length;
-  }
 
-  List<Task> filterTasks(
+  static  List<Task> filterTasks(
     CategoryEnum category, {
     required List<Task> allTasks,
   }) {
@@ -51,48 +47,44 @@ final class CategoryService {
     return filteredTasks;
   }
 
-  Future<Category> _getAllCategory({required DateTime? date}) async => Category(
+  Category _getAllCategory(List<Task> tasks) => Category(
         imagePath: ImagesManger.allCategories,
         category: CategoryEnum.all,
-        numberOfTasks: await _getSpecificDayNTasks(date),
-      );
-  Future<Category> _getEducationCategory({required DateTime? date}) async =>
-      Category(
-        imagePath: ImagesManger.educationCategory,
-        category: CategoryEnum.education,
-        numberOfTasks: await _getNumberOfTasksPerCategory(
-            CategoryEnum.education,
-            date: date),
+        numberOfTasks:
+            _getNumberOfTasksPerCategory(CategoryEnum.all, tasks: tasks),
       );
 
-  Future<Category> _getFamilyCategory({required DateTime? date}) async =>
-      Category(
+  Category _getEducationCategory(List<Task> tasks) => Category(
+        imagePath: ImagesManger.educationCategory,
+        category: CategoryEnum.education,
+        numberOfTasks:
+            _getNumberOfTasksPerCategory(CategoryEnum.education, tasks: tasks),
+      );
+
+  Category _getFamilyCategory(List<Task> tasks) => Category(
         imagePath: ImagesManger.familyCategory,
         category: CategoryEnum.family,
         numberOfTasks:
-            await _getNumberOfTasksPerCategory(CategoryEnum.family, date: date),
+            _getNumberOfTasksPerCategory(CategoryEnum.family, tasks: tasks),
       );
-  Future<Category> _getWorkCategory({required DateTime? date}) async =>
-      Category(
+  Category _getWorkCategory(List<Task> tasks) => Category(
         imagePath: ImagesManger.workCategory,
         category: CategoryEnum.work,
         numberOfTasks:
-            await _getNumberOfTasksPerCategory(CategoryEnum.work, date: date),
+            _getNumberOfTasksPerCategory(CategoryEnum.work, tasks: tasks),
       );
 
-  Future<Category> _getEntertainmentCategory({required DateTime? date}) async =>
-      Category(
-        imagePath: ImagesManger.entertainmentCategory,
+  Category _getFunCategory(List<Task> tasks) => Category(
+        imagePath: ImagesManger.funCategory,
         category: CategoryEnum.fun,
         numberOfTasks:
-            await _getNumberOfTasksPerCategory(CategoryEnum.fun, date: date),
+            _getNumberOfTasksPerCategory(CategoryEnum.fun, tasks: tasks),
       );
 
-  Future<Category> _getOtherCategory({required DateTime? date}) async =>
-      Category(
+  Category _getOtherCategory(List<Task> tasks) => Category(
         imagePath: ImagesManger.otherCategory,
         category: CategoryEnum.other,
         numberOfTasks:
-            await _getNumberOfTasksPerCategory(CategoryEnum.other, date: date),
+            _getNumberOfTasksPerCategory(CategoryEnum.other, tasks: tasks),
       );
 }
