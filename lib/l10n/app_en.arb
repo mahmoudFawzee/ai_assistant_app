@@ -91,7 +91,15 @@
     "description": "new task phrase we will use in add new task page"
   },
   "editTask": "Edit Task",
+  
   "@editTask": {
     "description": "Edit task phrase we will use in add new task page"
+  },
+
+  "pickDate": "Pick a Date",
+  
+  "@pickDate": {
+    "description": "pick date sentence"
   }
+
 }

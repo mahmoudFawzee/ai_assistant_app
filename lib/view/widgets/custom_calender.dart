@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'package:ai_assistant_app/logic/tasks/calender_cubit/calender_cubit.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:ai_assistant_app/view/widgets/custom_day.dart';
@@ -7,14 +6,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomCalender extends StatelessWidget {
   const CustomCalender({super.key});
-
+  static DateTime? selectedDate;
   @override
   Widget build(BuildContext context) {
     return SizedBox(
       height: 150,
-      child: BlocBuilder<CalenderCubit, CalenderState>(
+      child: BlocBuilder<CalenderCubit, CalenderState>(        
         builder: (context, state) {
           if (state is GotWeekState) {
+            
             final week = state.week;
             return Container(
               margin: const EdgeInsets.symmetric(horizontal: 10),

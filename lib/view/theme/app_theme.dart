@@ -16,6 +16,18 @@ final _lightTheme = ThemeData(
       color: ColorsManger.black,
     ),
   ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: WidgetStateProperty.all(ColorsManger.myMessageColor),
+      shape: WidgetStateProperty.all(
+        const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          side: BorderSide.none,
+        ),
+      ),
+    ),
+  ),
+  disabledColor: ColorsManger.myMessageColor.withOpacity(.5),
 );
 
 final _darkTheme = ThemeData(
@@ -26,6 +38,17 @@ final _darkTheme = ThemeData(
   textTheme: const TextTheme(
     bodyMedium: TextStyle(
       color: ColorsManger.white,
+    ),
+  ),
+  elevatedButtonTheme: ElevatedButtonThemeData(
+    style: ButtonStyle(
+      backgroundColor: WidgetStateProperty.all(ColorsManger.myMessageColor),
+      shape: WidgetStateProperty.all(
+        const RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+          side: BorderSide.none,
+        ),
+      ),
     ),
   ),
 );

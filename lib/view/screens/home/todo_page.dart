@@ -1,4 +1,8 @@
+import 'dart:developer';
+
+import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart';
 import 'package:ai_assistant_app/logic/tasks/category_cubit/category_cubit.dart';
+import 'package:ai_assistant_app/logic/tasks/day_decorator_cubit/day_decorator_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/tasks_bloc/tasks_bloc.dart';
 import 'package:ai_assistant_app/logic/tasks/welcome_message_cubit/welcome_message_cubit.dart';
 import 'package:go_router/go_router.dart';
@@ -15,7 +19,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class ToDoScreen extends StatelessWidget {
   const ToDoScreen({super.key});
   static const pageRoute = '/todo_screen';
-
+  static DateTime? _date;
   @override
   Widget build(BuildContext context) {
     final appLocalizations = AppLocalizations.of(context)!;
@@ -39,7 +43,13 @@ class ToDoScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 10),
-          const CustomCalender(),
+          BlocListener<DayDecoratorCubit, DateTime>(
+            listener: (context, state) {
+              log('got date : $state');
+              _date = state;
+            },
+            child: const CustomCalender(),
+          ),
           const SizedBox(height: 15),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10.0),
@@ -85,23 +95,40 @@ class ToDoScreen extends StatelessWidget {
 
           BlocBuilder<TasksBloc, TasksState>(
             builder: (context, state) {
+              log('getting tasks state : $state');
               if (state is TasksLoadingState) {
-                return const LoadingIndicator();
+                return const Expanded(child: LoadingIndicator());
               }
               if (state is GotTasksState) {
                 final unCompletedTasks = state.unCompletedTasks;
                 final completedTasks = state.completedTasks;
                 final allTasks = [...unCompletedTasks, ...completedTasks];
-                return ListView.builder(
-                  itemBuilder: (context, index) {
-                    //?here we have uncompleted tasks.
-                    final task = allTasks[index];
-                    if (index < unCompletedTasks.length) {
+                return Expanded(
+                  child: ListView.builder(
+                    itemCount: allTasks.length,
+                    
+                    itemBuilder: (context, index) {
+                      //?here we have uncompleted tasks.
+                      final task = allTasks[index];
+                      
+                      //?here we've completed tasks
                       return TaskCard(task: task);
-                    }
-                    //?here we've completed tasks
-                    return TaskCard(task: task);
-                  },
+                    },
+                  ),
+                );
+              }
+              if (state is GotNoTasksState) {
+                return const Expanded(
+                  child: Center(
+                    child: Text('no tasks'),
+                  ),
+                );
+              }
+              if (state is GotTasksErrorState) {
+                return Expanded(
+                  child: Center(
+                    child: Text(state.error),
+                  ),
                 );
               }
               return Container();
@@ -111,6 +138,7 @@ class ToDoScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
+          final date = DateTimeFormatter.dateToString(_date ?? DateTime.now());
           context.push(NewTaskScreen.pageRoute);
         },
         child: const Icon(Icons.add),

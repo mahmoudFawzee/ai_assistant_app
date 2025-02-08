@@ -1,4 +1,11 @@
+import 'dart:convert';
+
+import 'package:ai_assistant_app/data/models/tasks/task.dart';
+import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart';
+import 'package:ai_assistant_app/logic/tasks/date_time_picker_cubit/date_time_picker_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/day_decorator_cubit/day_decorator_cubit.dart';
+import 'package:ai_assistant_app/logic/tasks/new_task_category_cubit/new_task_category_cubit.dart';
+import 'package:ai_assistant_app/logic/tasks/new_task_cubit/new_task_cubit.dart';
 import 'package:ai_assistant_app/view/screens/home/base.dart';
 import 'package:ai_assistant_app/view/screens/home/chat_page.dart';
 import 'package:ai_assistant_app/view/screens/home/conversations_page.dart';
@@ -16,6 +23,7 @@ import 'package:ai_assistant_app/logic/tasks/category_cubit/category_cubit.dart'
 import 'package:ai_assistant_app/logic/tasks/tasks_bloc/tasks_bloc.dart';
 import 'package:ai_assistant_app/logic/tasks/welcome_message_cubit/welcome_message_cubit.dart';
 
+final _taskBloc = TasksBloc();
 final router = GoRouter(
   initialLocation: SplashScreen.pageRoute,
   routes: [
@@ -36,7 +44,36 @@ final router = GoRouter(
     ),
     GoRoute(
       path: NewTaskScreen.pageRoute,
-      builder: (context, state) => const NewTaskScreen(),
+      builder: (context, state) {
+        final taskParams = state.pathParameters['task'];
+        final dateParams = state.pathParameters['date'];
+
+        final task = taskParams == null
+            ? null
+            : Task.oneTaskFromJson(json.decode(taskParams));
+        final DateTime? date = dateParams == null
+            ? null
+            : DateTimeFormatter.dateFromString(dateParams);
+        return MultiBlocProvider(
+          providers: [
+            BlocProvider(
+              create: (context) => NewTaskCubit(),
+            ),
+            BlocProvider(
+              create: (context) => DateTimePickerCubit(),
+            ),
+            BlocProvider.value(
+              value: _taskBloc,
+            ),
+            BlocProvider(
+              create: (context) =>
+                  CategoryCubit()..getCategoriesNamesAndColors(),
+            ),
+            BlocProvider(create: (context) => NewTaskCategoryCubit()),
+          ],
+          child: NewTaskScreen(task: task, date: date),
+        );
+      },
     ),
     ShellRoute(
       navigatorKey: GlobalKey<NavigatorState>(),
@@ -62,11 +99,12 @@ final router = GoRouter(
                   BlocProvider(
                     create: (_) => CalenderCubit()..initCalender(),
                   ),
-                  BlocProvider(
-                    create: (_) => TasksBloc()..add(const GetTodayTasksEvent()),
+                  BlocProvider.value(
+                    value: _taskBloc..add(const GetTodayTasksEvent()),
                   ),
                   BlocProvider(
-                    create: (_) => DayDecoratorCubit(),
+                    create: (_) =>
+                        DayDecoratorCubit()..selectDay(DateTime.now()),
                   ),
                 ],
                 child: const ToDoScreen(),

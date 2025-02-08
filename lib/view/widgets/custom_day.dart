@@ -30,16 +30,20 @@ class CustomDay extends StatelessWidget {
           child: Container(
             margin: const EdgeInsets.symmetric(horizontal: 5),
             width: 40,
-            decoration: const BoxDecoration(
-              color: ColorsManger.aiMessageColor,
-              borderRadius: BorderRadius.all(Radius.circular(5)),
-            ),
+            decoration: BoxDecoration(
+                color: selected
+                    ? ColorsManger.aiMessageColor
+                    : ColorsManger.myMessageColor,
+                borderRadius: const BorderRadius.all(Radius.circular(5)),
+                border: Border.all(
+                  color: ColorsManger.white,
+                )),
             child: RichText(
               maxLines: 2,
               textAlign: TextAlign.center,
               text: TextSpan(
-                style: const TextStyle(
-                  color: ColorsManger.black,
+                style: TextStyle(
+                  color: selected ? ColorsManger.black : ColorsManger.white,
                   fontSize: 18,
                 ),
                 children: [

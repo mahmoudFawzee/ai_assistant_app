@@ -54,7 +54,7 @@ final class TasksService implements TasksInterface {
   Future<List<Task>> getSpecificDayCompletedTasks(DateTime date) async {
     final result = await _dbHelper.getSpecificRows(
       SqfliteKeys.tasksTable,
-      where: 'date = ? && done = ?',
+      where: 'date = ? AND done = ?',
       whereArgs: [DateTimeFormatter.dateToString(date), 1],
     );
     return Task.fromJson(result);
@@ -64,9 +64,10 @@ final class TasksService implements TasksInterface {
   Future<List<Task>> getSpecificDayUnCompletedTasks(DateTime date) async {
     final result = await _dbHelper.getSpecificRows(
       SqfliteKeys.tasksTable,
-      where: 'date = ? && done = ?',
+      where: 'date = ? AND done = ?',
       whereArgs: [DateTimeFormatter.dateToString(date), 0],
     );
+    log('got db uncompleted tasks l : ${result.length}');
     return Task.fromJson(result);
   }
 

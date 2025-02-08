@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ai_assistant_app/data/models/tasks/category.dart';
 import 'package:ai_assistant_app/data/models/tasks/task.dart';
 import 'package:ai_assistant_app/data/services/tasks/tasks_service.dart';
@@ -17,7 +19,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
         final TaskSpec taskSpec = TaskSpec(
           date: event.date,
           done: false,
-          time: event.time,
+          time: TimeOfDay.fromDateTime(event.date),
           title: event.title,
           description: event.description,
           category: event.category,
@@ -36,10 +38,10 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
           taskSpec: TaskSpec(
             date: event.date,
             done: event.done,
-            time: event.time,
+            time: TimeOfDay.fromDateTime(event.date),
             title: event.title,
             description: event.description,
-            category: event.category.categoryProps.category,
+            category: event.category,
           ),
         );
         await _tasksService.updateTask(task);
@@ -61,13 +63,16 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     on<GetSpecificDayTasksEvent>((event, emit) async {
       emit(const TasksLoadingState());
       try {
+        print('date : ${event.date}');
         final completedTasks = await _tasksService.getSpecificDayCompletedTasks(
           event.date,
         );
+        log('got tasks completed : ${completedTasks.length}');
         final unCompletedTasks =
             await _tasksService.getSpecificDayUnCompletedTasks(
           event.date,
         );
+        log('got tasks uncompleted : ${unCompletedTasks.length}');
         if ([...completedTasks, ...unCompletedTasks].isEmpty) {
           emit(const GotNoTasksState());
           return;
@@ -84,6 +89,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     on<GetTodayTasksEvent>((event, emit) async {
       emit(const TasksLoadingState());
       try {
+        log('get today tasks');
         final completedTasks = await _tasksService.getSpecificDayCompletedTasks(
           DateTime.now(),
         );

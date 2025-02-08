@@ -17,16 +17,17 @@ final class Task {
     };
   }
 
-  factory Task._fromJson(Map<String, dynamic> json) {
+  factory Task.oneTaskFromJson(Map<String, dynamic> json) {
     return Task(
       id: json[SqfliteKeys.id],
       taskSpec: TaskSpec._fromJson(json),
     );
   }
+  
   static List<Task> fromJson(List<Map<String, dynamic>> jsonTasks) {
     final List<Task> tasks = [];
     for (var element in jsonTasks) {
-      final task = Task._fromJson(element);
+      final task = Task.oneTaskFromJson(element);
       tasks.add(task);
     }
     return tasks;

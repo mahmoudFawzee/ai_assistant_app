@@ -13,10 +13,21 @@ class TaskCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      margin: const EdgeInsets.all(10),
+      padding: const EdgeInsets.all(10),
       //?here we need to provide the color of the category.
       decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(15)),
         color: CategoryProps.getCategoryColor(
           task.taskSpec.category,
+        ),
+      ),
+      child: Center(
+        child: Text(
+          task.taskSpec.title,
+          style: const TextStyle(
+            color: Colors.black,
+          ),
         ),
       ),
     );

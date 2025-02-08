@@ -49,17 +49,15 @@ final class AddTaskEvent extends TasksEvent {
   final String title;
   final String description;
   final DateTime date;
-  final TimeOfDay time;
   final CategoryEnum category;
   const AddTaskEvent({
     required this.title,
     required this.description,
-    required this.time,
     required this.date,
     required this.category,
   });
   @override
-  List<Object> get props => [date, time, category, title,description];
+  List<Object> get props => [date, category, title, description];
 }
 
 final class UpdateTaskEvent extends TasksEvent {
@@ -68,20 +66,17 @@ final class UpdateTaskEvent extends TasksEvent {
   final String description;
   final bool done;
   final DateTime date;
-
-  final TimeOfDay time;
-  final Category category;
+  final CategoryEnum category;
   const UpdateTaskEvent({
     required this.oldId,
     required this.title,
     required this.description,
     required this.done,
-    required this.time,
     required this.date,
     required this.category,
   });
   @override
-  List<Object> get props => [oldId, done, date, time, category, title,description];
+  List<Object> get props => [oldId, done, date, category, title, description];
 }
 
 final class DeleteTaskEvent extends TasksEvent {

@@ -12,9 +12,11 @@ class CalenderCubit extends Cubit<CalenderState> {
   final _calenderService = CalenderService();
   DateTime? _currentDate;
   void initCalender() {
+    log('start calender');
     final todayDate = DateTime.now();
     _currentDate = todayDate;
     final week = _calenderService.getWeek(todayDate);
+    log('we got week : $week');
     emit(GotWeekState(week: week));
   }
 
