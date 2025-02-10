@@ -106,11 +106,10 @@ class ToDoScreen extends StatelessWidget {
                 return Expanded(
                   child: ListView.builder(
                     itemCount: allTasks.length,
-                    
                     itemBuilder: (context, index) {
                       //?here we have uncompleted tasks.
                       final task = allTasks[index];
-                      
+
                       //?here we've completed tasks
                       return TaskCard(task: task);
                     },
@@ -139,7 +138,7 @@ class ToDoScreen extends StatelessWidget {
       floatingActionButton: FloatingActionButton(
         onPressed: () {
           final date = DateTimeFormatter.dateToString(_date ?? DateTime.now());
-          context.push(NewTaskScreen.pageRoute);
+          context.push('${NewTaskScreen.pageRoute}/${null}/$date');
         },
         child: const Icon(Icons.add),
       ),

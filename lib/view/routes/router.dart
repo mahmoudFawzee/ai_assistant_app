@@ -43,7 +43,7 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      path: NewTaskScreen.pageRoute,
+      path: '${NewTaskScreen.pageRoute}:/task:/date',
       builder: (context, state) {
         final taskParams = state.pathParameters['task'];
         final dateParams = state.pathParameters['date'];

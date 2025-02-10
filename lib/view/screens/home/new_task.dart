@@ -7,6 +7,7 @@ import 'package:ai_assistant_app/logic/tasks/date_time_picker_cubit/date_time_pi
 import 'package:ai_assistant_app/logic/tasks/new_task_category_cubit/new_task_category_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/new_task_cubit/new_task_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/tasks_bloc/tasks_bloc.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:ai_assistant_app/view/widgets/custom_date_time_button.dart';
 import 'package:flutter/material.dart';
@@ -57,6 +58,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     }
     //?directly path the date.
     date = widget.date;
+    context.read<DateTimePickerCubit>().pickDateTime(date!);
   }
 
   @override
@@ -66,10 +68,12 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       listener: (context, state) {
         if (state is AddedNewTaskState) {
           context.read<TasksBloc>().add(GetSpecificDayTasksEvent(widget.date!));
+          context.pop();
           return;
         }
         if (state is UpdatedTaskState) {
           context.read<TasksBloc>().add(GetSpecificDayTasksEvent(widget.date!));
+          context.pop();
           return;
         }
       },
@@ -109,9 +113,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                 return CustomDateTimePickerButton(
                   dateTime: date,
                   onDatePicked: () {
-                      date = date;
-                      _validateForm();
-                    },
+                    _validateForm();
+                  },
                 );
               },
             ),
@@ -175,6 +178,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
               minLines: 3,
               maxLines: 5,
             ),
+
             BlocBuilder<NewTaskCubit, NewTaskState>(
               builder: (context, state) {
                 final enabled = state is ValidTaskState;
@@ -207,7 +211,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       : null,
                   style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
                         backgroundColor: WidgetStateProperty.all(
-                          enabled ? Theme.of(context).disabledColor : null,
+                          enabled ? null : Theme.of(context).disabledColor,
                         ),
                       ),
                   child: Text(
