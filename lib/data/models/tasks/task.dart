@@ -23,7 +23,7 @@ final class Task {
       taskSpec: TaskSpec._fromJson(json),
     );
   }
-  
+
   static List<Task> fromJson(List<Map<String, dynamic>> jsonTasks) {
     final List<Task> tasks = [];
     for (var element in jsonTasks) {
@@ -47,15 +47,15 @@ final class TaskSpec {
   final String description;
   final CategoryEnum category;
   final DateTime date;
-  final TimeOfDay time;
+  final TimeOfDay _time;
   const TaskSpec({
     required this.date,
     required this.done,
-    required this.time,
+    required TimeOfDay time,
     required this.title,
     required this.description,
     required this.category,
-  });
+  }) : _time = time;
   Map<String, dynamic> toJson() {
     return {
       SqfliteKeys.done: done ? 1 : 0,
@@ -67,10 +67,15 @@ final class TaskSpec {
     };
   }
 
+  get time => _time;
+  String stringTime() =>
+      '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
+  String stringDate() =>
+      '${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}';
   bool isMatch(TaskSpec task) {
     if (date != task.date) return false;
     if (title != task.title) return false;
-    if (time != task.time) return false;
+    if (_time != task.time) return false;
     if (done != task.done) return false;
     if (category != task.category) return false;
     return true;

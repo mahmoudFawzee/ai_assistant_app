@@ -82,7 +82,7 @@ class ToDoScreen extends StatelessWidget {
                             context.read<TasksBloc>().add(
                                   GetCategoryTasksEvent(
                                     category.categoryProps.category,
-                                    _date??DateTime.now(),
+                                    _date ?? DateTime.now(),
                                   ),
                                 );
                           },
@@ -93,7 +93,7 @@ class ToDoScreen extends StatelessWidget {
               },
             ),
           ),
-
+          const SizedBox(height: 5),
           BlocBuilder<TasksBloc, TasksState>(
             builder: (context, state) {
               log('getting tasks state : $state');
@@ -106,6 +106,7 @@ class ToDoScreen extends StatelessWidget {
                 final allTasks = [...unCompletedTasks, ...completedTasks];
                 return Expanded(
                   child: ListView.builder(
+                    padding: EdgeInsets.zero,
                     itemCount: allTasks.length,
                     itemBuilder: (context, index) {
                       //?here we have uncompleted tasks.

@@ -13,8 +13,8 @@ class TaskCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(10),
-      padding: const EdgeInsets.all(10),
+      margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.only(bottom: 10, left: 10, right: 10),
       //?here we need to provide the color of the category.
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(15)),
@@ -22,13 +22,46 @@ class TaskCard extends StatelessWidget {
           task.taskSpec.category,
         ),
       ),
-      child: Center(
-        child: Text(
-          task.taskSpec.title,
-          style: const TextStyle(
-            color: Colors.black,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Checkbox(
+                    value: true,
+                    onChanged: (val) {},
+                  ),
+                  Text(
+                    task.taskSpec.title,
+                    style: const TextStyle(
+                      color: Colors.black,
+                    ),
+                  ),
+                ],
+              ),
+              Text(
+                '${task.taskSpec.stringDate()}   ${task.taskSpec.stringTime()}',
+                style: const TextStyle(
+                  color: Colors.grey,
+                  fontSize: 12,
+                ),
+              ),
+            ],
           ),
-        ),
+          Text(
+            task.taskSpec.description,
+            textAlign: TextAlign.left,
+            style: const TextStyle(
+              color: Colors.black,
+              fontSize: 8,
+            ),
+          ),
+        ],
       ),
     );
   }
