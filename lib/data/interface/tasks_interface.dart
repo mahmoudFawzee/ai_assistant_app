@@ -4,6 +4,7 @@ import 'package:ai_assistant_app/data/models/tasks/task.dart';
 abstract class TasksInterface {
   void addTask(TaskSpec taskSpec);
   void updateTask(Task task);
+  void finishTask(Task task);
   void deleteTask(int taskId);
   Future<List<Task>> getAllTasks();
   Future<List<Task>> getUnCompletedTasks();

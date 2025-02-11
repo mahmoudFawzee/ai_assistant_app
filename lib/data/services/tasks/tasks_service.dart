@@ -102,6 +102,14 @@ final class TasksService implements TasksInterface {
     );
     log('number of changes happened : $changes');
   }
+   @override
+  Future finishTask(Task task) async {
+    final changes = await _dbHelper.updateRow(
+      SqfliteKeys.tasksTable,
+      task.toJson(),
+    );
+    log('number of changes happened : $changes');
+  }
 
   @override
   Future createTable() async {

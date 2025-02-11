@@ -17,6 +17,20 @@ final class Task {
     };
   }
 
+  factory Task.confirmTaskFinished(Task task) {
+    final spec = task.taskSpec;
+    return Task(
+      id: task.id,
+      taskSpec: TaskSpec(
+        date: spec.date,
+        done: true,
+        time: spec.time,
+        title: spec.title,
+        description: spec.description,
+        category: spec.category,
+      ),
+    );
+  }
   factory Task.oneTaskFromJson(Map<String, dynamic> json) {
     return Task(
       id: json[SqfliteKeys.id],

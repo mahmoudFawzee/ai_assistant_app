@@ -1,6 +1,8 @@
 import 'package:ai_assistant_app/data/models/tasks/category.dart';
 import 'package:ai_assistant_app/data/models/tasks/task.dart';
+import 'package:ai_assistant_app/logic/tasks/finish_task_cubit/finish_task_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class TaskCard extends StatelessWidget {
   const TaskCard({
@@ -32,9 +34,29 @@ class TaskCard extends StatelessWidget {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Checkbox(
-                    value: true,
-                    onChanged: (val) {},
+                  BlocProvider(
+                    create: (context) =>
+                        FinishTaskCubit()..init(task.taskSpec.done),
+                    child: Builder(builder: (context) {
+                      return BlocBuilder<FinishTaskCubit, bool>(
+                        builder: (context, state) {
+                          return Checkbox(
+                            value: state,
+                            onChanged: state
+                                ? null
+                                : (val) {
+                                    if (val == true) {
+                                      context
+                                          .read<FinishTaskCubit>()
+                                          .finishTask(task);
+                                      return;
+                                    }
+                                    
+                                  },
+                          );
+                        },
+                      );
+                    }),
                   ),
                   Text(
                     task.taskSpec.title,
@@ -45,7 +67,7 @@ class TaskCard extends StatelessWidget {
                 ],
               ),
               Text(
-                '${task.taskSpec.stringDate()}   ${task.taskSpec.stringTime()}',
+                '${task.taskSpec.stringDate()}  ${task.taskSpec.stringTime()}',
                 style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 12,
