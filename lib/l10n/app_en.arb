@@ -100,6 +100,16 @@
   
   "@pickDate": {
     "description": "pick date sentence"
+  },
+  "title": "Title",
+  
+  "@title": {
+    "description": "title of the task"
+  },
+  "description": "Description",
+  
+  "@description": {
+    "description": "Description of the task"
   }
 
 }

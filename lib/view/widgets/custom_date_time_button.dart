@@ -1,5 +1,6 @@
 import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart';
 import 'package:ai_assistant_app/logic/tasks/date_time_picker_cubit/date_time_picker_cubit.dart';
+import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,10 +17,12 @@ class CustomDateTimePickerButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      padding: const EdgeInsets.all(10),
       decoration: BoxDecoration(
+        borderRadius: const BorderRadius.all(Radius.circular(5)),
         border: Border.all(
-          width: 1,
-          color: Theme.of(context).scaffoldBackgroundColor,
+          width: 2,
+          color: ColorsManger.myMessageColor,
         ),
       ),
       child: InkWell(
@@ -54,7 +57,10 @@ class CustomDateTimePickerButton extends StatelessWidget {
             Text(dateTime == null
                 ? AppLocalizations.of(context)!.pickDate
                 : DateTimeFormatter.dateTimeToString(dateTime!)),
-            const Icon(Icons.date_range),
+            const Icon(
+              Icons.date_range,
+              color: ColorsManger.myMessageColor,
+            ),
           ],
         ),
       ),

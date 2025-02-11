@@ -47,6 +47,7 @@ class WeatherScreen extends StatelessWidget {
                         width: 150,
                         child: Image.network(
                           weather.overView.icon,
+                          scale: 1.5,
                           fit: BoxFit.contain,
                         ),
                       ),

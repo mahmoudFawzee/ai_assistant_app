@@ -24,6 +24,7 @@ import 'package:ai_assistant_app/logic/tasks/tasks_bloc/tasks_bloc.dart';
 import 'package:ai_assistant_app/logic/tasks/welcome_message_cubit/welcome_message_cubit.dart';
 
 final _taskBloc = TasksBloc();
+final _categoryCubit = CategoryCubit();
 final router = GoRouter(
   initialLocation: SplashScreen.pageRoute,
   routes: [
@@ -65,9 +66,8 @@ final router = GoRouter(
             BlocProvider.value(
               value: _taskBloc,
             ),
-            BlocProvider(
-              create: (context) =>
-                  CategoryCubit()..getCategoriesNamesAndColors(),
+            BlocProvider.value(
+              value: _categoryCubit..getCategoriesNamesAndColors(),
             ),
             BlocProvider(create: (context) => NewTaskCategoryCubit()),
           ],
@@ -93,8 +93,8 @@ final router = GoRouter(
                     create: (_) =>
                         WelcomeMessageCubit()..getWelcomeMessage(context),
                   ),
-                  BlocProvider(
-                    create: (_) => CategoryCubit()..getCategories(),
+                  BlocProvider.value(
+                    value: _categoryCubit..getCategories(),
                   ),
                   BlocProvider(
                     create: (_) => CalenderCubit()..initCalender(),

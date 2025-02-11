@@ -20,4 +20,7 @@ we will work like that
 
     first: work on the design of add new task page.
     todo: note that categories number of tasks doesn't work perfectly.
-          work on that and fix it.
+          work on that and fix it. #$done.
+
+
+          ### todo make the week and month moves smoothly using reverse when another one moves.

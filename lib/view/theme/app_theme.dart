@@ -18,6 +18,9 @@ final _lightTheme = ThemeData(
   ),
   elevatedButtonTheme: ElevatedButtonThemeData(
     style: ButtonStyle(
+      iconColor: WidgetStateProperty.all(ColorsManger.white),
+      foregroundColor: WidgetStateProperty.all(ColorsManger.white),
+      overlayColor: WidgetStateProperty.all(ColorsManger.white),
       backgroundColor: WidgetStateProperty.all(ColorsManger.myMessageColor),
       shape: WidgetStateProperty.all(
         const RoundedRectangleBorder(

@@ -61,19 +61,24 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
     context.read<DateTimePickerCubit>().pickDateTime(date!);
   }
 
+  void closePage() {
+    context.read<TasksBloc>().add(GetSpecificDayTasksEvent(widget.date!));
+    context.read<CategoryCubit>().getSpecificDayCategoriesList(widget.date!);
+    context.pop();
+  }
+
   @override
   Widget build(BuildContext context) {
     final appLocalizations = AppLocalizations.of(context)!;
+    final mediaQuery = MediaQuery.of(context).size;
     return BlocListener<TasksBloc, TasksState>(
       listener: (context, state) {
         if (state is AddedNewTaskState) {
-          context.read<TasksBloc>().add(GetSpecificDayTasksEvent(widget.date!));
-          context.pop();
+          closePage();
           return;
         }
         if (state is UpdatedTaskState) {
-          context.read<TasksBloc>().add(GetSpecificDayTasksEvent(widget.date!));
-          context.pop();
+          closePage();
           return;
         }
       },
@@ -86,146 +91,223 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
             style: const TextStyle(fontSize: 20),
           ),
         ),
-        body: Column(
-          children: [
-            //?we need title of the task
-            TextField(
-              controller: titleController,
-              minLines: 1,
-              maxLines: 2,
-              onChanged: (value) {
-                title = value;
-                _validateForm();
-              },
-            ),
-            //?then we need to add the date and time of it
-            BlocConsumer<DateTimePickerCubit, DateTimePickerState>(
-              listener: (context, state) {
-                if (state is DateTimePickedState) {
-                  date = state.pickedDate;
-                  return;
-                }
-              },
-              builder: (context, state) {
-                log('date state : $state');
-                if (state is DateTimePickedState) {
-                  return CustomDateTimePickerButton(
-                    dateTime: state.pickedDate,
-                    onDatePicked: () => _validateForm(),
-                  );
-                }
-                return CustomDateTimePickerButton(
-                  dateTime: date,
-                  onDatePicked: () => _validateForm(),
-                );
-              },
-            ),
-            //?then we need to add its category
-            BlocBuilder<CategoryCubit, CategoryState>(
-              builder: (context, state) {
-                if (state is GotCategoriesPropsState) {
-                  final cats = state.categoriesProps;
-                  log('cats num : ${cats.length}');
-                  return BlocBuilder<NewTaskCategoryCubit, CategoryProps>(
-                    builder: (context, stateCategoryProps) {
-                      return DropdownButton<CategoryProps>(
-                        value: stateCategoryProps,
-                        items: List.generate(
-                          cats.length,
-                          (index) {
-                            final category = cats[index];
-                            return DropdownMenuItem<CategoryProps>(
-                              onTap: () {
-                                categoryProps = category;
-                                context
-                                    .read<NewTaskCategoryCubit>()
-                                    .selectCategory(category);
-                                _validateForm();
-                              },
-                              value: category,
-                              child: Container(
-                                margin: const EdgeInsets.symmetric(vertical: 5),
-                                padding: const EdgeInsets.all(5),
-                                decoration: BoxDecoration(
-                                  color: CategoryProps.getCategoryColor(
-                                    category.category,
-                                  ),
-                                ),
-                                child: Text(
-                                  category.getCategoryTitle(
-                                    context,
-                                  ),
-                                ),
-                              ),
-                            );
-                          },
-                        ),
-                        onChanged: (value) {
-                          categoryProps = value;
-                        },
-                      );
-                    },
-                  );
-                }
-                return Container();
-              },
-            ),
-            //?then we need a small description for it (optional)
-            TextField(
-              controller: descriptionController,
-              onChanged: (value) {
-                description = value;
-                _validateForm();
-              },
-              minLines: 3,
-              maxLines: 5,
-            ),
-            BlocBuilder<NewTaskCubit, NewTaskState>(
-              builder: (context, state) {
-                final enabled = state is ValidTaskState;
-                log('new task state : $state');
-                return ElevatedButton(
-                  onPressed: enabled
-                      ? () {
-                          if (widget.task == null) {
-                            context.read<TasksBloc>().add(
-                                  AddTaskEvent(
-                                    title: title!,
-                                    description: description!,
-                                    date: date!,
-                                    category: categoryProps!.category,
-                                  ),
-                                );
-                            return;
-                          }
-                          context.read<TasksBloc>().add(
-                                UpdateTaskEvent(
-                                  oldId: widget.task!.id,
-                                  done: widget.task!.taskSpec.done,
-                                  title: title!,
-                                  description: description!,
-                                  date: date!,
-                                  category: categoryProps!.category,
-                                ),
-                              );
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 10),
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                //?we need title of the task
+                CustomTextField(
+                  controller: titleController,
+                  hint: appLocalizations.title,
+                  minLines: 1,
+                  maxLines: 2,
+                  onChanged: (value) {
+                    title = value;
+                    _validateForm();
+                  },
+                ),
+
+                const SizedBox(height: 40),
+
+                //?then we need to add the date and time of it
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    BlocBuilder<CategoryCubit, CategoryState>(
+                      buildWhen: (previous, current) {
+                        if (current is GotAllCategoriesState &&
+                            previous is GotCategoriesPropsState) {
+                          return false;
                         }
-                      : null,
-                  style: Theme.of(context).elevatedButtonTheme.style!.copyWith(
-                        backgroundColor: WidgetStateProperty.all(
-                          enabled ? null : Theme.of(context).disabledColor,
-                        ),
+                        return true;
+                      },
+                      builder: (context, state) {
+                        if (state is GotCategoriesPropsState) {
+                          final cats = state.categoriesProps;
+                          log('cats num : ${cats.length}');
+                          return BlocBuilder<NewTaskCategoryCubit,
+                              CategoryProps>(
+                            builder: (context, stateCategoryProps) {
+                              return DropdownButton<CategoryProps>(
+                                menuWidth: mediaQuery.width / 3,
+                                value: stateCategoryProps,
+                                items: List.generate(
+                                  cats.length,
+                                  (index) {
+                                    final category = cats[index];
+                                    return DropdownMenuItem<CategoryProps>(
+                                      onTap: () {
+                                        categoryProps = category;
+                                        context
+                                            .read<NewTaskCategoryCubit>()
+                                            .selectCategory(category);
+                                        _validateForm();
+                                      },
+                                      value: category,
+                                      child: Container(
+                                        alignment: Alignment.center,
+                                        width: mediaQuery.width / 3,
+                                        margin: const EdgeInsets.symmetric(
+                                            vertical: 5),
+                                        padding: const EdgeInsets.all(5),
+                                        decoration: BoxDecoration(
+                                          color: CategoryProps.getCategoryColor(
+                                            category.category,
+                                          ),
+                                        ),
+                                        child: Text(
+                                          category.getCategoryTitle(
+                                            context,
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ),
+                                onChanged: (value) {
+                                  categoryProps = value;
+                                },
+                              );
+                            },
+                          );
+                        }
+                        return Container();
+                      },
+                    ),
+                    //?then we need to add its category
+                    BlocConsumer<DateTimePickerCubit, DateTimePickerState>(
+                      listener: (context, state) {
+                        if (state is DateTimePickedState) {
+                          date = state.pickedDate;
+                          return;
+                        }
+                      },
+                      builder: (context, state) {
+                        log('date state : $state');
+                        if (state is DateTimePickedState) {
+                          return CustomDateTimePickerButton(
+                            dateTime: state.pickedDate,
+                            onDatePicked: () => _validateForm(),
+                          );
+                        }
+                        return CustomDateTimePickerButton(
+                          dateTime: date,
+                          onDatePicked: () => _validateForm(),
+                        );
+                      },
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 40),
+                //?then we need a small description for it (optional)
+                CustomTextField(
+                  controller: descriptionController,
+                  hint: appLocalizations.description,
+                  onChanged: (value) {
+                    description = value;
+                    _validateForm();
+                  },
+                  minLines: 3,
+                  maxLines: 5,
+                ),
+                const SizedBox(height: 50),
+
+                BlocBuilder<NewTaskCubit, NewTaskState>(
+                  builder: (context, state) {
+                    final enabled = state is ValidTaskState;
+                    log('new task state : $state');
+                    return ElevatedButton(
+                      onPressed: enabled
+                          ? () {
+                              if (widget.task == null) {
+                                context.read<TasksBloc>().add(
+                                      AddTaskEvent(
+                                        title: title!,
+                                        description: description!,
+                                        date: date!,
+                                        category: categoryProps!.category,
+                                      ),
+                                    );
+                                return;
+                              }
+                              context.read<TasksBloc>().add(
+                                    UpdateTaskEvent(
+                                      oldId: widget.task!.id,
+                                      done: widget.task!.taskSpec.done,
+                                      title: title!,
+                                      description: description!,
+                                      date: date!,
+                                      category: categoryProps!.category,
+                                    ),
+                                  );
+                            }
+                          : null,
+                      style: Theme.of(context)
+                          .elevatedButtonTheme
+                          .style!
+                          .copyWith(
+                            minimumSize: WidgetStateProperty.all(
+                                Size(mediaQuery.width / 1.5, 50)),
+                            backgroundColor: WidgetStateProperty.all(
+                              enabled ? null : Theme.of(context).disabledColor,
+                            ),
+                          ),
+                      child: Text(
+                        widget.task == null
+                            ? appLocalizations.newTask
+                            : appLocalizations.editTask,
                       ),
-                  child: Text(
-                    widget.task == null
-                        ? appLocalizations.newTask
-                        : appLocalizations.editTask,
-                  ),
-                );
-              },
+                    );
+                  },
+                ),
+              ],
             ),
-          ],
+          ),
         ),
       ),
+    );
+  }
+}
+
+class CustomTextField extends StatelessWidget {
+  const CustomTextField({
+    super.key,
+    required this.controller,
+    required this.hint,
+    required this.maxLines,
+    required this.minLines,
+    required this.onChanged,
+  });
+
+  final TextEditingController controller;
+  final String hint;
+  final int maxLines, minLines;
+  final Function(String)? onChanged;
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        hintText: hint,
+        border: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: Colors.grey,
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(2)),
+        ),
+        focusedBorder: const OutlineInputBorder(
+          borderSide: BorderSide(
+            color: ColorsManger.myMessageColor,
+          ),
+          borderRadius: BorderRadius.all(Radius.circular(10)),
+        ),
+      ),
+      minLines: minLines,
+      maxLines: maxLines,
+      onChanged: onChanged,
     );
   }
 }
