@@ -7,6 +7,7 @@ final class Week {
     required this.month,
     required this.days,
   });
+  bool monthMatch(int month) => month == this.month;
   @override
   String toString() {
     return ' month : $month , year : $year , days : $days , nDays : ${days.length}';

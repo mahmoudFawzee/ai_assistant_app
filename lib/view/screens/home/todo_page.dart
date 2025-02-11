@@ -82,6 +82,7 @@ class ToDoScreen extends StatelessWidget {
                             context.read<TasksBloc>().add(
                                   GetCategoryTasksEvent(
                                     category.categoryProps.category,
+                                    _date??DateTime.now(),
                                   ),
                                 );
                           },

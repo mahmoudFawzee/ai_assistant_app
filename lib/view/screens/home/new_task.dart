@@ -99,22 +99,24 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
               },
             ),
             //?then we need to add the date and time of it
-            BlocBuilder<DateTimePickerCubit, DateTimePickerState>(
+            BlocConsumer<DateTimePickerCubit, DateTimePickerState>(
+              listener: (context, state) {
+                if (state is DateTimePickedState) {
+                  date = state.pickedDate;
+                  return;
+                }
+              },
               builder: (context, state) {
+                log('date state : $state');
                 if (state is DateTimePickedState) {
                   return CustomDateTimePickerButton(
                     dateTime: state.pickedDate,
-                    onDatePicked: () {
-                      date = state.pickedDate;
-                      _validateForm();
-                    },
+                    onDatePicked: () => _validateForm(),
                   );
                 }
                 return CustomDateTimePickerButton(
                   dateTime: date,
-                  onDatePicked: () {
-                    _validateForm();
-                  },
+                  onDatePicked: () => _validateForm(),
                 );
               },
             ),
@@ -178,7 +180,6 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
               minLines: 3,
               maxLines: 5,
             ),
-
             BlocBuilder<NewTaskCubit, NewTaskState>(
               builder: (context, state) {
                 final enabled = state is ValidTaskState;

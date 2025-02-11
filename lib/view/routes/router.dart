@@ -43,14 +43,14 @@ final router = GoRouter(
       },
     ),
     GoRoute(
-      path: '${NewTaskScreen.pageRoute}:/task:/date',
+      path: '${NewTaskScreen.pageRoute}/:task/:date',
       builder: (context, state) {
         final taskParams = state.pathParameters['task'];
         final dateParams = state.pathParameters['date'];
 
-        final task = taskParams == null
+        final task = taskParams == 'null'
             ? null
-            : Task.oneTaskFromJson(json.decode(taskParams));
+            : Task.oneTaskFromJson(json.decode(taskParams!));
         final DateTime? date = dateParams == null
             ? null
             : DateTimeFormatter.dateFromString(dateParams);

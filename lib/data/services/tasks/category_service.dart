@@ -34,12 +34,15 @@ final class CategoryService {
     required List<Task> tasks,
   }) {
     if (category == CategoryEnum.all) return tasks.length;
-    return tasks
-        .map((element) {
-          return element.taskSpec.category == category;
+    var nOfTasks = tasks
+        .where((element) {
+          final picked = element.taskSpec.category == category;
+
+          return picked;
         })
         .toList()
         .length;
+    return nOfTasks;
   }
 
   Future<List<Task>> _getSpecificDayTasks(DateTime? date) async =>
@@ -50,6 +53,7 @@ final class CategoryService {
     required List<Task> allTasks,
   }) {
     final List<Task> filteredTasks = [];
+    if (category == CategoryEnum.all) return allTasks;
     for (var element in allTasks) {
       if (element.taskSpec.category == category) {
         filteredTasks.add(element);
@@ -71,6 +75,7 @@ final class CategoryService {
         numberOfTasks:
             _getNumberOfTasksPerCategory(CategoryEnum.education, tasks: tasks),
       );
+
   Category _getFamilyCategory(List<Task> tasks) => Category(
         imagePath: ImagesManger.familyCategory,
         categoryProps: const CategoryProps(category: CategoryEnum.family),

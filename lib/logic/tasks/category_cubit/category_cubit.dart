@@ -13,6 +13,11 @@ class CategoryCubit extends Cubit<CategoryState> {
     emit(GotAllCategoriesState(categories));
   }
 
+  void getSpecificDayCategoriesList(DateTime date) async {
+    final categories = await _categoryService.getCategoriesList(date);
+    emit(GotAllCategoriesState(categories));
+  }
+
   void getCategoriesNamesAndColors() async {
     final categoriesProps = _categoryService.getCategoriesSpec();
     emit(GotCategoriesPropsState(categoriesProps));

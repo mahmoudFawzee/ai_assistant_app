@@ -1,4 +1,5 @@
 import 'package:ai_assistant_app/data/models/tasks/week.dart';
+import 'package:ai_assistant_app/logic/tasks/category_cubit/category_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/day_decorator_cubit/day_decorator_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/tasks_bloc/tasks_bloc.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
@@ -26,9 +27,12 @@ class CustomDay extends StatelessWidget {
             context.read<TasksBloc>().add(
                   GetSpecificDayTasksEvent(day.date),
                 );
+            context
+                .read<CategoryCubit>()
+                .getSpecificDayCategoriesList(day.date);
           },
           child: Container(
-            margin: const EdgeInsets.symmetric(horizontal: 5),
+            margin: const EdgeInsets.symmetric(horizontal: 4),
             width: 40,
             decoration: BoxDecoration(
                 color: selected
@@ -44,7 +48,7 @@ class CustomDay extends StatelessWidget {
               text: TextSpan(
                 style: TextStyle(
                   color: selected ? ColorsManger.black : ColorsManger.white,
-                  fontSize: 18,
+                  fontSize: 16,
                 ),
                 children: [
                   TextSpan(text: '${day.getStringDay()}\n'),

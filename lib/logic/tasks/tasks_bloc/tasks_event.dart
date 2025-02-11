@@ -39,10 +39,11 @@ final class GetSpecificDayTasksEvent extends TasksEvent {
 
 final class GetCategoryTasksEvent extends TasksEvent {
   final CategoryEnum category;
-  const GetCategoryTasksEvent(this.category);
+  final DateTime date;
+  const GetCategoryTasksEvent(this.category, this.date);
 
   @override
-  List<Object> get props => [category];
+  List<Object> get props => [category, date];
 }
 
 final class AddTaskEvent extends TasksEvent {

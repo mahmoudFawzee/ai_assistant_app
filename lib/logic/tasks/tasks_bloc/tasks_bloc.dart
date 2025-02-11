@@ -114,25 +114,28 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
       emit(const TasksLoadingState());
       try {
         final completedTasks = await _tasksService.getSpecificDayCompletedTasks(
-          DateTime.now(),
+          event.date,
+        );
+        final catCompletedTasks = _tasksService.getCategoryTasks(
+          event.category,
+          allTasks: completedTasks,
         );
         final unCompletedTasks =
             await _tasksService.getSpecificDayUnCompletedTasks(
-          DateTime.now(),
+          event.date,
         );
-        if ([...completedTasks, ...unCompletedTasks].isEmpty) {
+
+        final catUnCompletedTasks = _tasksService.getCategoryTasks(
+          event.category,
+          allTasks: unCompletedTasks,
+        );
+        if ([...catCompletedTasks, ...catUnCompletedTasks].isEmpty) {
           emit(const GotNoTasksState());
           return;
         }
         emit(GotTasksState(
-          completedTasks: _tasksService.getCategoryTasks(
-            event.category,
-            allTasks: completedTasks,
-          ),
-          unCompletedTasks: _tasksService.getCategoryTasks(
-            event.category,
-            allTasks: unCompletedTasks,
-          ),
+          completedTasks: catCompletedTasks,
+          unCompletedTasks: catUnCompletedTasks,
         ));
       } catch (e) {
         emit(GotTasksErrorState(e.toString()));

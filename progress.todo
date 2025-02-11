@@ -16,4 +16,8 @@ we will work like that
 
     then we need to make a row for week days.
     in this bar we will have the current month in the top and user can go throw it.
-    with day name and month day. ( sat 18 june, sun ,mon tue,wen ,thu,fri)
+    with day name and month day. ( sat 18 june, sun ,mon tue,wen ,thu,fri).
+
+    first: work on the design of add new task page.
+    todo: note that categories number of tasks doesn't work perfectly.
+          work on that and fix it.
