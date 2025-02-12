@@ -82,8 +82,21 @@ final class TaskSpec {
   }
 
   get time => _time;
-  String stringTime() =>
-      '${_time.hour.toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')}';
+  String stringTime() {
+    return '${_handelHour(_time.hour).toString().padLeft(2, '0')}:${_time.minute.toString().padLeft(2, '0')} ${_amOrPm(_time.hour)}';
+  }
+
+  int _handelHour(int hour) {
+    if (hour == 0) return 12;
+    if (hour > 12) return hour - 12;
+    return hour;
+  }
+
+  String _amOrPm(int hour) {
+    if (hour > 12) return 'PM';
+    return 'AM';
+  }
+
   String stringDate() =>
       '${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}';
   bool isMatch(TaskSpec task) {

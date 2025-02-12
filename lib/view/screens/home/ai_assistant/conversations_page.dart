@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:ai_assistant_app/logic/chat/conversation_cubit/conversation_cubit.dart';
 import 'package:ai_assistant_app/logic/chat/messages_bloc/messages_bloc.dart';
 import 'package:ai_assistant_app/logic/local/name_cubit/name_cubit.dart';
-import 'package:ai_assistant_app/view/screens/home/chat_page.dart';
+import 'package:ai_assistant_app/view/screens/home/ai_assistant/chat_page.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:ai_assistant_app/view/widgets/loading_indicator.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

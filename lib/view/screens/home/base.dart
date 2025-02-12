@@ -1,7 +1,7 @@
 import 'package:ai_assistant_app/logic/local/navigation_cubit/navigation_cubit.dart';
 import 'package:ai_assistant_app/view/resources/images_manger.dart';
-import 'package:ai_assistant_app/view/screens/home/conversations_page.dart';
-import 'package:ai_assistant_app/view/screens/home/todo_page.dart';
+import 'package:ai_assistant_app/view/screens/home/ai_assistant/conversations_page.dart';
+import 'package:ai_assistant_app/view/screens/home/tasks/todo_page.dart';
 import 'package:ai_assistant_app/view/screens/home/weather_page.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:flutter/material.dart';

@@ -6,7 +6,7 @@ import 'package:ai_assistant_app/logic/tasks/day_decorator_cubit/day_decorator_c
 import 'package:ai_assistant_app/logic/tasks/tasks_bloc/tasks_bloc.dart';
 import 'package:ai_assistant_app/logic/tasks/welcome_message_cubit/welcome_message_cubit.dart';
 import 'package:go_router/go_router.dart';
-import 'package:ai_assistant_app/view/screens/home/new_task.dart';
+import 'package:ai_assistant_app/view/screens/home/tasks/new_task.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:ai_assistant_app/view/widgets/custom_calender.dart';
 import 'package:ai_assistant_app/view/widgets/custom_category.dart';

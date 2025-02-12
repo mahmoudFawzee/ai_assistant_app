@@ -7,10 +7,10 @@ import 'package:ai_assistant_app/logic/tasks/day_decorator_cubit/day_decorator_c
 import 'package:ai_assistant_app/logic/tasks/new_task_category_cubit/new_task_category_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/new_task_cubit/new_task_cubit.dart';
 import 'package:ai_assistant_app/view/screens/home/base.dart';
-import 'package:ai_assistant_app/view/screens/home/chat_page.dart';
-import 'package:ai_assistant_app/view/screens/home/conversations_page.dart';
-import 'package:ai_assistant_app/view/screens/home/new_task.dart';
-import 'package:ai_assistant_app/view/screens/home/todo_page.dart';
+import 'package:ai_assistant_app/view/screens/home/ai_assistant/chat_page.dart';
+import 'package:ai_assistant_app/view/screens/home/ai_assistant/conversations_page.dart';
+import 'package:ai_assistant_app/view/screens/home/tasks/new_task.dart';
+import 'package:ai_assistant_app/view/screens/home/tasks/todo_page.dart';
 import 'package:ai_assistant_app/view/screens/home/weather_page.dart';
 import 'package:ai_assistant_app/view/screens/start/on_boarding_screen.dart';
 import 'package:ai_assistant_app/view/screens/start/splash_screen.dart';
