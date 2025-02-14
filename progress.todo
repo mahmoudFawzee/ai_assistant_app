@@ -24,5 +24,12 @@ we will work like that
 
 
           todo : start task card design. #done
+
+          todo : test finish task feature. #done 
           
-          todo : test finish task feature.
+          todo : fix the error of edit task. we can pass the required data in the path not the whole task like that /new_task_page/date/time/title/category..... #done
+
+          todo: fix the drop down button when task edit.
+          todo: work on delete publish app then add notification later.
+          todo: add it to gitHup and add to portfolio also add the links of the apps on gitHup 
+                or add the link on app store on the portfolio.

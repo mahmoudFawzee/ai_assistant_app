@@ -39,7 +39,6 @@ final class Category {
         return CategoryEnum.fun;
       case SqfliteKeys.work:
         return CategoryEnum.work;
-
       default:
         return CategoryEnum.other;
     }
@@ -49,6 +48,7 @@ final class Category {
 final class CategoryProps {
   final CategoryEnum category;
   const CategoryProps({required this.category});
+  
   String getCategoryTitle(BuildContext context) {
     final appLocalizations = AppLocalizations.of(context)!;
     switch (category) {

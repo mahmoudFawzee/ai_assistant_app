@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
 import 'package:ai_assistant_app/data/models/tasks/category.dart';
-import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart';
+import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart'
+    as custom_formatter;
 import 'package:flutter/material.dart';
 
 final class Task {
@@ -31,6 +33,7 @@ final class Task {
       ),
     );
   }
+
   factory Task.oneTaskFromJson(Map<String, dynamic> json) {
     return Task(
       id: json[SqfliteKeys.id],
@@ -52,6 +55,22 @@ final class Task {
     if (!taskSpec.isMatch(task.taskSpec)) return false;
 
     return true;
+  }
+
+  String taskToRouting() {
+    return json.encode({
+      SqfliteKeys.id: id,
+      ...taskSpec.toJson(),
+    });
+  }
+
+  factory Task.taskFromRouting(String string) {
+    final decodedString = json.decode(string) as Map<String, dynamic>;
+   
+    return Task(
+      id: decodedString[SqfliteKeys.id],
+      taskSpec: TaskSpec._fromJson(decodedString),
+    );
   }
 }
 
@@ -76,8 +95,8 @@ final class TaskSpec {
       SqfliteKeys.category: Category.categoryToJson(category),
       SqfliteKeys.title: title,
       SqfliteKeys.description: description,
-      SqfliteKeys.date: DateTimeFormatter.dateToString(date),
-      SqfliteKeys.time: DateTimeFormatter.timeToString(date),
+      SqfliteKeys.date: custom_formatter.DateTimeFormatter.dateToString(date),
+      SqfliteKeys.time: custom_formatter.DateTimeFormatter.timeToString(date),
     };
   }
 
@@ -99,6 +118,7 @@ final class TaskSpec {
 
   String stringDate() =>
       '${date.day.toString().padLeft(2, '0')}-${date.month.toString().padLeft(2, '0')}';
+
   bool isMatch(TaskSpec task) {
     if (date != task.date) return false;
     if (title != task.title) return false;
@@ -110,9 +130,11 @@ final class TaskSpec {
 
   factory TaskSpec._fromJson(Map<String, dynamic> json) {
     return TaskSpec(
-      date: DateTimeFormatter.dateFromString(json[SqfliteKeys.date]),
+      date: custom_formatter.DateTimeFormatter.dateFromString(
+          json[SqfliteKeys.date]),
       done: json[SqfliteKeys.done] == 1,
-      time: DateTimeFormatter.timeFromString(json[SqfliteKeys.time]),
+      time: custom_formatter.DateTimeFormatter.timeFromString(
+          json[SqfliteKeys.time]),
       title: json[SqfliteKeys.title],
       description: json[SqfliteKeys.description],
       category: Category.categoryFromJson(json[SqfliteKeys.category]),

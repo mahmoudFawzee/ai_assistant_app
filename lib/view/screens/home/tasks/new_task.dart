@@ -25,6 +25,8 @@ class NewTaskScreen extends StatefulWidget {
   //?this task can be null or task
   //?when null? => when we add a new task
   //?when Task? => when we edit an old one.
+  //?in task we will need just id and date and time and title and decoration and category
+  //?we will pass them directly through the route
   final Task? task;
   final DateTime? date;
 
@@ -52,13 +54,18 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   @override
   void initState() {
     super.initState();
-    if (widget.task != null) {
-      titleController.text = widget.task!.taskSpec.title;
-      descriptionController.text = widget.task!.taskSpec.description;
-    }
     //?directly path the date.
     date = widget.date;
     context.read<DateTimePickerCubit>().pickDateTime(date!);
+    if (widget.task != null) {
+      title = widget.task!.taskSpec.title;
+      titleController.text = title!;
+      description = widget.task!.taskSpec.description;
+      descriptionController.text = description!;
+      // context.read<NewTaskCategoryCubit>().selectCategory(
+      //     CategoryProps(category: widget.task!.taskSpec.category));
+    }
+    _validateForm();
   }
 
   void closePage() {
@@ -126,10 +133,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       builder: (context, state) {
                         if (state is GotCategoriesPropsState) {
                           final cats = state.categoriesProps;
-                          log('cats num : ${cats.length}');
                           return BlocBuilder<NewTaskCategoryCubit,
                               CategoryProps>(
                             builder: (context, stateCategoryProps) {
+                              log('stateCategoryProps ${stateCategoryProps.category}');
                               return DropdownButton<CategoryProps>(
                                 menuWidth: mediaQuery.width / 3,
                                 value: stateCategoryProps,

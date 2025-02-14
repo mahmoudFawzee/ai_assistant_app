@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart';
+import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart' as custom_formatter;
 import 'package:ai_assistant_app/logic/tasks/category_cubit/category_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/day_decorator_cubit/day_decorator_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/tasks_bloc/tasks_bloc.dart';
@@ -139,7 +139,7 @@ class ToDoScreen extends StatelessWidget {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          final date = DateTimeFormatter.dateToString(_date ?? DateTime.now());
+          final date =custom_formatter.DateTimeFormatter.dateToString(_date ?? DateTime.now());
           context.push('${NewTaskScreen.pageRoute}/${null}/$date');
         },
         child: const Icon(Icons.add),

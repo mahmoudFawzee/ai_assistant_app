@@ -25,5 +25,7 @@
     "editTask": "تعديل المهمة",
     "pickDate": "اختار التاريخ",
     "title": "العنوان",
-    "description": "الوصف"
+    "description": "الوصف",
+    "edit": "تعديل",  
+    "delete": "حذف"
 }

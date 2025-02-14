@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:ai_assistant_app/data/models/tasks/task.dart';
 import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart';
 import 'package:ai_assistant_app/logic/tasks/date_time_picker_cubit/date_time_picker_cubit.dart';
@@ -44,17 +42,26 @@ final router = GoRouter(
       },
     ),
     GoRoute(
+      //?here we will pass each one
       path: '${NewTaskScreen.pageRoute}/:task/:date',
       builder: (context, state) {
         final taskParams = state.pathParameters['task'];
+
+        final Task? task;
+        if (taskParams == 'null') {
+          task = null;
+        } else {
+          task = Task.taskFromRouting(taskParams!);
+        }
+        //?here we need to encode taskParams because we'll decode it later.
         final dateParams = state.pathParameters['date'];
 
-        final task = taskParams == 'null'
-            ? null
-            : Task.oneTaskFromJson(json.decode(taskParams!));
-        final DateTime? date = dateParams == null
-            ? null
-            : DateTimeFormatter.dateFromString(dateParams);
+        final DateTime? date;
+        if (dateParams == 'null') {
+          date = null;
+        } else {
+          date = DateTimeFormatter.dateFromString(dateParams!);
+        }
         return MultiBlocProvider(
           providers: [
             BlocProvider(
@@ -69,7 +76,9 @@ final router = GoRouter(
             BlocProvider.value(
               value: _categoryCubit..getCategoriesNamesAndColors(),
             ),
-            BlocProvider(create: (context) => NewTaskCategoryCubit()),
+            BlocProvider(
+                create: (context) => NewTaskCategoryCubit(
+                    categoryEnum: task?.taskSpec.category)),
           ],
           child: NewTaskScreen(task: task, date: date),
         );

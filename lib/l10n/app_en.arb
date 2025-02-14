@@ -110,6 +110,14 @@
   
   "@description": {
     "description": "Description of the task"
+  },
+  "edit": "Edit",  
+  "@edit": {
+    "description": "edit the task"
+  },
+  "delete": "Delete",  
+  "@delete": {
+    "description": "delete the task"
   }
 
 }

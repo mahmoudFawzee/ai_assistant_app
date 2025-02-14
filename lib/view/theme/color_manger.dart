@@ -12,6 +12,7 @@ final class ColorsManger {
   static const familyColor = Color(0xffC4EDDE);
   static const workColor = Color(0xffFDD2BF);
   static const educationColor = Color(0xff80EF91);
-  static const otherColor = Color(0xffF73859);
+  static const otherColor = Color.fromARGB(255, 233, 176, 185);
   static const allColor = myMessageColor;
+  static const grey = Colors.grey;
 }
