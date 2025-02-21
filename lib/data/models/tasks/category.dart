@@ -48,7 +48,7 @@ final class Category {
 final class CategoryProps {
   final CategoryEnum category;
   const CategoryProps({required this.category});
-  
+
   String getCategoryTitle(BuildContext context) {
     final appLocalizations = AppLocalizations.of(context)!;
     switch (category) {
@@ -84,6 +84,20 @@ final class CategoryProps {
       default:
         return ColorsManger.allColor;
     }
+  }
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    return other is CategoryProps && category == other.category;
+  }
+
+  @override
+  int get hashCode => category.hashCode;
+  
+  @override
+  String toString() {
+    return '$category';
   }
 }
 

@@ -7,6 +7,7 @@ import 'package:ai_assistant_app/logic/tasks/date_time_picker_cubit/date_time_pi
 import 'package:ai_assistant_app/logic/tasks/new_task_category_cubit/new_task_category_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/new_task_cubit/new_task_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/tasks_bloc/tasks_bloc.dart';
+import 'package:ai_assistant_app/view/widgets/custom_text_field.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:ai_assistant_app/view/widgets/custom_date_time_button.dart';
@@ -42,7 +43,6 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   String? description;
   DateTime? date;
   void _validateForm() {
-    log('enure works');
     context.read<NewTaskCubit>().validateForm(
           title: title,
           description: description,
@@ -62,8 +62,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       titleController.text = title!;
       description = widget.task!.taskSpec.description;
       descriptionController.text = description!;
-      // context.read<NewTaskCategoryCubit>().selectCategory(
-      //     CategoryProps(category: widget.task!.taskSpec.category));
+      categoryProps = CategoryProps(category: widget.task!.taskSpec.category);
     }
     _validateForm();
   }
@@ -133,13 +132,19 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       builder: (context, state) {
                         if (state is GotCategoriesPropsState) {
                           final cats = state.categoriesProps;
-                          return BlocBuilder<NewTaskCategoryCubit,
-                              CategoryProps>(
+                          log('cats : $cats');
+                          return BlocConsumer<NewTaskCategoryCubit,
+                              CategoryProps?>(
+                            listener: (context, state) {
+                              categoryProps = state;
+                            },
                             builder: (context, stateCategoryProps) {
-                              log('stateCategoryProps ${stateCategoryProps.category}');
+                              //!the problem happens because we need to override == operator
+                              //!and hashCode methods in the class to tell dart
+                              //!when does the class CategoryProps objects are equals.
                               return DropdownButton<CategoryProps>(
                                 menuWidth: mediaQuery.width / 3,
-                                value: stateCategoryProps,
+                                value: categoryProps,
                                 items: List.generate(
                                   cats.length,
                                   (index) {
@@ -274,47 +279,6 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class CustomTextField extends StatelessWidget {
-  const CustomTextField({
-    super.key,
-    required this.controller,
-    required this.hint,
-    required this.maxLines,
-    required this.minLines,
-    required this.onChanged,
-  });
-
-  final TextEditingController controller;
-  final String hint;
-  final int maxLines, minLines;
-  final Function(String)? onChanged;
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField(
-      controller: controller,
-      decoration: InputDecoration(
-        hintText: hint,
-        border: const OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Colors.grey,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(2)),
-        ),
-        focusedBorder: const OutlineInputBorder(
-          borderSide: BorderSide(
-            color: ColorsManger.myMessageColor,
-          ),
-          borderRadius: BorderRadius.all(Radius.circular(10)),
-        ),
-      ),
-      minLines: minLines,
-      maxLines: maxLines,
-      onChanged: onChanged,
     );
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ai_assistant_app/data/models/tasks/category.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -11,5 +13,8 @@ class NewTaskCategoryCubit extends Cubit<CategoryProps> {
 
   NewTaskCategoryCubit({required CategoryEnum? categoryEnum})
       : super(_initialCategory(categoryEnum));
-  void selectCategory(CategoryProps category) => emit(category);
+  void selectCategory(CategoryProps category) {
+    log('emit : $category');
+    emit(category);
+  }
 }

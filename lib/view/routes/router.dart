@@ -77,8 +77,9 @@ final router = GoRouter(
               value: _categoryCubit..getCategoriesNamesAndColors(),
             ),
             BlocProvider(
-                create: (context) => NewTaskCategoryCubit(
-                    categoryEnum: task?.taskSpec.category)),
+              create: (context) =>
+                  NewTaskCategoryCubit(categoryEnum: task?.taskSpec.category),
+            ),
           ],
           child: NewTaskScreen(task: task, date: date),
         );
