@@ -1,4 +1,5 @@
 import 'package:ai_assistant_app/logic/weather/weather_bloc/weather_bloc.dart';
+import 'package:ai_assistant_app/view/resources/images_manger.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -7,6 +8,21 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 class WeatherScreen extends StatelessWidget {
   const WeatherScreen({super.key});
   static const pageRoute = '/weather_screen';
+  Widget _imageHandler(String imageUrl) {
+    try {
+      return Image.network(
+        imageUrl,
+        scale: 1.5,
+        fit: BoxFit.contain,
+      );
+    } catch (e) {
+      return Image.asset(
+        ImagesManger.handleWeatherIconUrl(imageUrl),
+        scale: 1.5,
+        fit: BoxFit.contain,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,11 +61,7 @@ class WeatherScreen extends StatelessWidget {
                       child: SizedBox(
                         height: 150,
                         width: 150,
-                        child: Image.network(
-                          weather.overView.icon,
-                          scale: 1.5,
-                          fit: BoxFit.contain,
-                        ),
+                        child: _imageHandler(weather.overView.icon),
                       ),
                     ),
 
