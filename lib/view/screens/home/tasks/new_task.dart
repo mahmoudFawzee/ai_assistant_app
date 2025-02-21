@@ -131,7 +131,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                       },
                       builder: (context, state) {
                         if (state is GotCategoriesPropsState) {
-                          final cats = state.categoriesProps;
+                          final cats = state.categoriesProps.sublist(1);
                           log('cats : $cats');
                           return BlocConsumer<NewTaskCategoryCubit,
                               CategoryProps?>(

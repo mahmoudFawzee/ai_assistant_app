@@ -27,5 +27,6 @@
     "title": "العنوان",
     "description": "الوصف",
     "edit": "تعديل",  
-    "delete": "حذف"
+    "delete": "حذف",
+    "deleteTask": "هل تريد حذف المهمة ؟" 
 }

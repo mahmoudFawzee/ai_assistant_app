@@ -118,6 +118,10 @@
   "delete": "Delete",  
   "@delete": {
     "description": "delete the task"
+  },
+  "deleteTask": "Delete Task ?",  
+  "@deleteTask": {
+    "description": "delete the task"
   }
 
 }
