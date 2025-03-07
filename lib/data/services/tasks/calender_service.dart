@@ -5,7 +5,6 @@ final class CalenderService {
     required int year,
     required int month,
   }) {
-    print('month is $month year : $year');
     if (month > 12) month = 1;
     if (month < 1) month = 12;
     switch (month) {

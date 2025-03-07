@@ -105,7 +105,6 @@ final class _Wind {
   });
 
   factory _Wind.fromJson(Map<String, Object?> json) {
-    print('converting : wind');
     final targetJson = json['wind'] as Map<String, Object?>;
     return _Wind(
       speed: _parseDouble('${targetJson['speed']}'),
@@ -129,7 +128,6 @@ final class _Sys {
     required this.sunSet,
   });
   factory _Sys.fromJson(Map<String, Object?> json) {
-    print('converting : sys');
     final targetJson = json['sys'] as Map<String, Object?>;
     return _Sys(
       countryCode: targetJson['country'] as String,

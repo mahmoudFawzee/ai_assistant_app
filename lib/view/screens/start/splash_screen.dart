@@ -21,6 +21,7 @@ class _SplashScreenState extends State<SplashScreen> {
         milliseconds: 500,
       ),
       () {
+        // ignore: use_build_context_synchronously
         context.go(ConversationsScreen.pageRoute);
       },
     );

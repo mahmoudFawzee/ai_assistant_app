@@ -63,7 +63,6 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     on<GetSpecificDayTasksEvent>((event, emit) async {
       emit(const TasksLoadingState());
       try {
-        print('date : ${event.date}');
         final completedTasks = await _tasksService.getSpecificDayCompletedTasks(
           event.date,
         );
