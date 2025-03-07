@@ -4,6 +4,7 @@ import 'package:ai_assistant_app/logic/tasks/date_time_picker_cubit/date_time_pi
 import 'package:ai_assistant_app/logic/tasks/day_decorator_cubit/day_decorator_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/new_task_category_cubit/new_task_category_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/new_task_cubit/new_task_cubit.dart';
+import 'package:ai_assistant_app/logic/weather/weather_bloc/weather_bloc.dart';
 import 'package:ai_assistant_app/view/screens/home/base.dart';
 import 'package:ai_assistant_app/view/screens/home/ai_assistant/chat_page.dart';
 import 'package:ai_assistant_app/view/screens/home/ai_assistant/conversations_page.dart';
@@ -81,8 +82,10 @@ final router = GoRouter(
               value: _categoryCubit,
             ),
             BlocProvider(
-              create: (context) =>
-                  NewTaskCategoryCubit(categoryEnum: task?.taskSpec.category,imagePath: '',),
+              create: (context) => NewTaskCategoryCubit(
+                categoryEnum: task?.taskSpec.category,
+                imagePath: '',
+              ),
             ),
           ],
           child: NewTaskScreen(task: task, date: date),
@@ -108,7 +111,8 @@ final router = GoRouter(
                         WelcomeMessageCubit()..getWelcomeMessage(context),
                   ),
                   BlocProvider.value(
-                    value: _categoryCubit..getSpecificDayCategoriesList(DateTime.now()),
+                    value: _categoryCubit
+                      ..getSpecificDayCategoriesList(DateTime.now()),
                   ),
                   BlocProvider(
                     create: (_) => CalenderCubit()..initCalender(),
@@ -127,7 +131,10 @@ final router = GoRouter(
         GoRoute(
             path: WeatherScreen.pageRoute,
             builder: (context, state) {
-              return const WeatherScreen();
+              return BlocProvider(
+                create: (context) => WeatherBloc()..add(const GetTodayWeatherEvent()),
+                child: const WeatherScreen(),
+              );
             }),
       ],
     )

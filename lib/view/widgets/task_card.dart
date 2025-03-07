@@ -1,7 +1,6 @@
 import 'dart:developer';
 import 'package:ai_assistant_app/data/models/tasks/category.dart';
 import 'package:ai_assistant_app/data/models/tasks/task.dart';
-import 'package:ai_assistant_app/logic/tasks/category_cubit/category_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/finish_task_cubit/finish_task_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/tasks_bloc/tasks_bloc.dart';
 import 'package:ai_assistant_app/view/screens/home/tasks/new_task.dart';
@@ -137,12 +136,6 @@ class TaskCard extends StatelessWidget {
                             context
                                 .read<TasksBloc>()
                                 .add(DeleteTaskEvent(task.id));
-                            // context.read<CategoryCubit>().getSpecificDayCategoriesList(task.taskSpec.date);
-                            // context
-                            //     .read<TasksBloc>()
-                            //     .add(GetSpecificDayTasksEvent(
-                            //       task.taskSpec.date,
-                            //     ));
                           },
                         ).show();
                       },
