@@ -36,7 +36,7 @@ class CustomCategory extends StatelessWidget {
               child: Image.asset(
                 height: 30,
                 width: 30,
-                category.imagePath,
+                category.categoryProps.imagePath,
                 color: ColorsManger.white,
               ),
             ),

@@ -54,6 +54,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   @override
   void initState() {
     super.initState();
+    context.read<CategoryCubit>().getCategoriesNamesAndColors();
     //?directly path the date.
     date = widget.date;
     context.read<DateTimePickerCubit>().pickDateTime(date!);
@@ -62,7 +63,10 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
       titleController.text = title!;
       description = widget.task!.taskSpec.description;
       descriptionController.text = description!;
-      categoryProps = CategoryProps(category: widget.task!.taskSpec.category);
+      categoryProps = CategoryProps(
+        category: widget.task!.taskSpec.category,
+        imagePath: '',
+      );
     }
     _validateForm();
   }
@@ -123,13 +127,14 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                   children: [
                     BlocBuilder<CategoryCubit, CategoryState>(
                       buildWhen: (previous, current) {
-                        if (current is GotAllCategoriesState &&
-                            previous is GotCategoriesPropsState) {
-                          return false;
+                        if (
+                            current is GotCategoriesPropsState) {
+                          return true;
                         }
-                        return true;
+                        return false;
                       },
                       builder: (context, state) {
+                        log('new task category state : $state');
                         if (state is GotCategoriesPropsState) {
                           final cats = state.categoriesProps.sublist(1);
                           log('cats : $cats');
@@ -145,6 +150,12 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                               return DropdownButton<CategoryProps>(
                                 menuWidth: mediaQuery.width / 3,
                                 value: categoryProps,
+                                hint: const DropDownItemContainer(
+                                  category: CategoryProps(
+                                    category: CategoryEnum.all,
+                                    imagePath: '',
+                                  ),
+                                ),
                                 items: List.generate(
                                   cats.length,
                                   (index) {
@@ -158,23 +169,8 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                                         _validateForm();
                                       },
                                       value: category,
-                                      child: Container(
-                                        alignment: Alignment.center,
-                                        width: mediaQuery.width / 3,
-                                        margin: const EdgeInsets.symmetric(
-                                            vertical: 5),
-                                        padding: const EdgeInsets.all(5),
-                                        decoration: BoxDecoration(
-                                          color: CategoryProps.getCategoryColor(
-                                            category.category,
-                                          ),
-                                        ),
-                                        child: Text(
-                                          category.getCategoryTitle(
-                                            context,
-                                          ),
-                                        ),
-                                      ),
+                                      child: DropDownItemContainer(
+                                          category: category),
                                     );
                                   },
                                 ),
@@ -277,6 +273,36 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
               ],
             ),
           ),
+        ),
+      ),
+    );
+  }
+}
+
+class DropDownItemContainer extends StatelessWidget {
+  const DropDownItemContainer({
+    super.key,
+    required this.category,
+  });
+
+  final CategoryProps category;
+
+  @override
+  Widget build(BuildContext context) {
+    final mediaQuery = MediaQuery.of(context).size;
+    return Container(
+      alignment: Alignment.center,
+      width: mediaQuery.width / 3,
+      margin: const EdgeInsets.symmetric(vertical: 5),
+      padding: const EdgeInsets.all(5),
+      decoration: BoxDecoration(
+        color: CategoryProps.getCategoryColor(
+          category.category,
+        ),
+      ),
+      child: Text(
+        category.getCategoryTitle(
+          context,
         ),
       ),
     );

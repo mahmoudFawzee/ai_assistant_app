@@ -10,19 +10,15 @@ part 'category_state.dart';
 class CategoryCubit extends Cubit<CategoryState> {
   CategoryCubit() : super(const CategoryInitial());
   final _categoryService = CategoryService();
-  void getCategories() async {
-    log('get cats now ');
-    final categories = await _categoryService.getCategoriesList();
-    emit(GotAllCategoriesState(categories));
-  }
 
   void getSpecificDayCategoriesList(DateTime date) async {
+    log('get cats now 2');
     final categories = await _categoryService.getCategoriesList(date);
+    log('get cats now updated : $categories');
     emit(GotAllCategoriesState(categories));
   }
 
   void getCategoriesNamesAndColors() async {
-    log('get cats now names and colors');
     final categoriesProps = _categoryService.getCategoriesSpec();
     emit(GotCategoriesPropsState(categoriesProps));
   }

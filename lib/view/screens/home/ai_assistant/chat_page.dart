@@ -11,9 +11,14 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ChatScreen extends StatefulWidget {
-  const ChatScreen({super.key, required this.conversationId});
+  const ChatScreen({
+    super.key,
+    required this.conversationId,
+    required this.conversationTitle,
+  });
   static const pageRoute = '/chat_screen';
   final int conversationId;
+  final String conversationTitle;
 
   @override
   State<ChatScreen> createState() => _ChatScreenState();
@@ -79,7 +84,7 @@ class _ChatScreenState extends State<ChatScreen> {
       },
       child: Scaffold(
         appBar: AppBar(
-          title: Text('${widget.conversationId}'),
+          title: Text(widget.conversationTitle),
         ),
         body: Column(
           children: [

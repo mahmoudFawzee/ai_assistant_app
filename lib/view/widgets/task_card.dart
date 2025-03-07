@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:ai_assistant_app/data/models/tasks/category.dart';
 import 'package:ai_assistant_app/data/models/tasks/task.dart';
+import 'package:ai_assistant_app/logic/tasks/category_cubit/category_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/finish_task_cubit/finish_task_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/tasks_bloc/tasks_bloc.dart';
 import 'package:ai_assistant_app/view/screens/home/tasks/new_task.dart';
@@ -24,7 +25,6 @@ class TaskCard extends StatelessWidget {
     final appLocalizations = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
-    
       //?here we need to provide the color of the category.
       decoration: BoxDecoration(
         borderRadius: const BorderRadius.all(Radius.circular(15)),
@@ -137,12 +137,12 @@ class TaskCard extends StatelessWidget {
                             context
                                 .read<TasksBloc>()
                                 .add(DeleteTaskEvent(task.id));
-                            context
-                                .read<TasksBloc>()
-                                .add(GetSpecificDayTasksEvent(
-                                  task.taskSpec.date,
-                                ));
-                            log('delete');
+                            // context.read<CategoryCubit>().getSpecificDayCategoriesList(task.taskSpec.date);
+                            // context
+                            //     .read<TasksBloc>()
+                            //     .add(GetSpecificDayTasksEvent(
+                            //       task.taskSpec.date,
+                            //     ));
                           },
                         ).show();
                       },

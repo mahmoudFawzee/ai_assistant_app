@@ -35,10 +35,14 @@ final router = GoRouter(
       builder: (context, state) => const OnBoardingScreen(),
     ),
     GoRoute(
-      path: '${ChatScreen.pageRoute}/:conversationId',
+      path: '${ChatScreen.pageRoute}/:conversationId/:conversationTitle',
       builder: (context, state) {
         final conversationId = state.pathParameters['conversationId'];
-        return ChatScreen(conversationId: int.parse(conversationId!));
+        final conversationTitle = state.pathParameters['conversationTitle'];
+        return ChatScreen(
+          conversationId: int.parse(conversationId!),
+          conversationTitle: conversationTitle!,
+        );
       },
     ),
     GoRoute(
@@ -74,11 +78,11 @@ final router = GoRouter(
               value: _taskBloc,
             ),
             BlocProvider.value(
-              value: _categoryCubit..getCategoriesNamesAndColors(),
+              value: _categoryCubit,
             ),
             BlocProvider(
               create: (context) =>
-                  NewTaskCategoryCubit(categoryEnum: task?.taskSpec.category),
+                  NewTaskCategoryCubit(categoryEnum: task?.taskSpec.category,imagePath: '',),
             ),
           ],
           child: NewTaskScreen(task: task, date: date),
@@ -104,7 +108,7 @@ final router = GoRouter(
                         WelcomeMessageCubit()..getWelcomeMessage(context),
                   ),
                   BlocProvider.value(
-                    value: _categoryCubit..getCategories(),
+                    value: _categoryCubit..getSpecificDayCategoriesList(DateTime.now()),
                   ),
                   BlocProvider(
                     create: (_) => CalenderCubit()..initCalender(),

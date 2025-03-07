@@ -20,12 +20,30 @@ final class CategoryService {
 
   List<CategoryProps> getCategoriesSpec() {
     return const [
-      CategoryProps(category: CategoryEnum.all),
-      CategoryProps(category: CategoryEnum.education),
-      CategoryProps(category: CategoryEnum.family),
-      CategoryProps(category: CategoryEnum.fun),
-      CategoryProps(category: CategoryEnum.work),
-      CategoryProps(category: CategoryEnum.other),
+      CategoryProps(
+        category: CategoryEnum.all,
+        imagePath: ImagesManger.allCategories,
+      ),
+      CategoryProps(
+        category: CategoryEnum.education,
+        imagePath: ImagesManger.educationCategory,
+      ),
+      CategoryProps(
+        category: CategoryEnum.family,
+        imagePath: ImagesManger.familyCategory,
+      ),
+      CategoryProps(
+        category: CategoryEnum.fun,
+        imagePath: ImagesManger.funCategory,
+      ),
+      CategoryProps(
+        category: CategoryEnum.work,
+        imagePath: ImagesManger.workCategory,
+      ),
+      CategoryProps(
+        category: CategoryEnum.other,
+        imagePath: ImagesManger.otherCategory,
+      ),
     ];
   }
 
@@ -63,42 +81,48 @@ final class CategoryService {
   }
 
   Category _getAllCategory(List<Task> tasks) => Category(
-        imagePath: ImagesManger.allCategories,
-        categoryProps: const CategoryProps(category: CategoryEnum.all),
+        categoryProps: const CategoryProps(
+            category: CategoryEnum.all, imagePath: ImagesManger.allCategories),
         numberOfTasks:
             _getNumberOfTasksPerCategory(CategoryEnum.all, tasks: tasks),
       );
 
   Category _getEducationCategory(List<Task> tasks) => Category(
-        imagePath: ImagesManger.educationCategory,
-        categoryProps: const CategoryProps(category: CategoryEnum.education),
+        categoryProps: const CategoryProps(
+            category: CategoryEnum.education,
+            imagePath: ImagesManger.educationCategory),
         numberOfTasks:
             _getNumberOfTasksPerCategory(CategoryEnum.education, tasks: tasks),
       );
 
   Category _getFamilyCategory(List<Task> tasks) => Category(
-        imagePath: ImagesManger.familyCategory,
-        categoryProps: const CategoryProps(category: CategoryEnum.family),
+        categoryProps: const CategoryProps(
+            category: CategoryEnum.family,
+            imagePath: ImagesManger.familyCategory),
         numberOfTasks:
             _getNumberOfTasksPerCategory(CategoryEnum.family, tasks: tasks),
       );
   Category _getWorkCategory(List<Task> tasks) => Category(
-        imagePath: ImagesManger.workCategory,
-        categoryProps: const CategoryProps(category: CategoryEnum.work),
+        categoryProps: const CategoryProps(
+            category: CategoryEnum.work, imagePath: ImagesManger.workCategory),
         numberOfTasks:
             _getNumberOfTasksPerCategory(CategoryEnum.work, tasks: tasks),
       );
 
   Category _getFunCategory(List<Task> tasks) => Category(
-        imagePath: ImagesManger.funCategory,
-        categoryProps: const CategoryProps(category: CategoryEnum.fun),
+        categoryProps: const CategoryProps(
+          category: CategoryEnum.fun,
+          imagePath: ImagesManger.funCategory,
+        ),
         numberOfTasks:
             _getNumberOfTasksPerCategory(CategoryEnum.fun, tasks: tasks),
       );
 
   Category _getOtherCategory(List<Task> tasks) => Category(
-        imagePath: ImagesManger.otherCategory,
-        categoryProps: const CategoryProps(category: CategoryEnum.other),
+        categoryProps: const CategoryProps(
+          category: CategoryEnum.other,
+          imagePath: ImagesManger.otherCategory,
+        ),
         numberOfTasks:
             _getNumberOfTasksPerCategory(CategoryEnum.other, tasks: tasks),
       );

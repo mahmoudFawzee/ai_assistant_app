@@ -14,7 +14,7 @@ import 'package:intl/intl.dart' as bidi;
 class ConversationsScreen extends StatelessWidget {
   const ConversationsScreen({super.key});
   static const pageRoute = '/conversations_screen';
-
+  static String? _chatTitle;
   @override
   Widget build(BuildContext context) {
     final appLocalizations = AppLocalizations.of(context)!;
@@ -30,7 +30,7 @@ class ConversationsScreen extends StatelessWidget {
       body: BlocConsumer<ConversationCubit, ConversationState>(
         listener: (context, state) {
           if (state is ConversationCreatedState) {
-            context.push('${ChatScreen.pageRoute}/${state.id}');
+            context.push('${ChatScreen.pageRoute}/${state.id}/$_chatTitle');
           }
         },
         builder: (context, state) {
@@ -81,7 +81,7 @@ class ConversationsScreen extends StatelessWidget {
                                       conversation.id));
                               //todo: we will need it later when we need to clear the conversation
                               context.push(
-                                  '${ChatScreen.pageRoute}/${conversation.id}');
+                                  '${ChatScreen.pageRoute}/${conversation.id}/${conversation.title}');
                             },
                           ),
                         ),
@@ -114,11 +114,10 @@ class ConversationsScreen extends StatelessWidget {
     required bool isNew,
   }) {
     final appLocalization = AppLocalizations.of(context)!;
+    final controller = TextEditingController();
     showDialog(
       context: context,
       builder: (context) {
-        final controller = TextEditingController();
-
         return AlertDialog(
           title: Text(
             appLocalization.start_new_conversation,
@@ -145,8 +144,10 @@ class ConversationsScreen extends StatelessWidget {
             ),
             TextButton(
               onPressed: () {
-                final title = controller.value.text;
-                context.read<ConversationCubit>().startNewConversation(title);
+                _chatTitle = controller.value.text;
+                context
+                    .read<ConversationCubit>()
+                    .startNewConversation(_chatTitle!);
                 Navigator.of(context).pop();
               },
               child: Text(

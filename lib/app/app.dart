@@ -39,7 +39,6 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (context) => WeatherBloc()..add(const GetTodayWeatherEvent()),
         ),
-      
       ],
       child: BlocBuilder<LocalizationCubit, LocalizationState>(
         builder: (context, langState) {

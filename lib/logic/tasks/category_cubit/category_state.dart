@@ -11,6 +11,10 @@ final class CategoryInitial extends CategoryState {
   const CategoryInitial();
 }
 
+final class CategoryLoading extends CategoryState {
+  const CategoryLoading();
+}
+
 final class GotAllCategoriesState extends CategoryState {
   final List<Category> categories;
   const GotAllCategoriesState(this.categories);

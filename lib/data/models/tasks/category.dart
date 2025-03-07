@@ -4,14 +4,25 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 final class Category {
-  final String imagePath;
   final CategoryProps categoryProps;
   final int numberOfTasks;
   Category({
-    required this.imagePath,
     required this.numberOfTasks,
     required this.categoryProps,
   });
+
+  @override
+  bool operator ==(Object other) {
+    if (identical(this, other)) return true;
+    final isPropsEquals =
+        other is Category && categoryProps == other.categoryProps;
+    final isNumberOfTasksEqual =
+        other is Category && numberOfTasks == other.numberOfTasks;
+    return isPropsEquals && isNumberOfTasksEqual;
+  }
+
+  @override
+  int get hashCode => numberOfTasks.hashCode + categoryProps.hashCode;
 
   static String categoryToJson(CategoryEnum cat) {
     switch (cat) {
@@ -47,7 +58,11 @@ final class Category {
 
 final class CategoryProps {
   final CategoryEnum category;
-  const CategoryProps({required this.category});
+  final String imagePath;
+  const CategoryProps({
+    required this.category,
+    required this.imagePath,
+  });
 
   String getCategoryTitle(BuildContext context) {
     final appLocalizations = AppLocalizations.of(context)!;
@@ -89,15 +104,17 @@ final class CategoryProps {
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is CategoryProps && category == other.category;
+    return other is CategoryProps &&
+        category == other.category &&
+        imagePath == other.imagePath;
   }
 
   @override
-  int get hashCode => category.hashCode;
-  
+  int get hashCode => category.hashCode + imagePath.hashCode;
+
   @override
   String toString() {
-    return '$category';
+    return 'category : $category image : $imagePath';
   }
 }
 

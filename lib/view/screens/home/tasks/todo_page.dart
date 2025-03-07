@@ -68,6 +68,9 @@ class ToDoScreen extends StatelessWidget {
             height: 120,
             child: BlocBuilder<CategoryCubit, CategoryState>(
               builder: (context, state) {
+                if (state is CategoryLoading) {
+                  return const LoadingIndicator();
+                }
                 if (state is GotAllCategoriesState) {
                   final cats = state.categories;
                   return ListView.builder(
@@ -94,11 +97,22 @@ class ToDoScreen extends StatelessWidget {
               },
             ),
           ),
+
           const SizedBox(height: 5),
-          BlocBuilder<TasksBloc, TasksState>(
-           
+          //tasks part
+          BlocConsumer<TasksBloc, TasksState>(
+            listener: (context, state) {
+              if (state is DeletedTaskState) {
+                context.read<CategoryCubit>().getSpecificDayCategoriesList(
+                      _date ?? DateTime.now(),
+                    );
+                context.read<TasksBloc>().add(GetSpecificDayTasksEvent(
+                      _date ?? DateTime.now(),
+                    ));
+              }
+            },
             builder: (context, state) {
-              log('getting tasks state : $state');
+              log('todo getting tasks state : $state');
               if (state is TasksLoadingState) {
                 return const Expanded(child: LoadingIndicator());
               }
