@@ -1,6 +1,8 @@
 import 'package:ai_assistant_app/app/cubit/old_user_cubit.dart';
 import 'package:ai_assistant_app/domain/models/tasks/task.dart';
 import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart';
+import 'package:ai_assistant_app/view/screens/settings/cubit/settings_cubit.dart';
+import 'package:ai_assistant_app/view/screens/settings/settings_screen.dart';
 import 'package:ai_assistant_app/view/widgets/calender/date_time_picker_cubit/date_time_picker_cubit.dart';
 import 'package:ai_assistant_app/view/widgets/calender/day_decorator_cubit/day_decorator_cubit.dart';
 import 'package:ai_assistant_app/view/screens/home/tasks/create/new_task_category_cubit/new_task_category_cubit.dart';
@@ -33,6 +35,13 @@ final router = GoRouter(
       builder: (context, state) => BlocProvider(
         create: (context) => OldUserCubit()..isOldUser(),
         child: const SplashScreen(),
+      ),
+    ),
+    GoRoute(
+      path: SettingsScreen.pageRoute,
+      builder: (context, state) => BlocProvider(
+        create: (context) => SettingsCubit(),
+        child: const SettingsScreen(),
       ),
     ),
     GoRoute(

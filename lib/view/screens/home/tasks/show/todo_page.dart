@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart'
     as custom_formatter;
+import 'package:ai_assistant_app/view/screens/settings/settings_screen.dart';
 import 'package:ai_assistant_app/view/widgets/tasks/category_cubit/category_cubit.dart';
 import 'package:ai_assistant_app/view/widgets/calender/day_decorator_cubit/day_decorator_cubit.dart';
 import 'package:ai_assistant_app/view/screens/home/tasks/tasks_bloc/tasks_bloc.dart';
@@ -51,12 +52,26 @@ class _ToDoScreenState extends State<ToDoScreen> {
                 builder: (context, state) {
                   return Padding(
                     padding: const EdgeInsets.only(top: 20.0),
-                    child: Text(
-                      '$state Ali',
-                      style: const TextStyle(
-                        color: ColorsManger.black,
-                        fontSize: 24,
-                      ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          '$state Ali',
+                          style: const TextStyle(
+                            color: ColorsManger.black,
+                            fontSize: 24,
+                          ),
+                        ),
+                        IconButton(
+                          onPressed: () {
+                            context.push(SettingsScreen.pageRoute);
+                          },
+                          icon: const Icon(
+                            Icons.settings,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
                   );
                 },

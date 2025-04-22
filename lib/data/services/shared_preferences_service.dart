@@ -37,4 +37,9 @@ final class SharedPreferencesService {
 
     return preferences.getBool(key) ?? false;
   }
+
+  Future<bool> clear() async {
+    final preferences = await _preferences;
+    return await preferences.clear();
+  }
 }

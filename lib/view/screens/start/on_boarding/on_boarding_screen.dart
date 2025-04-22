@@ -97,7 +97,7 @@ class OnBoardingItem extends StatelessWidget {
                   child: const Text('Get Started'),
                 ),
               ],
-            )
+            ),
         ],
       ),
     );
