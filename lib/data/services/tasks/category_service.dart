@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:ai_assistant_app/data/models/tasks/category.dart';
 import 'package:ai_assistant_app/data/models/tasks/task.dart';
 import 'package:ai_assistant_app/data/services/tasks/tasks_service.dart';
@@ -20,7 +18,7 @@ final class CategoryService {
     ];
   }
 
-  static final _categories = [
+   static List<CategoryProps> get categoriesProps => [
     const CategoryProps(
       category: CategoryEnum.education,
       imagePath: ImagesManger.educationCategory,
@@ -43,17 +41,7 @@ final class CategoryService {
     ),
   ];
 
-  static List<CategoryProps> getCategoriesSpec(CategoryProps? except) {
-    return _categories;
-
-    final cats = _categories.where((item) {
-      final isMatched = !item.isMatched(except);
-      log('item: ${item.category} is not matched to ${except?.category}: $isMatched');
-      return isMatched;
-    }).toList();
-    log('cats are: ${cats.toString()}');
-    return cats;
-  }
+ 
 
   int _getNumberOfTasksPerCategory(
     CategoryEnum category, {

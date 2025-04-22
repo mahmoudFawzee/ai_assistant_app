@@ -157,7 +157,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                             ),
                           ),
                           items:
-                              CategoryService.getCategoriesSpec(categoryProps)
+                              CategoryService.categoriesProps
                                   .map(
                             (category) {
                               return DropdownMenuItem<CategoryEnum>(
