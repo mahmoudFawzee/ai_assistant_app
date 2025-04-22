@@ -1,4 +1,4 @@
-import 'package:ai_assistant_app/domain/models/tasks/week.dart';
+import 'package:ai_assistant_app/domain/models/calender/week.dart';
 import 'package:ai_assistant_app/view/widgets/calender/calender_cubit/calender_cubit.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:ai_assistant_app/view/widgets/calender/custom_day.dart';

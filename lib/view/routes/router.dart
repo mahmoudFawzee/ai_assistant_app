@@ -11,7 +11,7 @@ import 'package:ai_assistant_app/view/screens/home/ai_assistant/conversations/co
 import 'package:ai_assistant_app/view/screens/home/tasks/create/new_task.dart';
 import 'package:ai_assistant_app/view/screens/home/tasks/show/todo_page.dart';
 import 'package:ai_assistant_app/view/screens/home/weather/weather_page.dart';
-import 'package:ai_assistant_app/view/screens/start/on_boarding_screen.dart';
+import 'package:ai_assistant_app/view/screens/start/on_boarding/on_boarding_screen.dart';
 import 'package:ai_assistant_app/view/screens/start/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';

@@ -1,6 +1,6 @@
 import 'dart:developer';
 
-import 'package:ai_assistant_app/domain/models/tasks/week.dart';
+import 'package:ai_assistant_app/domain/models/calender/week.dart';
 import 'package:ai_assistant_app/data/services/tasks/calender_service.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:equatable/equatable.dart';

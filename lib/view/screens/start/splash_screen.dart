@@ -1,6 +1,6 @@
 import 'package:ai_assistant_app/view/resources/images_manger.dart';
 import 'package:ai_assistant_app/view/resources/responsiveness_manger.dart';
-import 'package:ai_assistant_app/view/screens/home/ai_assistant/conversations/conversations_page.dart';
+import 'package:ai_assistant_app/view/screens/start/on_boarding/on_boarding_screen.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';
@@ -22,7 +22,7 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
       () {
         // ignore: use_build_context_synchronously
-        context.go(ConversationsScreen.pageRoute);
+        context.go(OnBoardingScreen.pageRoute);
       },
     );
   }

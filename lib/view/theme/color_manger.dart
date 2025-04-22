@@ -8,6 +8,8 @@ final class ColorsManger {
   static const aiMessageColor = Color(0xffD7FFDF);
   static const myMessageColor = Color(0xff77B5A6);
   static const blue = Color.fromARGB(255, 0, 132, 99);
+  static const onBoardingTitle = Color.fromARGB(255, 210, 77, 97);
+  static const onBoardingDescription = Color.fromARGB(255, 2, 73, 55);
   static const funColor = Color(0xffF7E74A);
   static const familyColor = Color(0xffC4EDDE);
   static const workColor = Color(0xffFDD2BF);
