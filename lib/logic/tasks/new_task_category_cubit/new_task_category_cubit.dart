@@ -5,8 +5,10 @@ import 'package:ai_assistant_app/view/resources/images_manger.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class NewTaskCategoryCubit extends Cubit<CategoryProps> {
-  static CategoryProps _initialCategory(
-      {required CategoryEnum? categoryEnum, required String imagePath}) {
+  static CategoryProps _initialCategory({
+    required CategoryEnum? categoryEnum,
+    required String imagePath,
+  }) {
     if (categoryEnum == null) {
       return const CategoryProps(
         category: CategoryEnum.all,

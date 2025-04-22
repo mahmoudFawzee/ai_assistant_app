@@ -3,9 +3,10 @@ import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
 import 'package:ai_assistant_app/data/models/tasks/category.dart';
 import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart'
     as custom_formatter;
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-final class Task {
+final class Task extends Equatable {
   final int id;
   final TaskSpec taskSpec;
   const Task({
@@ -43,6 +44,8 @@ final class Task {
 
   static List<Task> fromJson(List<Map<String, dynamic>> jsonTasks) {
     final List<Task> tasks = [];
+    if (jsonTasks.isEmpty) return tasks;
+
     for (var element in jsonTasks) {
       final task = Task.oneTaskFromJson(element);
       tasks.add(task);
@@ -66,15 +69,18 @@ final class Task {
 
   factory Task.taskFromRouting(String string) {
     final decodedString = json.decode(string) as Map<String, dynamic>;
-   
+
     return Task(
       id: decodedString[SqfliteKeys.id],
       taskSpec: TaskSpec._fromJson(decodedString),
     );
   }
+
+  @override
+  List<Object?> get props => [id, taskSpec];
 }
 
-final class TaskSpec {
+final class TaskSpec extends Equatable {
   final bool done;
   final String title;
   final String description;
@@ -140,4 +146,7 @@ final class TaskSpec {
       category: Category.categoryFromJson(json[SqfliteKeys.category]),
     );
   }
+
+  @override
+  List<Object?> get props => [done, title, description, category, date, _time];
 }

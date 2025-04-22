@@ -11,15 +11,10 @@ class CategoryCubit extends Cubit<CategoryState> {
   CategoryCubit() : super(const CategoryInitial());
   final _categoryService = CategoryService();
 
-  void getSpecificDayCategoriesList(DateTime date) async {
-    log('get cats now 2');
+  void getSpecificDayCategoriesList(DateTime date,String from) async {
+    log('category bloc this event called from : $from');
     final categories = await _categoryService.getCategoriesList(date);
     log('get cats now updated : $categories');
     emit(GotAllCategoriesState(categories));
-  }
-
-  void getCategoriesNamesAndColors() async {
-    final categoriesProps = _categoryService.getCategoriesSpec();
-    emit(GotCategoriesPropsState(categoriesProps));
   }
 }

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:ai_assistant_app/data/models/tasks/category.dart';
 import 'package:ai_assistant_app/data/models/tasks/task.dart';
 import 'package:ai_assistant_app/data/services/tasks/tasks_service.dart';
@@ -18,33 +20,39 @@ final class CategoryService {
     ];
   }
 
-  List<CategoryProps> getCategoriesSpec() {
-    return const [
-      CategoryProps(
-        category: CategoryEnum.all,
-        imagePath: ImagesManger.allCategories,
-      ),
-      CategoryProps(
-        category: CategoryEnum.education,
-        imagePath: ImagesManger.educationCategory,
-      ),
-      CategoryProps(
-        category: CategoryEnum.family,
-        imagePath: ImagesManger.familyCategory,
-      ),
-      CategoryProps(
-        category: CategoryEnum.fun,
-        imagePath: ImagesManger.funCategory,
-      ),
-      CategoryProps(
-        category: CategoryEnum.work,
-        imagePath: ImagesManger.workCategory,
-      ),
-      CategoryProps(
-        category: CategoryEnum.other,
-        imagePath: ImagesManger.otherCategory,
-      ),
-    ];
+  static final _categories = [
+    const CategoryProps(
+      category: CategoryEnum.education,
+      imagePath: ImagesManger.educationCategory,
+    ),
+    const CategoryProps(
+      category: CategoryEnum.family,
+      imagePath: ImagesManger.familyCategory,
+    ),
+    const CategoryProps(
+      category: CategoryEnum.fun,
+      imagePath: ImagesManger.funCategory,
+    ),
+    const CategoryProps(
+      category: CategoryEnum.work,
+      imagePath: ImagesManger.workCategory,
+    ),
+    const CategoryProps(
+      category: CategoryEnum.other,
+      imagePath: ImagesManger.otherCategory,
+    ),
+  ];
+
+  static List<CategoryProps> getCategoriesSpec(CategoryProps? except) {
+    return _categories;
+
+    final cats = _categories.where((item) {
+      final isMatched = !item.isMatched(except);
+      log('item: ${item.category} is not matched to ${except?.category}: $isMatched');
+      return isMatched;
+    }).toList();
+    log('cats are: ${cats.toString()}');
+    return cats;
   }
 
   int _getNumberOfTasksPerCategory(

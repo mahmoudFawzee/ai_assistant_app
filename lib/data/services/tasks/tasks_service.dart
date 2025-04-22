@@ -6,7 +6,8 @@ import 'package:ai_assistant_app/data/models/tasks/category.dart';
 import 'package:ai_assistant_app/data/models/tasks/task.dart';
 import 'package:ai_assistant_app/data/services/tasks/category_service.dart';
 import 'package:ai_assistant_app/data/services/database_helper.dart';
-import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart' as custom_formatter;
+import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart'
+    as custom_formatter;
 
 final class TasksService implements TasksInterface {
   final _dbHelper = DatabaseHelper();
@@ -45,7 +46,7 @@ final class TasksService implements TasksInterface {
     final result = await _dbHelper.getSpecificRows(
       SqfliteKeys.tasksTable,
       where: 'date = ?',
-      whereArgs: [custom_formatter. DateTimeFormatter.dateToString(date)],
+      whereArgs: [custom_formatter.DateTimeFormatter.dateToString(date)],
     );
     return Task.fromJson(result);
   }
@@ -55,7 +56,7 @@ final class TasksService implements TasksInterface {
     final result = await _dbHelper.getSpecificRows(
       SqfliteKeys.tasksTable,
       where: 'date = ? AND done = ?',
-      whereArgs: [custom_formatter. DateTimeFormatter.dateToString(date), 1],
+      whereArgs: [custom_formatter.DateTimeFormatter.dateToString(date), 1],
     );
     return Task.fromJson(result);
   }
@@ -67,7 +68,7 @@ final class TasksService implements TasksInterface {
       where: 'date = ? AND done = ?',
       whereArgs: [custom_formatter.DateTimeFormatter.dateToString(date), 0],
     );
-    log('got db uncompleted tasks l : ${result.length}');
+    log('got db uncompleted tasks l 111: ${result.length}');
     return Task.fromJson(result);
   }
 
@@ -102,7 +103,8 @@ final class TasksService implements TasksInterface {
     );
     log('number of changes happened : $changes');
   }
-   @override
+
+  @override
   Future finishTask(Task task) async {
     final changes = await _dbHelper.updateRow(
       SqfliteKeys.tasksTable,

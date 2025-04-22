@@ -1,12 +1,13 @@
 import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
-final class Category {
+final class Category extends Equatable {
   final CategoryProps categoryProps;
   final int numberOfTasks;
-  Category({
+  const Category({
     required this.numberOfTasks,
     required this.categoryProps,
   });
@@ -54,6 +55,9 @@ final class Category {
         return CategoryEnum.other;
     }
   }
+
+  @override
+  List<Object?> get props => [categoryProps, numberOfTasks];
 }
 
 final class CategoryProps {
@@ -112,10 +116,17 @@ final class CategoryProps {
   @override
   int get hashCode => category.hashCode + imagePath.hashCode;
 
+
+  bool isMatched(CategoryProps? other) {
+    if (other == null) return false;
+    return category == other.category;
+  }
   @override
   String toString() {
     return 'category : $category image : $imagePath';
   }
+
+  
 }
 
 enum CategoryEnum {

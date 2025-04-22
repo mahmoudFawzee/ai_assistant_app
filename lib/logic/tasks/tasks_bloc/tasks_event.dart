@@ -19,7 +19,8 @@ final class GetCompletedTasksEvent extends TasksEvent {
 }
 
 final class GetTodayTasksEvent extends TasksEvent {
-  const GetTodayTasksEvent();
+  final String from;
+  const GetTodayTasksEvent(this.from);
 }
 
 final class GetAllTasksEvent extends TasksEvent {
@@ -31,7 +32,8 @@ final class GetAllTasksEvent extends TasksEvent {
 
 final class GetSpecificDayTasksEvent extends TasksEvent {
   final DateTime date;
-  const GetSpecificDayTasksEvent(this.date);
+  final String from;
+  const GetSpecificDayTasksEvent(this.date, {required this.from});
 
   @override
   List<Object> get props => [date];

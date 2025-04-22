@@ -28,5 +28,6 @@
     "description": "الوصف",
     "edit": "تعديل",  
     "delete": "حذف",
-    "deleteTask": "هل تريد حذف المهمة ؟" 
+    "deleteTask": "هل تريد حذف المهمة ؟",
+    "tasks": "المهام"
 }

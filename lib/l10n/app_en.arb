@@ -66,7 +66,8 @@
   "education": "Education",
   "@education": {
     "description": "the category of education"
-  },"family": "Family",
+  },
+  "family": "Family",
   "@family": {
     "description": "the category of family"
   },
@@ -91,37 +92,35 @@
     "description": "new task phrase we will use in add new task page"
   },
   "editTask": "Edit Task",
-  
   "@editTask": {
     "description": "Edit task phrase we will use in add new task page"
   },
-
   "pickDate": "Pick a Date",
-  
   "@pickDate": {
     "description": "pick date sentence"
   },
   "title": "Title",
-  
   "@title": {
     "description": "title of the task"
   },
   "description": "Description",
-  
   "@description": {
     "description": "Description of the task"
   },
-  "edit": "Edit",  
+  "edit": "Edit",
   "@edit": {
     "description": "edit the task"
   },
-  "delete": "Delete",  
+  "delete": "Delete",
   "@delete": {
     "description": "delete the task"
   },
-  "deleteTask": "Delete Task ?",  
+  "deleteTask": "Delete Task ?",
   "@deleteTask": {
     "description": "delete the task"
+  },
+  "tasks": "Tasks",
+  "@tasks": {
+    "description": "delete the task"
   }
-
 }

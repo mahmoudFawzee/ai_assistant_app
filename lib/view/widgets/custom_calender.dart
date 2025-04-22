@@ -1,3 +1,4 @@
+import 'package:ai_assistant_app/data/models/tasks/week.dart';
 import 'package:ai_assistant_app/logic/tasks/calender_cubit/calender_cubit.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:ai_assistant_app/view/widgets/custom_day.dart';
@@ -5,14 +6,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class CustomCalender extends StatefulWidget {
-  const CustomCalender({super.key});
-
+  const CustomCalender({
+    super.key,
+    required this.onSelectDay,
+  });
+  final Function(DayPerWeek day) onSelectDay;
   @override
   State<CustomCalender> createState() => _CustomCalenderState();
 }
 
 class _CustomCalenderState extends State<CustomCalender>
     with TickerProviderStateMixin {
+  _handleOnTap(DayPerWeek day) => widget.onSelectDay(day);
+
   bool goForward = true;
   late AnimationController _forwardController;
 
@@ -66,139 +72,138 @@ class _CustomCalenderState extends State<CustomCalender>
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: 140,
-      child: BlocBuilder<CalenderCubit, CalenderState>(
-        builder: (context, state) {
-          if (state is GotWeekState) {
-            final week = state.week;
+    return BlocBuilder<CalenderCubit, CalenderState>(
+      builder: (context, state) {
+        if (state is GotWeekState) {
+          final week = state.week;
 
-            return Container(
-              margin: const EdgeInsets.symmetric(horizontal: 10),
-              width: double.infinity,
-              decoration: const BoxDecoration(
-                color: ColorsManger.myMessageColor,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(15),
-                ),
+          return Container(
+            margin: const EdgeInsets.symmetric(horizontal: 10),
+            decoration: const BoxDecoration(
+              color: ColorsManger.myMessageColor,
+              borderRadius: BorderRadius.all(
+                Radius.circular(15),
               ),
-              child: Column(
-                children: [
-                  GestureDetector(
+            ),
+            child: Column(
+              children: [
+                GestureDetector(
+                  onHorizontalDragEnd: (details) {
+                    if (details.primaryVelocity! < 0) {
+                      goForward = true;
+                      _forwardController.reset();
+                      _forwardController.forward();
+                      context.read<CalenderCubit>().nextMonth();
+
+                      return;
+                    }
+                    goForward = false;
+                    _backwardController.reset();
+                    _backwardController.forward();
+                    context.read<CalenderCubit>().preMonth();
+                  },
+                  child: SizedBox(
+                    height: 50,
+                    width: double.infinity,
+                    child: Stack(
+                      children: [
+                        Align(
+                          alignment: Alignment.center,
+                          child: SlideTransition(
+                            position: goForward
+                                ? _forwardAnimation
+                                : _backwardAnimation,
+                            child: Text(
+                              '${week.year}/${(week.month).toString().padLeft(2, '0')}',
+                              style: const TextStyle(
+                                color: ColorsManger.white,
+                                fontSize: 24,
+                              ),
+                            ),
+                          ),
+                        ),
+                        Align(
+                          alignment: Alignment.center,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+                            children: [
+                              MonthArrow(
+                                  icon: Icons.arrow_back_ios_outlined,
+                                  alignIconToStart: false,
+                                  onPressed: () {
+                                    goForward = false;
+                                    _backwardController.reset();
+                                    _backwardController.forward();
+                                    context.read<CalenderCubit>().preMonth();
+                                  }),
+                              const Expanded(
+                                flex: 3,
+                                child: SizedBox(
+                                  width: 50,
+                                ),
+                              ),
+                              MonthArrow(
+                                alignIconToStart: true,
+                                icon: Icons.arrow_forward_ios_outlined,
+                                onPressed: () {
+                                  goForward = true;
+                                  _forwardController.reset();
+                                  _forwardController.forward();
+                                  context.read<CalenderCubit>().nextMonth();
+                                },
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                SizedBox(
+                  height: 50,
+                  width: double.infinity,
+                  child: GestureDetector(
                     onHorizontalDragEnd: (details) {
                       if (details.primaryVelocity! < 0) {
                         goForward = true;
                         _forwardController.reset();
                         _forwardController.forward();
-                        context.read<CalenderCubit>().nextMonth();
-
+                        context.read<CalenderCubit>().nextWeek();
                         return;
                       }
                       goForward = false;
                       _backwardController.reset();
                       _backwardController.forward();
-                      context.read<CalenderCubit>().preMonth();
+                      context.read<CalenderCubit>().preWeek();
                     },
-                    child: SizedBox(
-                      height: 50,
-                      width: double.infinity,
-                      child: Stack(
-                        children: [
-                          Align(
-                            alignment: Alignment.center,
-                            child: SlideTransition(
-                              position: goForward
-                                  ? _forwardAnimation
-                                  : _backwardAnimation,
-                              child: Text(
-                                '${week.year}/${(week.month).toString().padLeft(2, '0')}',
-                                style: const TextStyle(
-                                  color: ColorsManger.white,
-                                  fontSize: 24,
-                                ),
-                              ),
-                            ),
-                          ),
-                          Align(
-                            alignment: Alignment.center,
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround,
-                              children: [
-                                MonthArrow(
-                                    icon: Icons.arrow_back_ios_outlined,
-                                    alignIconToStart: false,
-                                    onPressed: () {
-                                      goForward = false;
-                                      _backwardController.reset();
-                                      _backwardController.forward();
-                                      context.read<CalenderCubit>().preMonth();
-                                    }),
-                                const Expanded(
-                                  flex: 3,
-                                  child: SizedBox(
-                                    width: 50,
-                                  ),
-                                ),
-                                MonthArrow(
-                                  alignIconToStart: true,
-                                  icon: Icons.arrow_forward_ios_outlined,
-                                  onPressed: () {
-                                    goForward = true;
-                                    _forwardController.reset();
-                                    _forwardController.forward();
-                                    context.read<CalenderCubit>().nextMonth();
-                                  },
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  SizedBox(
-                    height: 50,
-                    width: double.infinity,
-                    child: GestureDetector(
-                      onHorizontalDragEnd: (details) {
-                        if (details.primaryVelocity! < 0) {
-                          goForward = true;
-                          _forwardController.reset();
-                          _forwardController.forward();
-                          context.read<CalenderCubit>().nextWeek();
-                          return;
-                        }
-                        goForward = false;
-                        _backwardController.reset();
-                        _backwardController.forward();
-                        context.read<CalenderCubit>().preWeek();
-                      },
-                      child: SlideTransition(
-                        position:
-                            goForward ? _forwardAnimation : _backwardAnimation,
-                        child: Center(
-                          child: ListView.builder(
-                            itemCount: week.days.length,
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              final day = week.days[index];
-                              return CustomDay(day: day);
-                            },
-                          ),
+                    child: SlideTransition(
+                      position:
+                          goForward ? _forwardAnimation : _backwardAnimation,
+                      child: Center(
+                        child: ListView.builder(
+                          itemCount: week.days.length,
+                          shrinkWrap: true,
+                          physics: const NeverScrollableScrollPhysics(),
+                          scrollDirection: Axis.horizontal,
+                          itemBuilder: (context, index) {
+                            final day = week.days[index];
+                            return CustomDay(
+                              day: day,
+                              onTap: (day) => _handleOnTap(day),
+                            );
+                          },
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
-            );
-          }
-          return Container();
-        },
-      ),
+                ),
+              ],
+            ),
+          );
+        }
+        return Container();
+      },
     );
   }
 }

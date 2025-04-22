@@ -1,4 +1,6 @@
-final class Week {
+import 'package:equatable/equatable.dart';
+
+final class Week extends Equatable {
   final int year;
   final int month;
   final List<DayPerWeek> days;
@@ -12,9 +14,12 @@ final class Week {
   String toString() {
     return ' month : $month , year : $year , days : $days , nDays : ${days.length}';
   }
+
+  @override
+  List<Object?> get props => [month, year, days];
 }
 
-final class DayPerWeek {
+final class DayPerWeek extends Equatable {
   final int _dayPerMonth;
   final int _dayPerWeek;
   final DateTime _date;
@@ -63,4 +68,7 @@ final class DayPerWeek {
   String toString() {
     return ' month day : $_dayPerMonth , week day : $_dayPerWeek , day string : ${getStringDay()}';
   }
+
+  @override
+  List<Object?> get props => [_dayPerMonth, _dayPerWeek, _date];
 }

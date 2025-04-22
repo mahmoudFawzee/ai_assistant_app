@@ -62,20 +62,32 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
 
     on<GetSpecificDayTasksEvent>((event, emit) async {
       emit(const TasksLoadingState());
+
       try {
+        log('date when add task in bloc is: ${event.date}');
+        log('tasks bloc this event called from : ${event.from}');
         final completedTasks = await _tasksService.getSpecificDayCompletedTasks(
           event.date,
         );
         log('got tasks completed : ${completedTasks.length}');
+        log('task bloc testing 0');
         final unCompletedTasks =
             await _tasksService.getSpecificDayUnCompletedTasks(
           event.date,
         );
-        log('got tasks uncompleted : ${unCompletedTasks.length}');
+        log('task bloc testing 1');
+        if (unCompletedTasks.isNotEmpty) {
+          log('got tasks uncompleted : ${unCompletedTasks.first.taskSpec.date} and number of tasks is : ${unCompletedTasks.length}');
+        }
+
         if ([...completedTasks, ...unCompletedTasks].isEmpty) {
           emit(const GotNoTasksState());
           return;
         }
+        log('tasks length is : ${[
+          ...completedTasks,
+          ...unCompletedTasks
+        ].length}');
         emit(GotTasksState(
           completedTasks: completedTasks,
           unCompletedTasks: unCompletedTasks,
@@ -88,7 +100,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     on<GetTodayTasksEvent>((event, emit) async {
       emit(const TasksLoadingState());
       try {
-        log('get today tasks');
+        log('today tasks event bloc this event called from : ${event.from}');
         final completedTasks = await _tasksService.getSpecificDayCompletedTasks(
           DateTime.now(),
         );
@@ -110,6 +122,7 @@ class TasksBloc extends Bloc<TasksEvent, TasksState> {
     });
 
     on<GetCategoryTasksEvent>((event, emit) async {
+      log('we are in category tasks event');
       emit(const TasksLoadingState());
       try {
         final completedTasks = await _tasksService.getSpecificDayCompletedTasks(

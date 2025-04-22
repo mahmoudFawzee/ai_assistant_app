@@ -10,9 +10,15 @@ Meet **Ai Assistant**, the all-in-one personal assistant designed to help you st
 
 🤖 **AI Chat Assistant** – Interact with an AI-powered assistant for quick responses and guidance. Your conversations and tasks are securely stored using SQFLite for easy access.  
 
+Technologies & Packages Used:
+BLoC – For state management to ensure smooth performance.
+HTTP – For seamless API communication.
+SQFLite – For local storage of tasks and chat history.
+OpenWeatherMap API – To fetch real-time weather data. 
+
 ### **Why Choose Ai Assistant?**  
 - Simple and intuitive UI for effortless navigation.  
 - Local storage for saving tasks and chat history securely.  
 - Seamless integration with APIs for real-time data.  
 
-Take control of your day with Ai Assistant – your go-to assistant for productivity and convenience!  
+

@@ -111,14 +111,13 @@ final router = GoRouter(
                         WelcomeMessageCubit()..getWelcomeMessage(context),
                   ),
                   BlocProvider.value(
-                    value: _categoryCubit
-                      ..getSpecificDayCategoriesList(DateTime.now()),
+                    value: _categoryCubit,
                   ),
                   BlocProvider(
                     create: (_) => CalenderCubit()..initCalender(),
                   ),
                   BlocProvider.value(
-                    value: _taskBloc..add(const GetTodayTasksEvent()),
+                    value: _taskBloc,
                   ),
                   BlocProvider(
                     create: (_) =>
@@ -132,7 +131,8 @@ final router = GoRouter(
             path: WeatherScreen.pageRoute,
             builder: (context, state) {
               return BlocProvider(
-                create: (context) => WeatherBloc()..add(const GetTodayWeatherEvent()),
+                create: (context) =>
+                    WeatherBloc()..add(const GetTodayWeatherEvent()),
                 child: const WeatherScreen(),
               );
             }),

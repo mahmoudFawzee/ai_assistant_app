@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:ai_assistant_app/data/models/tasks/category.dart';
 import 'package:ai_assistant_app/data/models/tasks/task.dart';
+import 'package:ai_assistant_app/data/services/tasks/category_service.dart';
 import 'package:ai_assistant_app/logic/tasks/category_cubit/category_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/date_time_picker_cubit/date_time_picker_cubit.dart';
 import 'package:ai_assistant_app/logic/tasks/new_task_category_cubit/new_task_category_cubit.dart';
@@ -54,7 +55,7 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   @override
   void initState() {
     super.initState();
-    context.read<CategoryCubit>().getCategoriesNamesAndColors();
+
     //?directly path the date.
     date = widget.date;
     context.read<DateTimePickerCubit>().pickDateTime(date!);
@@ -72,9 +73,20 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
   }
 
   void closePage() {
-    context.read<TasksBloc>().add(GetSpecificDayTasksEvent(widget.date!));
-    context.read<CategoryCubit>().getSpecificDayCategoriesList(widget.date!);
+    log('date when add task is: ${widget.date}');
+    context.read<TasksBloc>().add(
+        GetSpecificDayTasksEvent(widget.date!, from: 'new task close page'));
+    context
+        .read<CategoryCubit>()
+        .getSpecificDayCategoriesList(widget.date!, 'new task close page');
     context.pop();
+  }
+
+  @override
+  void dispose() {
+    titleController.dispose();
+    descriptionController.dispose();
+    super.dispose();
   }
 
   @override
@@ -97,7 +109,9 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
           backgroundColor: ColorsManger.white,
           elevation: 0.0,
           title: Text(
-            appLocalizations.newTask,
+            widget.task == null
+                ? appLocalizations.newTask
+                : appLocalizations.editTask,
             style: const TextStyle(fontSize: 20),
           ),
         ),
@@ -125,66 +139,51 @@ class _NewTaskScreenState extends State<NewTaskScreen> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
-                    BlocBuilder<CategoryCubit, CategoryState>(
-                      buildWhen: (previous, current) {
-                        if (
-                            current is GotCategoriesPropsState) {
-                          return true;
-                        }
-                        return false;
+                    BlocConsumer<NewTaskCategoryCubit, CategoryProps?>(
+                      listener: (context, state) {
+                        categoryProps = state;
                       },
-                      builder: (context, state) {
-                        log('new task category state : $state');
-                        if (state is GotCategoriesPropsState) {
-                          final cats = state.categoriesProps.sublist(1);
-                          log('cats : $cats');
-                          return BlocConsumer<NewTaskCategoryCubit,
-                              CategoryProps?>(
-                            listener: (context, state) {
-                              categoryProps = state;
-                            },
-                            builder: (context, stateCategoryProps) {
-                              //!the problem happens because we need to override == operator
-                              //!and hashCode methods in the class to tell dart
-                              //!when does the class CategoryProps objects are equals.
-                              return DropdownButton<CategoryProps>(
-                                menuWidth: mediaQuery.width / 3,
-                                value: categoryProps,
-                                hint: const DropDownItemContainer(
-                                  category: CategoryProps(
-                                    category: CategoryEnum.all,
-                                    imagePath: '',
-                                  ),
-                                ),
-                                items: List.generate(
-                                  cats.length,
-                                  (index) {
-                                    final category = cats[index];
-                                    return DropdownMenuItem<CategoryProps>(
-                                      onTap: () {
-                                        categoryProps = category;
-                                        context
-                                            .read<NewTaskCategoryCubit>()
-                                            .selectCategory(category);
-                                        _validateForm();
-                                      },
-                                      value: category,
-                                      child: DropDownItemContainer(
-                                          category: category),
-                                    );
-                                  },
-                                ),
-                                onChanged: (value) {
-                                  categoryProps = value;
+                      builder: (context, stateCategoryProps) {
+                        //!the problem happens because we need to override == operator
+                        //!and hashCode methods in the class to tell dart
+                        //!when does the class CategoryProps objects are equals.
+                        return DropdownButton<CategoryEnum>(
+                          menuWidth: mediaQuery.width / 3,
+                          value: categoryProps?.category,
+                          hint: const DropDownItemContainer(
+                            category: CategoryProps(
+                              category: CategoryEnum.all,
+                              imagePath: '',
+                            ),
+                          ),
+                          items:
+                              CategoryService.getCategoriesSpec(categoryProps)
+                                  .map(
+                            (category) {
+                              return DropdownMenuItem<CategoryEnum>(
+                                onTap: () {
+                                  categoryProps = category;
+                                  context
+                                      .read<NewTaskCategoryCubit>()
+                                      .selectCategory(category);
+                                  _validateForm();
                                 },
+                                value: category.category,
+                                child:
+                                    DropDownItemContainer(category: category),
                               );
                             },
-                          );
-                        }
-                        return Container();
+                          ).toList(),
+                          onChanged: (value) {
+                            categoryProps = CategoryProps(
+                              category: value!,
+                              imagePath: '',
+                            );
+                          },
+                        );
                       },
                     ),
-                    //?then we need to add its category
+                    //?then we need to add its date
                     BlocConsumer<DateTimePickerCubit, DateTimePickerState>(
                       listener: (context, state) {
                         if (state is DateTimePickedState) {
