@@ -91,6 +91,7 @@ class OnBoardingItem extends StatelessWidget {
                 ),
                 ElevatedButton(
                   onPressed: () {
+                    //context.read<OldUserCubit>().setOldUser();
                     context.go(ConversationsScreen.pageRoute);
                   },
                   child: const Text('Get Started'),

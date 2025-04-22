@@ -1,3 +1,4 @@
+import 'package:ai_assistant_app/app/cubit/old_user_cubit.dart';
 import 'package:ai_assistant_app/domain/models/tasks/task.dart';
 import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart';
 import 'package:ai_assistant_app/view/widgets/calender/date_time_picker_cubit/date_time_picker_cubit.dart';
@@ -29,7 +30,10 @@ final router = GoRouter(
   routes: [
     GoRoute(
       path: SplashScreen.pageRoute,
-      builder: (context, state) => const SplashScreen(),
+      builder: (context, state) => BlocProvider(
+        create: (context) => OldUserCubit()..isOldUser(),
+        child: const SplashScreen(),
+      ),
     ),
     GoRoute(
       path: OnBoardingScreen.pageRoute,
