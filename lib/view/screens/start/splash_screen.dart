@@ -1,6 +1,6 @@
 import 'package:ai_assistant_app/view/resources/images_manger.dart';
 import 'package:ai_assistant_app/view/resources/responsiveness_manger.dart';
-import 'package:ai_assistant_app/view/screens/home/ai_assistant/conversations_page.dart';
+import 'package:ai_assistant_app/view/screens/home/ai_assistant/conversations/conversations_page.dart';
 import 'package:ai_assistant_app/view/theme/color_manger.dart';
 import 'package:go_router/go_router.dart';
 import 'package:flutter/material.dart';

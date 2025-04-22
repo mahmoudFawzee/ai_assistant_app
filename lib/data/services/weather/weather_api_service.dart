@@ -5,7 +5,7 @@ import 'dart:io';
 import 'package:ai_assistant_app/data/interface/weather_api_interface.dart';
 import 'package:ai_assistant_app/data/key/api_keys.dart';
 import 'package:ai_assistant_app/data/key/json_keys.dart';
-import 'package:ai_assistant_app/data/models/weather/weather.dart';
+import 'package:ai_assistant_app/domain/models/weather/weather.dart';
 import 'package:ai_assistant_app/data/services/weather/geolocator_service.dart';
 import 'package:http/http.dart' as http;
 

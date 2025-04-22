@@ -1,5 +1,5 @@
-import 'package:ai_assistant_app/data/models/tasks/category.dart';
-import 'package:ai_assistant_app/data/models/tasks/task.dart';
+import 'package:ai_assistant_app/domain/models/tasks/category.dart';
+import 'package:ai_assistant_app/domain/models/tasks/task.dart';
 import 'package:ai_assistant_app/data/services/tasks/tasks_service.dart';
 import 'package:ai_assistant_app/view/resources/images_manger.dart';
 

@@ -2,8 +2,8 @@ import 'dart:developer';
 
 import 'package:ai_assistant_app/data/interface/tasks_interface.dart';
 import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
-import 'package:ai_assistant_app/data/models/tasks/category.dart';
-import 'package:ai_assistant_app/data/models/tasks/task.dart';
+import 'package:ai_assistant_app/domain/models/tasks/category.dart';
+import 'package:ai_assistant_app/domain/models/tasks/task.dart';
 import 'package:ai_assistant_app/data/services/tasks/category_service.dart';
 import 'package:ai_assistant_app/data/services/database_helper.dart';
 import 'package:ai_assistant_app/data/services/tasks/date_time_formatter.dart'

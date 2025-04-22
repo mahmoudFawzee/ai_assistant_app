@@ -1,4 +1,4 @@
-import 'package:ai_assistant_app/data/models/tasks/week.dart';
+import 'package:ai_assistant_app/domain/models/tasks/week.dart';
 
 final class CalenderService {
   int getMonthDays({

@@ -1,4 +1,4 @@
-import 'package:ai_assistant_app/data/models/ai_assistant/conversation.dart';
+import 'package:ai_assistant_app/domain/models/ai_assistant/conversation.dart';
 
 abstract class ConversationInterface {
   Future<int> startNewConversation(Conversation conversation);

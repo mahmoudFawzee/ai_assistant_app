@@ -1,5 +1,5 @@
-import 'package:ai_assistant_app/data/models/tasks/category.dart';
-import 'package:ai_assistant_app/data/models/tasks/task.dart';
+import 'package:ai_assistant_app/domain/models/tasks/category.dart';
+import 'package:ai_assistant_app/domain/models/tasks/task.dart';
 
 abstract class TasksInterface {
   void addTask(TaskSpec taskSpec);

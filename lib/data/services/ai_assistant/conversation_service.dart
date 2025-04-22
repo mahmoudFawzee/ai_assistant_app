@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:ai_assistant_app/data/interface/conversation_interface.dart';
 import 'package:ai_assistant_app/data/services/ai_assistant/messages_service.dart';
 import 'package:ai_assistant_app/data/key/sqflite_keys.dart';
-import 'package:ai_assistant_app/data/models/ai_assistant/conversation.dart';
+import 'package:ai_assistant_app/domain/models/ai_assistant/conversation.dart';
 import 'package:ai_assistant_app/data/services/database_helper.dart';
 
 final class ConversationService implements ConversationInterface {

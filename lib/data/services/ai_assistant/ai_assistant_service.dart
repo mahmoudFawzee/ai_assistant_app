@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'package:ai_assistant_app/data/constants/end_points.dart';
+import 'package:ai_assistant_app/app/constants/end_points.dart';
 import 'package:ai_assistant_app/data/interface/open_ai_interface.dart';
 import 'package:ai_assistant_app/data/key/api_keys.dart';
 import 'package:http/http.dart' as http;
